@@ -1,0 +1,1370 @@
+{
+  "schema_version": 1,
+  "generated_by": "tools/skill_registry.py",
+  "skills": [
+    {
+      "schema_version": 1,
+      "name": "mcu-driver-core",
+      "version": "2.1.0",
+      "title": "MCU 驱动开发核心",
+      "summary": "提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。",
+      "layer": "foundation",
+      "dependencies": [],
+      "triggers": [
+        "驱动模板",
+        "HAL 抽象",
+        "总线调试",
+        "嵌入式代码审查",
+        "MCU 工程规范",
+        "BSP 分层"
+      ],
+      "routes": [
+        {
+          "id": "driver-api",
+          "intent": "统一驱动 API、状态码和配置结构",
+          "keywords": [
+            "驱动 API",
+            "状态码",
+            "配置结构"
+          ],
+          "target": "templates/driver-template.h"
+        },
+        {
+          "id": "i2c",
+          "intent": "I2C 驱动模板",
+          "keywords": [
+            "I2C 驱动",
+            "I2C 模板"
+          ],
+          "target": "templates/driver-template-i2c.c"
+        },
+        {
+          "id": "spi",
+          "intent": "SPI 驱动模板",
+          "keywords": [
+            "SPI 驱动",
+            "SPI 模板"
+          ],
+          "target": "templates/driver-template-spi.c"
+        },
+        {
+          "id": "uart",
+          "intent": "UART 与 AT 指令驱动模板",
+          "keywords": [
+            "UART 驱动",
+            "AT 指令驱动"
+          ],
+          "target": "templates/driver-template-uart.c"
+        },
+        {
+          "id": "adc",
+          "intent": "ADC 采样模板",
+          "keywords": [
+            "ADC 采样",
+            "ADC 模板"
+          ],
+          "target": "templates/driver-template-adc.c"
+        },
+        {
+          "id": "pwm",
+          "intent": "PWM 输出模板",
+          "keywords": [
+            "PWM 输出",
+            "PWM 模板"
+          ],
+          "target": "templates/driver-template-pwm.c"
+        },
+        {
+          "id": "gpio",
+          "intent": "GPIO 与外部中断模板",
+          "keywords": [
+            "GPIO 驱动",
+            "外部中断"
+          ],
+          "target": "templates/driver-template-gpio.c"
+        },
+        {
+          "id": "rtos",
+          "intent": "FreeRTOS 任务、互斥和 ISR 通知模板",
+          "keywords": [
+            "FreeRTOS 驱动",
+            "总线互斥",
+            "ISR 通知"
+          ],
+          "target": "templates/driver-template-rtos.c"
+        },
+        {
+          "id": "hardware-design",
+          "intent": "原理图、PCB、EMC 与电平匹配",
+          "keywords": [
+            "硬件设计审查",
+            "PCB EMC",
+            "电平匹配"
+          ],
+          "target": "guides/hardware-design.md"
+        },
+        {
+          "id": "debugging",
+          "intent": "调试流程、协议分析和测试用例",
+          "keywords": [
+            "协议分析",
+            "逻辑分析仪调试",
+            "驱动测试"
+          ],
+          "target": "guides/debugging-testing.md"
+        },
+        {
+          "id": "pitfalls",
+          "intent": "常见硬件与固件陷阱",
+          "keywords": [
+            "嵌入式避坑",
+            "硬件陷阱",
+            "固件陷阱"
+          ],
+          "target": "guides/pitfalls.md"
+        },
+        {
+          "id": "coding-style",
+          "intent": "命名、格式、版本和评审规范",
+          "keywords": [
+            "嵌入式代码规范",
+            "驱动代码评审",
+            "C 代码风格"
+          ],
+          "target": "guides/coding-style.md"
+        },
+        {
+          "id": "bsp-example",
+          "intent": "BSP 分层示例",
+          "keywords": [
+            "BSP 示例",
+            "板级接口示例"
+          ],
+          "target": "examples/bsp/"
+        },
+        {
+          "id": "soft-i2c-example",
+          "intent": "GPIO 模拟 I2C 示例",
+          "keywords": [
+            "软件 I2C",
+            "模拟 I2C"
+          ],
+          "target": "examples/soft-i2c/"
+        }
+      ],
+      "resources": {
+        "references": [],
+        "templates": [
+          "templates/driver-template-adc.c",
+          "templates/driver-template-gpio.c",
+          "templates/driver-template-i2c.c",
+          "templates/driver-template-pwm.c",
+          "templates/driver-template-rtos.c",
+          "templates/driver-template-spi.c",
+          "templates/driver-template-uart.c",
+          "templates/driver-template.h"
+        ],
+        "guides": [
+          "guides/coding-style.md",
+          "guides/debugging-testing.md",
+          "guides/hardware-design.md",
+          "guides/pitfalls.md"
+        ],
+        "examples": [
+          "examples/bsp/bsp.c",
+          "examples/bsp/bsp.h",
+          "examples/soft-i2c/soft_i2c.c",
+          "examples/soft-i2c/soft_i2c.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-actuators",
+      "version": "2.1.0",
+      "title": "MCU 执行器",
+      "summary": "覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "执行器选型",
+        "电机驱动",
+        "运动控制",
+        "感性负载保护",
+        "音频执行器"
+      ],
+      "routes": [
+        {
+          "id": "dc-motor",
+          "intent": "直流电机与 H 桥",
+          "keywords": [
+            "直流电机",
+            "L298N",
+            "TB6612",
+            "H 桥"
+          ],
+          "target": "references/dc-motor.md"
+        },
+        {
+          "id": "stepper-motor",
+          "intent": "步进电机",
+          "keywords": [
+            "步进电机",
+            "28BYJ-48",
+            "ULN2003",
+            "A4988",
+            "TMC2209"
+          ],
+          "target": "references/stepper-motor.md"
+        },
+        {
+          "id": "servo",
+          "intent": "PWM 与总线舵机",
+          "keywords": [
+            "舵机",
+            "PWM 舵机",
+            "总线舵机",
+            "连续旋转舵机"
+          ],
+          "target": "references/servo.md"
+        },
+        {
+          "id": "relay",
+          "intent": "机械与固态继电器",
+          "keywords": [
+            "继电器",
+            "固态继电器",
+            "继电器互锁"
+          ],
+          "target": "references/relay.md"
+        },
+        {
+          "id": "solenoid",
+          "intent": "电磁阀与电磁铁",
+          "keywords": [
+            "电磁阀",
+            "电磁铁",
+            "保持电流"
+          ],
+          "target": "references/solenoid.md"
+        },
+        {
+          "id": "buzzer",
+          "intent": "有源与无源蜂鸣器",
+          "keywords": [
+            "蜂鸣器",
+            "有源蜂鸣器",
+            "无源蜂鸣器",
+            "蜂鸣器旋律"
+          ],
+          "target": "references/buzzer.md"
+        },
+        {
+          "id": "audio",
+          "intent": "音频播放模块",
+          "keywords": [
+            "DFPlayer",
+            "I2S 功放",
+            "音频播放模块"
+          ],
+          "target": "references/audio.md"
+        },
+        {
+          "id": "dc-motor-example",
+          "intent": "四轮直流电机示例",
+          "keywords": [
+            "四轮电机示例"
+          ],
+          "target": "examples/dc-motor/"
+        },
+        {
+          "id": "dfplayer-example",
+          "intent": "DFPlayer 示例",
+          "keywords": [
+            "DFPlayer 示例"
+          ],
+          "target": "examples/dfplayer/"
+        },
+        {
+          "id": "servo-example",
+          "intent": "PWM 舵机示例",
+          "keywords": [
+            "舵机示例"
+          ],
+          "target": "examples/servo-pwm/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/audio.md",
+          "references/buzzer.md",
+          "references/dc-motor.md",
+          "references/relay.md",
+          "references/servo.md",
+          "references/solenoid.md",
+          "references/stepper-motor.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/dc-motor/motor_4wheel.c",
+          "examples/dc-motor/motor_4wheel.h",
+          "examples/dfplayer/dfplayer.c",
+          "examples/dfplayer/dfplayer.h",
+          "examples/servo-pwm/servo.c",
+          "examples/servo-pwm/servo.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-communication",
+      "version": "2.1.0",
+      "title": "MCU 通信",
+      "summary": "覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "通信模块选型",
+        "无线通信",
+        "有线总线协议",
+        "网络重连",
+        "通信状态机"
+      ],
+      "routes": [
+        {
+          "id": "wifi",
+          "intent": "WiFi、AT 与 MQTT",
+          "keywords": [
+            "WiFi",
+            "ESP8266",
+            "ESP32",
+            "MQTT",
+            "WiFi AT"
+          ],
+          "target": "references/wifi.md"
+        },
+        {
+          "id": "bluetooth",
+          "intent": "经典蓝牙与 BLE",
+          "keywords": [
+            "蓝牙",
+            "BLE",
+            "HC-05",
+            "GATT",
+            "nRF52"
+          ],
+          "target": "references/bluetooth.md"
+        },
+        {
+          "id": "lora",
+          "intent": "LoRa 点对点通信",
+          "keywords": [
+            "LoRa",
+            "SX1278",
+            "SX1276"
+          ],
+          "target": "references/lora.md"
+        },
+        {
+          "id": "nb-iot",
+          "intent": "NB-IoT 与蜂窝通信",
+          "keywords": [
+            "NB-IoT",
+            "BC95",
+            "蜂窝通信"
+          ],
+          "target": "references/nb-iot.md"
+        },
+        {
+          "id": "can",
+          "intent": "CAN 总线",
+          "keywords": [
+            "CAN 总线",
+            "MCP2515",
+            "bxCAN",
+            "FDCAN"
+          ],
+          "target": "references/can.md"
+        },
+        {
+          "id": "rs485",
+          "intent": "RS485 与 Modbus RTU",
+          "keywords": [
+            "RS485",
+            "Modbus RTU",
+            "485 总线"
+          ],
+          "target": "references/rs485.md"
+        },
+        {
+          "id": "nfc",
+          "intent": "NFC 与 RFID",
+          "keywords": [
+            "NFC",
+            "RFID",
+            "RC522",
+            "PN532",
+            "Mifare"
+          ],
+          "target": "references/nfc.md"
+        },
+        {
+          "id": "ethernet",
+          "intent": "以太网",
+          "keywords": [
+            "以太网",
+            "W5500",
+            "LAN8720",
+            "lwIP"
+          ],
+          "target": "references/ethernet.md"
+        },
+        {
+          "id": "esp8266-example",
+          "intent": "ESP8266 AT 与 MQTT 示例",
+          "keywords": [
+            "ESP8266 示例",
+            "MQTT 示例"
+          ],
+          "target": "examples/esp8266-wifi/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/bluetooth.md",
+          "references/can.md",
+          "references/ethernet.md",
+          "references/lora.md",
+          "references/nb-iot.md",
+          "references/nfc.md",
+          "references/rs485.md",
+          "references/wifi.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/esp8266-wifi/esp01s_mqtt.c",
+          "examples/esp8266-wifi/esp01s_mqtt.h",
+          "examples/esp8266-wifi/esp8266_at.c",
+          "examples/esp8266-wifi/esp8266_at.h",
+          "examples/esp8266-wifi/esp8266_v3.c",
+          "examples/esp8266-wifi/esp8266_v3.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-displays",
+      "version": "2.1.0",
+      "title": "MCU 显示设备",
+      "summary": "覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "显示屏选型",
+        "显示驱动",
+        "图形界面刷新",
+        "显存优化",
+        "屏幕初始化"
+      ],
+      "routes": [
+        {
+          "id": "oled",
+          "intent": "OLED 显示",
+          "keywords": [
+            "OLED",
+            "SSD1306",
+            "SH1106"
+          ],
+          "target": "references/oled.md"
+        },
+        {
+          "id": "lcd",
+          "intent": "字符与图形 LCD",
+          "keywords": [
+            "LCD1602",
+            "PCF8574",
+            "ST7920",
+            "字符 LCD"
+          ],
+          "target": "references/lcd.md"
+        },
+        {
+          "id": "tft",
+          "intent": "彩色 TFT",
+          "keywords": [
+            "TFT",
+            "ILI9341",
+            "ST7789"
+          ],
+          "target": "references/tft.md"
+        },
+        {
+          "id": "e-paper",
+          "intent": "电子纸",
+          "keywords": [
+            "电子纸",
+            "电子墨水屏",
+            "SSD1680",
+            "UC8176"
+          ],
+          "target": "references/e-paper.md"
+        },
+        {
+          "id": "led-matrix",
+          "intent": "LED 点阵、数码管与灯带",
+          "keywords": [
+            "LED 点阵",
+            "数码管",
+            "MAX7219",
+            "TM1637",
+            "WS2812"
+          ],
+          "target": "references/led-matrix.md"
+        },
+        {
+          "id": "oled-example",
+          "intent": "OLED 刷新示例",
+          "keywords": [
+            "OLED 示例",
+            "OLED 脏页刷新",
+            "OLED 批量写入"
+          ],
+          "target": "examples/oled/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/e-paper.md",
+          "references/lcd.md",
+          "references/led-matrix.md",
+          "references/oled.md",
+          "references/tft.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/oled/oled_v1_dirty_page.c",
+          "examples/oled/oled_v1_dirty_page.h",
+          "examples/oled/oled_v2_burst_write.c",
+          "examples/oled/oled_v2_burst_write.h",
+          "examples/oled/oled_v3_basic.c",
+          "examples/oled/oled_v3_basic.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-input",
+      "version": "2.1.0",
+      "title": "MCU 输入与识别",
+      "summary": "覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "人机输入",
+        "按键扫描",
+        "输入去抖",
+        "生物识别",
+        "语音识别模块"
+      ],
+      "routes": [
+        {
+          "id": "rotary-encoder",
+          "intent": "旋转编码器",
+          "keywords": [
+            "旋转编码器",
+            "EC11",
+            "增量编码器",
+            "绝对编码器"
+          ],
+          "target": "references/rotary-encoder.md"
+        },
+        {
+          "id": "keypad",
+          "intent": "独立按键与矩阵键盘",
+          "keywords": [
+            "独立按键",
+            "矩阵键盘",
+            "ADC 键盘",
+            "按键去抖"
+          ],
+          "target": "references/keypad.md"
+        },
+        {
+          "id": "touch",
+          "intent": "电容触摸",
+          "keywords": [
+            "电容触摸",
+            "TTP223",
+            "TTP229",
+            "MPR121"
+          ],
+          "target": "references/touch.md"
+        },
+        {
+          "id": "fingerprint-example",
+          "intent": "AS608 指纹示例",
+          "keywords": [
+            "AS608",
+            "指纹识别"
+          ],
+          "target": "examples/fingerprint/"
+        },
+        {
+          "id": "voice-vision-example",
+          "intent": "ASRPro 语音与 K210 视觉识别示例",
+          "keywords": [
+            "ASRPro",
+            "K210 视觉识别",
+            "离线语音识别"
+          ],
+          "target": "examples/asrpro-voice/"
+        },
+        {
+          "id": "keyboard-example",
+          "intent": "按键与矩阵键盘示例",
+          "keywords": [
+            "矩阵键盘示例",
+            "按键扫描示例"
+          ],
+          "target": "examples/keyboard/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/keypad.md",
+          "references/rotary-encoder.md",
+          "references/touch.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/asrpro-voice/asrpro.c",
+          "examples/asrpro-voice/asrpro.h",
+          "examples/asrpro-voice/k10_face_recognition.c",
+          "examples/asrpro-voice/k10_face_recognition.h",
+          "examples/asrpro-voice/k210_face_README.md",
+          "examples/asrpro-voice/k210_face_main.py",
+          "examples/asrpro-voice/k210_face_model.py",
+          "examples/fingerprint/finger_as608.c",
+          "examples/fingerprint/finger_as608.h",
+          "examples/fingerprint/fingerprint.c",
+          "examples/fingerprint/fingerprint.h",
+          "examples/keyboard/key_simple_3btn.c",
+          "examples/keyboard/key_simple_3btn.h",
+          "examples/keyboard/keyboard_leaky_integrator.c",
+          "examples/keyboard/keyboard_leaky_integrator.h",
+          "examples/keyboard/keyboard_matrix_4x4.c",
+          "examples/keyboard/keyboard_matrix_4x4.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-power",
+      "version": "2.1.0",
+      "title": "MCU 电源",
+      "summary": "覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "电源架构",
+        "稳压器选型",
+        "充电电路",
+        "电池监控",
+        "电源保护"
+      ],
+      "routes": [
+        {
+          "id": "ldo",
+          "intent": "LDO 线性稳压",
+          "keywords": [
+            "LDO",
+            "AMS1117",
+            "ME6211",
+            "HT7333"
+          ],
+          "target": "references/ldo.md"
+        },
+        {
+          "id": "dc-dc",
+          "intent": "DC-DC 变换",
+          "keywords": [
+            "DC-DC",
+            "MP1584",
+            "LM2596",
+            "TPS5430",
+            "升降压"
+          ],
+          "target": "references/dc-dc.md"
+        },
+        {
+          "id": "battery-charger",
+          "intent": "电池充电",
+          "keywords": [
+            "电池充电",
+            "TP4056",
+            "BQ24075",
+            "锂电充电"
+          ],
+          "target": "references/battery-charger.md"
+        },
+        {
+          "id": "battery-monitor",
+          "intent": "电池与电量监控",
+          "keywords": [
+            "电量计",
+            "MAX17048",
+            "INA219",
+            "BQ27441"
+          ],
+          "target": "references/battery-monitor.md"
+        },
+        {
+          "id": "protection",
+          "intent": "输入与接口保护",
+          "keywords": [
+            "TVS",
+            "反接保护",
+            "浪涌保护",
+            "过流保护",
+            "ESD 保护"
+          ],
+          "target": "references/protection.md"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/battery-charger.md",
+          "references/battery-monitor.md",
+          "references/dc-dc.md",
+          "references/ldo.md",
+          "references/protection.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-sensors",
+      "version": "2.1.0",
+      "title": "MCU 传感器",
+      "summary": "覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "传感器选型",
+        "传感器驱动",
+        "环境采集",
+        "运动传感",
+        "定位模块"
+      ],
+      "routes": [
+        {
+          "id": "temperature",
+          "intent": "温度传感器",
+          "keywords": [
+            "温度传感器",
+            "DS18B20",
+            "SHT30",
+            "NTC",
+            "PT100",
+            "LM35"
+          ],
+          "target": "references/temperature.md"
+        },
+        {
+          "id": "humidity",
+          "intent": "湿度传感器",
+          "keywords": [
+            "湿度传感器",
+            "DHT11",
+            "DHT22",
+            "BME280"
+          ],
+          "target": "references/humidity.md"
+        },
+        {
+          "id": "pressure",
+          "intent": "压力与称重传感器",
+          "keywords": [
+            "压力传感器",
+            "BMP280",
+            "HX711",
+            "称重传感器"
+          ],
+          "target": "references/pressure.md"
+        },
+        {
+          "id": "light",
+          "intent": "光照与图像传感器",
+          "keywords": [
+            "光照传感器",
+            "BH1750",
+            "TSL2561",
+            "OV2640",
+            "OV5640"
+          ],
+          "target": "references/light.md"
+        },
+        {
+          "id": "imu",
+          "intent": "IMU 与姿态传感器",
+          "keywords": [
+            "IMU",
+            "MPU6050",
+            "BMI270",
+            "ICM42688",
+            "电子罗盘"
+          ],
+          "target": "references/imu.md"
+        },
+        {
+          "id": "gas",
+          "intent": "气体与空气质量传感器",
+          "keywords": [
+            "气体传感器",
+            "MQ135",
+            "CCS811",
+            "SGP30",
+            "空气质量"
+          ],
+          "target": "references/gas.md"
+        },
+        {
+          "id": "distance",
+          "intent": "超声波、ToF 与红外测距",
+          "keywords": [
+            "测距传感器",
+            "HC-SR04",
+            "VL53L0X",
+            "TFmini"
+          ],
+          "target": "references/distance.md"
+        },
+        {
+          "id": "magnetic",
+          "intent": "霍尔与磁场传感器",
+          "keywords": [
+            "霍尔传感器",
+            "HMC5883L",
+            "QMC5883L",
+            "MLX90393"
+          ],
+          "target": "references/magnetic.md"
+        },
+        {
+          "id": "gps",
+          "intent": "GPS 与 GNSS",
+          "keywords": [
+            "GPS 模块",
+            "GNSS",
+            "NEO-6M",
+            "ATGM336H",
+            "NMEA"
+          ],
+          "target": "references/gps.md"
+        },
+        {
+          "id": "adc-water-example",
+          "intent": "ADC 水位与 MQ135 示例",
+          "keywords": [
+            "水位传感器示例",
+            "MQ135 示例"
+          ],
+          "target": "examples/adc-water/"
+        },
+        {
+          "id": "bh1750-example",
+          "intent": "BH1750 示例",
+          "keywords": [
+            "BH1750 示例"
+          ],
+          "target": "examples/bh1750-light/"
+        },
+        {
+          "id": "air-quality-example",
+          "intent": "CCS811 与 SGP30 示例",
+          "keywords": [
+            "CCS811 示例",
+            "SGP30 示例"
+          ],
+          "target": "examples/ccs811-sgp30/"
+        },
+        {
+          "id": "dht-example",
+          "intent": "DHT11 与 DHT22 时序示例",
+          "keywords": [
+            "DHT11 示例",
+            "DHT22 示例"
+          ],
+          "target": "examples/dht11-dht22/"
+        },
+        {
+          "id": "ds18b20-example",
+          "intent": "DS18B20 示例",
+          "keywords": [
+            "DS18B20 示例"
+          ],
+          "target": "examples/ds18b20/"
+        },
+        {
+          "id": "gps-example",
+          "intent": "GPS 解析示例",
+          "keywords": [
+            "GPS 解析示例",
+            "NMEA 解析示例"
+          ],
+          "target": "examples/gps/"
+        },
+        {
+          "id": "hcsr04-example",
+          "intent": "HC-SR04 示例",
+          "keywords": [
+            "HC-SR04 示例"
+          ],
+          "target": "examples/hc-sr04/"
+        },
+        {
+          "id": "hx711-example",
+          "intent": "HX711 示例",
+          "keywords": [
+            "HX711 示例"
+          ],
+          "target": "examples/hx711/"
+        },
+        {
+          "id": "max30102-example",
+          "intent": "MAX30102 示例",
+          "keywords": [
+            "MAX30102",
+            "心率血氧"
+          ],
+          "target": "examples/max30102/"
+        },
+        {
+          "id": "mpu6050-example",
+          "intent": "MPU6050 示例",
+          "keywords": [
+            "MPU6050 示例"
+          ],
+          "target": "examples/mpu6050/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/distance.md",
+          "references/gas.md",
+          "references/gps.md",
+          "references/humidity.md",
+          "references/imu.md",
+          "references/light.md",
+          "references/magnetic.md",
+          "references/pressure.md",
+          "references/temperature.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/adc-water/mq135.c",
+          "examples/adc-water/mq135.h",
+          "examples/adc-water/water_sensor.c",
+          "examples/adc-water/water_sensor.h",
+          "examples/bh1750-light/light_sensor.c",
+          "examples/bh1750-light/light_sensor.h",
+          "examples/ccs811-sgp30/ccs811_sgp30.c",
+          "examples/ccs811-sgp30/ccs811_sgp30.h",
+          "examples/dht11-dht22/dht11_v1_wait_level.c",
+          "examples/dht11-dht22/dht11_v1_wait_level.h",
+          "examples/dht11-dht22/dht11_v2_dwt_waitpin.c",
+          "examples/dht11-dht22/dht11_v2_dwt_waitpin.h",
+          "examples/dht11-dht22/dht11_v3_systick.c",
+          "examples/dht11-dht22/dht11_v3_systick.h",
+          "examples/dht11-dht22/dht22.c",
+          "examples/dht11-dht22/dht22.h",
+          "examples/ds18b20/ds18b20.c",
+          "examples/ds18b20/ds18b20.h",
+          "examples/gps/gps_parse.c",
+          "examples/gps/gps_parse.h",
+          "examples/gps/serial_gps.c",
+          "examples/gps/serial_gps.h",
+          "examples/hc-sr04/hcsr04.c",
+          "examples/hc-sr04/hcsr04.h",
+          "examples/hx711/hx711.c",
+          "examples/hx711/hx711.h",
+          "examples/max30102/max30102.c",
+          "examples/max30102/max30102.h",
+          "examples/mpu6050/mpu6050.c",
+          "examples/mpu6050/mpu6050.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-storage",
+      "version": "2.1.0",
+      "title": "MCU 存储与 RTC",
+      "summary": "覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。",
+      "layer": "domain",
+      "dependencies": [
+        "mcu-driver-core"
+      ],
+      "triggers": [
+        "非易失存储",
+        "参数持久化",
+        "掉电保存",
+        "文件系统",
+        "实时时钟"
+      ],
+      "routes": [
+        {
+          "id": "eeprom",
+          "intent": "I2C EEPROM",
+          "keywords": [
+            "EEPROM",
+            "AT24C",
+            "24LC"
+          ],
+          "target": "references/eeprom.md"
+        },
+        {
+          "id": "flash",
+          "intent": "SPI NOR Flash",
+          "keywords": [
+            "SPI Flash",
+            "W25Q",
+            "GD25Q",
+            "NOR Flash"
+          ],
+          "target": "references/flash.md"
+        },
+        {
+          "id": "sd-card",
+          "intent": "SD 卡与 FatFs",
+          "keywords": [
+            "SD 卡",
+            "SDIO",
+            "FatFs",
+            "SDHC"
+          ],
+          "target": "references/sd-card.md"
+        },
+        {
+          "id": "fram",
+          "intent": "FRAM",
+          "keywords": [
+            "FRAM",
+            "FM25",
+            "MB85"
+          ],
+          "target": "references/fram.md"
+        },
+        {
+          "id": "rtc",
+          "intent": "实时时钟",
+          "keywords": [
+            "RTC",
+            "DS3231",
+            "PCF8563",
+            "DS1302"
+          ],
+          "target": "references/rtc.md"
+        },
+        {
+          "id": "rtc-example",
+          "intent": "DS1302 RTC 示例",
+          "keywords": [
+            "DS1302 示例"
+          ],
+          "target": "examples/ds1302-rtc/"
+        },
+        {
+          "id": "flash-param-example",
+          "intent": "Flash 参数保存示例",
+          "keywords": [
+            "Flash 参数示例",
+            "参数保存示例"
+          ],
+          "target": "examples/flash-param/"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/eeprom.md",
+          "references/flash.md",
+          "references/fram.md",
+          "references/rtc.md",
+          "references/sd-card.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [
+          "examples/ds1302-rtc/ds1302.c",
+          "examples/ds1302-rtc/ds1302.h",
+          "examples/flash-param/flash_param.c",
+          "examples/flash-param/flash_param.h"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "mcu-system-design",
+      "version": "2.1.0",
+      "title": "MCU 系统设计",
+      "summary": "编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。",
+      "layer": "orchestrator",
+      "dependencies": [
+        "mcu-driver-core",
+        "mcu-sensors",
+        "mcu-actuators",
+        "mcu-displays",
+        "mcu-communication",
+        "mcu-storage",
+        "mcu-power",
+        "mcu-input"
+      ],
+      "triggers": [
+        "完整嵌入式产品",
+        "多器件系统",
+        "系统架构设计",
+        "环境监测站",
+        "智能控制器",
+        "资源预算",
+        "低功耗系统",
+        "OTA 升级"
+      ],
+      "routes": [
+        {
+          "id": "driver-core",
+          "intent": "加载共享驱动基础",
+          "keywords": [
+            "系统驱动基础",
+            "系统硬件审查"
+          ],
+          "target": "skill://mcu-driver-core/SKILL.md"
+        },
+        {
+          "id": "sensors",
+          "intent": "加载传感器领域",
+          "keywords": [
+            "传感器子系统",
+            "采集子系统"
+          ],
+          "target": "skill://mcu-sensors/SKILL.md"
+        },
+        {
+          "id": "actuators",
+          "intent": "加载执行器领域",
+          "keywords": [
+            "执行器子系统",
+            "运动子系统"
+          ],
+          "target": "skill://mcu-actuators/SKILL.md"
+        },
+        {
+          "id": "displays",
+          "intent": "加载显示领域",
+          "keywords": [
+            "显示子系统",
+            "人机界面子系统"
+          ],
+          "target": "skill://mcu-displays/SKILL.md"
+        },
+        {
+          "id": "communication",
+          "intent": "加载通信领域",
+          "keywords": [
+            "通信子系统",
+            "联网子系统"
+          ],
+          "target": "skill://mcu-communication/SKILL.md"
+        },
+        {
+          "id": "storage",
+          "intent": "加载存储领域",
+          "keywords": [
+            "存储子系统",
+            "日志子系统"
+          ],
+          "target": "skill://mcu-storage/SKILL.md"
+        },
+        {
+          "id": "power",
+          "intent": "加载电源领域",
+          "keywords": [
+            "电源子系统",
+            "供电子系统"
+          ],
+          "target": "skill://mcu-power/SKILL.md"
+        },
+        {
+          "id": "input",
+          "intent": "加载输入与识别领域",
+          "keywords": [
+            "输入子系统",
+            "识别子系统"
+          ],
+          "target": "skill://mcu-input/SKILL.md"
+        },
+        {
+          "id": "low-power",
+          "intent": "系统级低功耗设计",
+          "keywords": [
+            "低功耗设计",
+            "睡眠唤醒",
+            "功耗预算"
+          ],
+          "target": "guides/low-power.md"
+        },
+        {
+          "id": "ota",
+          "intent": "Bootloader 与 OTA",
+          "keywords": [
+            "Bootloader",
+            "双分区",
+            "OTA 回滚",
+            "固件签名"
+          ],
+          "target": "guides/ota-bootloader.md"
+        },
+        {
+          "id": "stm32-patterns",
+          "intent": "多项目 STM32 工程模式",
+          "keywords": [
+            "STM32 工程模式",
+            "STM32 项目模式",
+            "跨项目模式"
+          ],
+          "target": "guides/stm32-project-patterns.md"
+        },
+        {
+          "id": "environment-station",
+          "intent": "环境监测站端到端示例",
+          "keywords": [
+            "环境监测站",
+            "环境监测站示例",
+            "多传感器上云"
+          ],
+          "target": "examples/env-monitor-station.md"
+        },
+        {
+          "id": "door-controller",
+          "intent": "门控系统端到端示例",
+          "keywords": [
+            "门控系统",
+            "PIR 继电器联动"
+          ],
+          "target": "examples/buzzer-pir-relay/"
+        }
+      ],
+      "resources": {
+        "references": [],
+        "templates": [],
+        "guides": [
+          "guides/low-power.md",
+          "guides/ota-bootloader.md",
+          "guides/stm32-project-patterns.md"
+        ],
+        "examples": [
+          "examples/buzzer-pir-relay/buzzer.c",
+          "examples/buzzer-pir-relay/buzzer.h",
+          "examples/buzzer-pir-relay/door_io.c",
+          "examples/buzzer-pir-relay/door_io.h",
+          "examples/buzzer-pir-relay/pir.c",
+          "examples/buzzer-pir-relay/pir.h",
+          "examples/buzzer-pir-relay/relays.c",
+          "examples/buzzer-pir-relay/relays.h",
+          "examples/env-monitor-station.md"
+        ],
+        "scripts": []
+      }
+    },
+    {
+      "schema_version": 1,
+      "name": "project-organizer",
+      "version": "2.1.0",
+      "title": "项目整理",
+      "summary": "扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。",
+      "layer": "utility",
+      "dependencies": [],
+      "triggers": [
+        "整理项目",
+        "清理项目",
+        "规范目录结构",
+        "生成硬件清单",
+        "生成引脚表",
+        "/organize"
+      ],
+      "routes": [
+        {
+          "id": "organize-rules",
+          "intent": "目录、命名与清理规则",
+          "keywords": [
+            "整理规则",
+            "命名规范",
+            "目录规范",
+            "垃圾文件清理"
+          ],
+          "target": "references/organize-rules.md"
+        },
+        {
+          "id": "embedded-inventory",
+          "intent": "功能、硬件、引脚和说明文档模板",
+          "keywords": [
+            "功能清单",
+            "硬件清单",
+            "引脚分配表",
+            "使用说明文档"
+          ],
+          "target": "references/feature-hardware-inventory.md"
+        },
+        {
+          "id": "scanner",
+          "intent": "只读项目扫描",
+          "keywords": [
+            "/organize-scan",
+            "扫描项目现状",
+            "失效链接扫描"
+          ],
+          "target": "scripts/scan_project.py"
+        }
+      ],
+      "resources": {
+        "references": [
+          "references/feature-hardware-inventory.md",
+          "references/organize-rules.md"
+        ],
+        "templates": [],
+        "guides": [],
+        "examples": [],
+        "scripts": [
+          "scripts/scan_project.py"
+        ]
+      }
+    }
+  ]
+}

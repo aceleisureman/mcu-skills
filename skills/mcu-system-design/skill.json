@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "name": "mcu-system-design",
+  "version": "2.1.0",
+  "title": "MCU 系统设计",
+  "summary": "编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。",
+  "layer": "orchestrator",
+  "dependencies": [
+    "mcu-driver-core",
+    "mcu-sensors",
+    "mcu-actuators",
+    "mcu-displays",
+    "mcu-communication",
+    "mcu-storage",
+    "mcu-power",
+    "mcu-input"
+  ],
+  "triggers": [
+    "完整嵌入式产品",
+    "多器件系统",
+    "系统架构设计",
+    "环境监测站",
+    "智能控制器",
+    "资源预算",
+    "低功耗系统",
+    "OTA 升级"
+  ],
+  "routes": [
+    {
+      "id": "driver-core",
+      "intent": "加载共享驱动基础",
+      "keywords": ["系统驱动基础", "系统硬件审查"],
+      "target": "skill://mcu-driver-core/SKILL.md"
+    },
+    {
+      "id": "sensors",
+      "intent": "加载传感器领域",
+      "keywords": ["传感器子系统", "采集子系统"],
+      "target": "skill://mcu-sensors/SKILL.md"
+    },
+    {
+      "id": "actuators",
+      "intent": "加载执行器领域",
+      "keywords": ["执行器子系统", "运动子系统"],
+      "target": "skill://mcu-actuators/SKILL.md"
+    },
+    {
+      "id": "displays",
+      "intent": "加载显示领域",
+      "keywords": ["显示子系统", "人机界面子系统"],
+      "target": "skill://mcu-displays/SKILL.md"
+    },
+    {
+      "id": "communication",
+      "intent": "加载通信领域",
+      "keywords": ["通信子系统", "联网子系统"],
+      "target": "skill://mcu-communication/SKILL.md"
+    },
+    {
+      "id": "storage",
+      "intent": "加载存储领域",
+      "keywords": ["存储子系统", "日志子系统"],
+      "target": "skill://mcu-storage/SKILL.md"
+    },
+    {
+      "id": "power",
+      "intent": "加载电源领域",
+      "keywords": ["电源子系统", "供电子系统"],
+      "target": "skill://mcu-power/SKILL.md"
+    },
+    {
+      "id": "input",
+      "intent": "加载输入与识别领域",
+      "keywords": ["输入子系统", "识别子系统"],
+      "target": "skill://mcu-input/SKILL.md"
+    },
+    {
+      "id": "low-power",
+      "intent": "系统级低功耗设计",
+      "keywords": ["低功耗设计", "睡眠唤醒", "功耗预算"],
+      "target": "guides/low-power.md"
+    },
+    {
+      "id": "ota",
+      "intent": "Bootloader 与 OTA",
+      "keywords": ["Bootloader", "双分区", "OTA 回滚", "固件签名"],
+      "target": "guides/ota-bootloader.md"
+    },
+    {
+      "id": "stm32-patterns",
+      "intent": "多项目 STM32 工程模式",
+      "keywords": ["STM32 工程模式", "STM32 项目模式", "跨项目模式"],
+      "target": "guides/stm32-project-patterns.md"
+    },
+    {
+      "id": "environment-station",
+      "intent": "环境监测站端到端示例",
+      "keywords": ["环境监测站", "环境监测站示例", "多传感器上云"],
+      "target": "examples/env-monitor-station.md"
+    },
+    {
+      "id": "door-controller",
+      "intent": "门控系统端到端示例",
+      "keywords": ["门控系统", "PIR 继电器联动"],
+      "target": "examples/buzzer-pir-relay/"
+    }
+  ]
+}

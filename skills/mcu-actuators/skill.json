@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "name": "mcu-actuators",
+  "version": "2.1.0",
+  "title": "MCU 执行器",
+  "summary": "覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。",
+  "layer": "domain",
+  "dependencies": ["mcu-driver-core"],
+  "triggers": [
+    "执行器选型",
+    "电机驱动",
+    "运动控制",
+    "感性负载保护",
+    "音频执行器"
+  ],
+  "routes": [
+    {
+      "id": "dc-motor",
+      "intent": "直流电机与 H 桥",
+      "keywords": ["直流电机", "L298N", "TB6612", "H 桥"],
+      "target": "references/dc-motor.md"
+    },
+    {
+      "id": "stepper-motor",
+      "intent": "步进电机",
+      "keywords": ["步进电机", "28BYJ-48", "ULN2003", "A4988", "TMC2209"],
+      "target": "references/stepper-motor.md"
+    },
+    {
+      "id": "servo",
+      "intent": "PWM 与总线舵机",
+      "keywords": ["舵机", "PWM 舵机", "总线舵机", "连续旋转舵机"],
+      "target": "references/servo.md"
+    },
+    {
+      "id": "relay",
+      "intent": "机械与固态继电器",
+      "keywords": ["继电器", "固态继电器", "继电器互锁"],
+      "target": "references/relay.md"
+    },
+    {
+      "id": "solenoid",
+      "intent": "电磁阀与电磁铁",
+      "keywords": ["电磁阀", "电磁铁", "保持电流"],
+      "target": "references/solenoid.md"
+    },
+    {
+      "id": "buzzer",
+      "intent": "有源与无源蜂鸣器",
+      "keywords": ["蜂鸣器", "有源蜂鸣器", "无源蜂鸣器", "蜂鸣器旋律"],
+      "target": "references/buzzer.md"
+    },
+    {
+      "id": "audio",
+      "intent": "音频播放模块",
+      "keywords": ["DFPlayer", "I2S 功放", "音频播放模块"],
+      "target": "references/audio.md"
+    },
+    {
+      "id": "dc-motor-example",
+      "intent": "四轮直流电机示例",
+      "keywords": ["四轮电机示例"],
+      "target": "examples/dc-motor/"
+    },
+    {
+      "id": "dfplayer-example",
+      "intent": "DFPlayer 示例",
+      "keywords": ["DFPlayer 示例"],
+      "target": "examples/dfplayer/"
+    },
+    {
+      "id": "servo-example",
+      "intent": "PWM 舵机示例",
+      "keywords": ["舵机示例"],
+      "target": "examples/servo-pwm/"
+    }
+  ]
+}

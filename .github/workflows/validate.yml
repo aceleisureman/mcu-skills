@@ -12,5 +12,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Check generated registry and docs
+        run: python3 tools/skill_registry.py --check
+      - name: Check routing evaluation
+        run: |
+          python3 tools/evaluate_routing.py
+          python3 tools/evaluate_routing.py --check-report
       - name: Validate skills
         run: python3 tools/validate.py
+      - name: Test validator
+        run: python3 -m unittest discover -s tests -v

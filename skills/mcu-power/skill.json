@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "name": "mcu-power",
+  "version": "2.1.0",
+  "title": "MCU 电源",
+  "summary": "覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。",
+  "layer": "domain",
+  "dependencies": ["mcu-driver-core"],
+  "triggers": [
+    "电源架构",
+    "稳压器选型",
+    "充电电路",
+    "电池监控",
+    "电源保护"
+  ],
+  "routes": [
+    {
+      "id": "ldo",
+      "intent": "LDO 线性稳压",
+      "keywords": ["LDO", "AMS1117", "ME6211", "HT7333"],
+      "target": "references/ldo.md"
+    },
+    {
+      "id": "dc-dc",
+      "intent": "DC-DC 变换",
+      "keywords": ["DC-DC", "MP1584", "LM2596", "TPS5430", "升降压"],
+      "target": "references/dc-dc.md"
+    },
+    {
+      "id": "battery-charger",
+      "intent": "电池充电",
+      "keywords": ["电池充电", "TP4056", "BQ24075", "锂电充电"],
+      "target": "references/battery-charger.md"
+    },
+    {
+      "id": "battery-monitor",
+      "intent": "电池与电量监控",
+      "keywords": ["电量计", "MAX17048", "INA219", "BQ27441"],
+      "target": "references/battery-monitor.md"
+    },
+    {
+      "id": "protection",
+      "intent": "输入与接口保护",
+      "keywords": ["TVS", "反接保护", "浪涌保护", "过流保护", "ESD 保护"],
+      "target": "references/protection.md"
+    }
+  ]
+}

@@ -1,97 +1,121 @@
-# Skills 知识库
+# MCU Skills 知识库
 
-公司共享的 AI Agent Skill 集合。每个 skill 为一个独立目录，入口为该目录下带 YAML frontmatter 的 `SKILL.md`。
+面向 AI Agent 和嵌入式团队的模块化 Skill 集合。仓库采用 `skills/<skill-name>/SKILL.md` 结构，每个 Skill 都有独立触发范围、路由入口、版本记录和按需加载资源。
 
-## Skill 列表
+## Skill 目录
 
-| Skill | 用途 | 入口 |
-|-------|------|------|
-| `mcu-components/` | 单片机元器件开发规范：七大类 42 种元器件的选型/硬件设计/驱动开发/调试/避坑 + 驱动代码模板 + 通用指南 | `mcu-components/SKILL.md` |
-| `project-organizer/` | 项目整理：目录规范化、垃圾清理，以及嵌入式项目功能清单/硬件清单/引脚表/使用说明生成（`/organize` 系列命令） | `project-organizer/SKILL.md` |
+<!-- GENERATED:SKILL_TABLE:START -->
+| Skill | 层级 | 版本 | 依赖 | 用途 |
+|-------|------|------|------|------|
+| [`mcu-driver-core`](skills/mcu-driver-core/SKILL.md) | `foundation` | `v2.1.0` | 无 | 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。 |
+| [`mcu-actuators`](skills/mcu-actuators/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。 |
+| [`mcu-communication`](skills/mcu-communication/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。 |
+| [`mcu-displays`](skills/mcu-displays/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。 |
+| [`mcu-input`](skills/mcu-input/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。 |
+| [`mcu-power`](skills/mcu-power/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。 |
+| [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
+| [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
+| [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.1.0` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
+| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.1.0` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
+<!-- GENERATED:SKILL_TABLE:END -->
 
-## 仓库整体结构
+完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)。
 
+## 为什么拆分
+
+原 `mcu-components` 同时覆盖 42 类器件、通用模板、工程指南和完整项目，触发范围过宽。拆分后的结构具备：
+
+- **精确触发**：每个 frontmatter 只描述一个领域。
+- **按需加载**：Agent 只读取当前领域的一篇参考文档。
+- **单一维护职责**：通用模板集中在 `mcu-driver-core`，领域内容不重复。
+- **可组合**：复杂产品由 `mcu-system-design` 编排多个领域 Skill。
+- **机器可读**：每个 `skill.json` 声明版本、层级、依赖、触发词和资源路由。
+- **可扩展校验**：自动检查依赖、循环、孤儿资源、重复路由、URI 和生成漂移。
+- **可量化路由**：55 个典型问题持续评测单领域与组合 Skill 的精确率和召回率。
+
+## 依赖模型
+
+```text
+mcu-system-design
+├── mcu-driver-core
+├── mcu-sensors
+├── mcu-actuators
+├── mcu-displays
+├── mcu-communication
+├── mcu-storage
+├── mcu-power
+└── mcu-input
+
+各 MCU 领域 Skill ──> mcu-driver-core
+project-organizer     （独立）
 ```
-skills/
-├── README.md                    # 本文件 - 仓库总索引
-├── .gitignore                   # 忽略系统/编辑器/临时文件
-├── .github/workflows/           # CI: 推送时自动运行 tools/validate.py
+
+领域 Skill 可独立用于选型和规范查询；需要生成驱动或做硬件/调试审查时，应同时安装 `mcu-driver-core`。完整产品设计建议安装 `mcu-system-design` 及其声明的依赖闭包。确定性依赖图由 [`skills/registry.json`](skills/registry.json) 提供。
+
+## 仓库结构
+
+```text
+.
+├── skills/                 # 10 个独立 Skill
+│   └── registry.json       # 自动汇总的机器可读 registry
+├── evals/
+│   └── routing-cases.json  # 路由评测数据集
+├── docs/                   # 架构、依赖图、迁移和生成索引
 ├── tools/
-│   └── validate.py              # 全仓库校验脚本（提交前运行）
-├── mcu-components/              # Skill 1: 元器件开发规范
-└── project-organizer/           # Skill 2: 项目整理
+│   ├── skill_registry.py   # registry、索引和依赖图生成/URI 解析
+│   ├── evaluate_routing.py # 路由评测与报告生成
+│   └── validate.py         # 结构、语义和生成漂移校验
+├── tests/
+│   ├── test_validate.py
+│   └── test_routing.py
+└── .github/workflows/
+    └── validate.yml
 ```
 
-## 各 Skill 内部结构
+每个 Skill 遵循：
 
-每个 skill 遵循统一的目录约定：
-
-```
-<skill-name>/
-├── SKILL.md          # 唯一入口（必须）: frontmatter + 使用流程 + 意图路由表
-├── CHANGELOG.md      # 版本记录（必须）: 每次修改追加条目
-├── references/       # 详细规范文档（按需加载, 不在 SKILL.md 内展开）
-├── templates/        # 可直接套用的代码模板（如有）
-├── guides/           # 跨主题通用指南（如有）
-├── examples/         # 完整示例与索引（如有）
-└── scripts/          # 配套可执行脚本（如有）
-```
-
-**设计原则（按需加载）**：`SKILL.md` 只做路由——frontmatter 的 description 决定何时自动触发，正文的「意图 → 文档」映射表引导 Agent 只读取所需的 references/templates 文件，避免一次性加载全部内容浪费上下文。
-
-### mcu-components（元器件开发规范）
-
-```
-mcu-components/
-├── SKILL.md                     # 路由入口: 意图映射表 + 型号快速索引
-├── CHANGELOG.md
-├── references/                  # 42 篇元器件规范（统一五段式结构）
-│   ├── sensors/                 # 传感器: 温度/湿度/压力/光照/IMU/气体/距离/磁性/GPS
-│   ├── actuators/               # 执行器: 直流电机/步进/舵机/继电器/电磁阀/蜂鸣器/音频
-│   ├── display/                 # 显示: OLED/LCD/TFT/墨水屏/LED点阵
-│   ├── communication/           # 通信: WiFi/蓝牙/LoRa/NB-IoT/CAN/RS485/NFC/以太网
-│   ├── storage/                 # 存储: EEPROM/Flash/SD卡/FRAM/RTC
-│   ├── power/                   # 电源: LDO/DC-DC/充电/电池监控/保护
-│   └── input/                   # 输入: 旋转编码器/按键键盘/电容触摸
-├── templates/                   # I2C/SPI/UART/ADC/PWM/GPIO 驱动模板
-│                                # + driver-template.h + driver-template-rtos.c
-├── guides/                      # 硬件设计/调试测试/避坑/低功耗/OTA/代码风格
-└── examples/                    # 示例索引 + 端到端完整示例
+```text
+skills/<skill-name>/
+├── SKILL.md                # 必须：name/description frontmatter + 路由
+├── skill.json              # 必须：版本、层级、依赖、触发词与资源路由
+├── CHANGELOG.md            # 必须：版本记录
+├── references/             # 详细规范，可选
+├── templates/              # 可复用模板，可选
+├── guides/                 # 通用指南，可选
+├── examples/               # 示例，可选
+└── scripts/                # 配套脚本，可选
 ```
 
-每篇 references 文档统一五段式：①选型指南 → ②硬件设计 → ③驱动开发 → ④调试测试 → ⑤避坑指南，末尾附「相关文档」交叉引用。
-
-### project-organizer（项目整理）
-
-```
-project-organizer/
-├── SKILL.md                     # 命令定义: /organize 系列 + /organize-docs 等 10 个命令
-├── CHANGELOG.md
-├── references/
-│   ├── organize-rules.md        # 整理规则: 命名约定/目录结构/垃圾清单/.gitignore 基线
-│   └── feature-hardware-inventory.md  # 功能清单/硬件清单/引脚表/使用说明的执行规范与模板
-└── scripts/
-    └── scan_project.py          # 只读扫描脚本（支持 --json 与失效链接检查）
-```
-
-## 使用方式
+## 安装
 
 ### Claude Code / Claude 平台
-将 skill 目录放入项目 `.claude/skills/`（或个人 `~/.claude/skills/`）即可，Agent 会根据 `SKILL.md` frontmatter 的 description 自动触发。
 
-### CodeBuddy 等其他 Agent 平台
-将 skill 目录放入对应平台的 skills 目录，或在会话中引用 `SKILL.md` 作为系统知识。
+复制需要的 Skill 目录到项目或个人 Skill 目录：
 
-## 新增一个 Skill
+```sh
+cp -R skills/mcu-sensors .claude/skills/
+cp -R skills/mcu-driver-core .claude/skills/
+```
 
-1. 新建目录 `<skill-name>/`（kebab-case 命名），按上方「各 Skill 内部结构」创建 `SKILL.md` 与 `CHANGELOG.md`
-2. `SKILL.md` 必须含 frontmatter（`name` 与 `description`，description 写清覆盖范围和触发场景）
-3. 详细内容放 `references/`，`SKILL.md` 内只写路由表，保持按需加载
-4. 更新本 README 的「Skill 列表」，运行 `python3 tools/validate.py` 通过后提交
+依赖信息以对应 `skill.json` 为准。复制一个 Skill 时，同时复制其 `dependencies` 的传递闭包。
 
-## 维护规范
+### 其他 Agent 平台
 
-1. 修改内容后在对应 skill 的 `CHANGELOG.md` 追加条目（版本号递增）
-2. 提交前运行校验：`python3 tools/validate.py`（校验 frontmatter、文档结构、内部链接、索引一致性）
-3. 新增元器件文档需遵循 `mcu-components/SKILL.md` 中的五段式标准结构，并同步更新 SKILL.md 目录树、型号索引和 `examples/README.md`
-4. 通过 git 管理，一类改动一个提交；重大结构调整先在团队内评审
+将 `skills/` 下所需目录复制到平台约定的 Skill 目录，或把对应 `SKILL.md` 注册为入口。跨 Skill 资源使用 `skill://<skill-name>/<path>`，不依赖安装目录的相对层级；可用以下命令解析：
+
+```sh
+python3 tools/skill_registry.py --resolve \
+  skill://mcu-driver-core/templates/driver-template-i2c.c
+```
+
+## 维护
+
+```sh
+python3 tools/skill_registry.py --write
+python3 tools/evaluate_routing.py --write-report
+python3 tools/validate.py
+python3 tools/evaluate_routing.py
+python3 -m unittest discover -s tests -v
+```
+
+不要手工编辑 `skills/registry.json`、内容索引、依赖图或路由评测报告。新增或修改 Skill 前阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。从旧版 `mcu-components` 迁移请参考 [`docs/migration-v2.md`](docs/migration-v2.md)。

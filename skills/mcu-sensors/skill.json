@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "name": "mcu-sensors",
+  "version": "2.1.0",
+  "title": "MCU 传感器",
+  "summary": "覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。",
+  "layer": "domain",
+  "dependencies": ["mcu-driver-core"],
+  "triggers": [
+    "传感器选型",
+    "传感器驱动",
+    "环境采集",
+    "运动传感",
+    "定位模块"
+  ],
+  "routes": [
+    {
+      "id": "temperature",
+      "intent": "温度传感器",
+      "keywords": ["温度传感器", "DS18B20", "SHT30", "NTC", "PT100", "LM35"],
+      "target": "references/temperature.md"
+    },
+    {
+      "id": "humidity",
+      "intent": "湿度传感器",
+      "keywords": ["湿度传感器", "DHT11", "DHT22", "BME280"],
+      "target": "references/humidity.md"
+    },
+    {
+      "id": "pressure",
+      "intent": "压力与称重传感器",
+      "keywords": ["压力传感器", "BMP280", "HX711", "称重传感器"],
+      "target": "references/pressure.md"
+    },
+    {
+      "id": "light",
+      "intent": "光照与图像传感器",
+      "keywords": ["光照传感器", "BH1750", "TSL2561", "OV2640", "OV5640"],
+      "target": "references/light.md"
+    },
+    {
+      "id": "imu",
+      "intent": "IMU 与姿态传感器",
+      "keywords": ["IMU", "MPU6050", "BMI270", "ICM42688", "电子罗盘"],
+      "target": "references/imu.md"
+    },
+    {
+      "id": "gas",
+      "intent": "气体与空气质量传感器",
+      "keywords": ["气体传感器", "MQ135", "CCS811", "SGP30", "空气质量"],
+      "target": "references/gas.md"
+    },
+    {
+      "id": "distance",
+      "intent": "超声波、ToF 与红外测距",
+      "keywords": ["测距传感器", "HC-SR04", "VL53L0X", "TFmini"],
+      "target": "references/distance.md"
+    },
+    {
+      "id": "magnetic",
+      "intent": "霍尔与磁场传感器",
+      "keywords": ["霍尔传感器", "HMC5883L", "QMC5883L", "MLX90393"],
+      "target": "references/magnetic.md"
+    },
+    {
+      "id": "gps",
+      "intent": "GPS 与 GNSS",
+      "keywords": ["GPS 模块", "GNSS", "NEO-6M", "ATGM336H", "NMEA"],
+      "target": "references/gps.md"
+    },
+    {
+      "id": "adc-water-example",
+      "intent": "ADC 水位与 MQ135 示例",
+      "keywords": ["水位传感器示例", "MQ135 示例"],
+      "target": "examples/adc-water/"
+    },
+    {
+      "id": "bh1750-example",
+      "intent": "BH1750 示例",
+      "keywords": ["BH1750 示例"],
+      "target": "examples/bh1750-light/"
+    },
+    {
+      "id": "air-quality-example",
+      "intent": "CCS811 与 SGP30 示例",
+      "keywords": ["CCS811 示例", "SGP30 示例"],
+      "target": "examples/ccs811-sgp30/"
+    },
+    {
+      "id": "dht-example",
+      "intent": "DHT11 与 DHT22 时序示例",
+      "keywords": ["DHT11 示例", "DHT22 示例"],
+      "target": "examples/dht11-dht22/"
+    },
+    {
+      "id": "ds18b20-example",
+      "intent": "DS18B20 示例",
+      "keywords": ["DS18B20 示例"],
+      "target": "examples/ds18b20/"
+    },
+    {
+      "id": "gps-example",
+      "intent": "GPS 解析示例",
+      "keywords": ["GPS 解析示例", "NMEA 解析示例"],
+      "target": "examples/gps/"
+    },
+    {
+      "id": "hcsr04-example",
+      "intent": "HC-SR04 示例",
+      "keywords": ["HC-SR04 示例"],
+      "target": "examples/hc-sr04/"
+    },
+    {
+      "id": "hx711-example",
+      "intent": "HX711 示例",
+      "keywords": ["HX711 示例"],
+      "target": "examples/hx711/"
+    },
+    {
+      "id": "max30102-example",
+      "intent": "MAX30102 示例",
+      "keywords": ["MAX30102", "心率血氧"],
+      "target": "examples/max30102/"
+    },
+    {
+      "id": "mpu6050-example",
+      "intent": "MPU6050 示例",
+      "keywords": ["MPU6050 示例"],
+      "target": "examples/mpu6050/"
+    }
+  ]
+}

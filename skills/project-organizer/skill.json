@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "name": "project-organizer",
+  "version": "2.1.0",
+  "title": "项目整理",
+  "summary": "扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。",
+  "layer": "utility",
+  "dependencies": [],
+  "triggers": [
+    "整理项目",
+    "清理项目",
+    "规范目录结构",
+    "生成硬件清单",
+    "生成引脚表",
+    "/organize"
+  ],
+  "routes": [
+    {
+      "id": "organize-rules",
+      "intent": "目录、命名与清理规则",
+      "keywords": ["整理规则", "命名规范", "目录规范", "垃圾文件清理"],
+      "target": "references/organize-rules.md"
+    },
+    {
+      "id": "embedded-inventory",
+      "intent": "功能、硬件、引脚和说明文档模板",
+      "keywords": ["功能清单", "硬件清单", "引脚分配表", "使用说明文档"],
+      "target": "references/feature-hardware-inventory.md"
+    },
+    {
+      "id": "scanner",
+      "intent": "只读项目扫描",
+      "keywords": ["/organize-scan", "扫描项目现状", "失效链接扫描"],
+      "target": "scripts/scan_project.py"
+    }
+  ]
+}
