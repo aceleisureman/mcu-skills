@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """项目整理扫描脚本（只读）。
 
-用法: python3 scan_project.py <项目路径>
-按 SKILL.md 的 /organize-scan 维度输出问题清单，不做任何修改。
+用法: python3 scan_project.py <项目路径> [--json]
+按 SKILL.md 的 /organize-scan 维度输出问题清单（含失效 Markdown 链接检查），不做任何修改。
+--json: 以 JSON 格式输出，便于工具链消费。
 """
+import json
 import os
 import re
 import sys
@@ -16,6 +18,7 @@ BUILD_DIRS = {"node_modules", "dist", "build", "__pycache__", ".cache"}
 SKIP_DIRS = {".git", ".svn", ".hg"}
 BIG_FILE_MB = 10
 BAD_NAME = re.compile(r"[ ()（）]|副本|新建|final|_v\d+", re.IGNORECASE)
+MD_LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 
 
 def human(size: int) -> str:
@@ -29,8 +32,25 @@ def md5(path: str, limit: int = 4 * 1024 * 1024) -> str:
     return h.hexdigest()
 
 
-def scan(root: str) -> None:
+def broken_md_links(path: str, root: str) -> list:
+    out = []
+    try:
+        text = open(path, encoding="utf-8").read()
+    except (UnicodeDecodeError, OSError):
+        return out
+    base = os.path.dirname(path)
+    for m in MD_LINK.finditer(text):
+        t = m.group(1)
+        if t.startswith(("http://", "https://", "mailto:")) or "<" in t:
+            continue
+        if not os.path.exists(os.path.normpath(os.path.join(base, t))):
+            out.append(f"{os.path.relpath(path, root)} -> {t}")
+    return out
+
+
+def scan(root: str, as_json: bool = False) -> None:
     junk, build, big, badname, empty_files, empty_dirs = [], [], [], [], [], []
+    broken_links = []
     by_hash = defaultdict(list)
 
     for dirpath, dirnames, filenames in os.walk(root):
@@ -57,6 +77,8 @@ def scan(root: str) -> None:
                 badname.append(rel)
             if 0 < size < 4 * 1024 * 1024:
                 by_hash[(size, md5(path))].append(rel)
+            if name.endswith(".md"):
+                broken_links.extend(broken_md_links(path, root))
 
     dupes = [v for v in by_hash.values() if len(v) > 1]
 
@@ -68,7 +90,12 @@ def scan(root: str) -> None:
         (f"大文件（> {BIG_FILE_MB}MB）", big),
         ("命名不规范（空格/副本/版本后缀等）", badname),
         ("内容重复文件组", ["  <==>  ".join(g) for g in dupes]),
+        ("失效 Markdown 链接", broken_links),
     ]
+    if as_json:
+        print(json.dumps({title: sorted(items) for title, items in sections},
+                         ensure_ascii=False, indent=2))
+        return
     total = 0
     for title, items in sections:
         print(f"\n## {title}: {len(items)}")
@@ -79,7 +106,8 @@ def scan(root: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]):
+    args = [a for a in sys.argv[1:] if a != "--json"]
+    if len(args) != 1 or not os.path.isdir(args[0]):
         print(__doc__)
         sys.exit(1)
-    scan(sys.argv[1])
+    scan(args[0], as_json="--json" in sys.argv)

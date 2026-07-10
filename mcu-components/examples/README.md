@@ -15,11 +15,18 @@ mcu-components/
 │   ├── display/             -- 显示类
 │   ├── communication/       -- 通信模块
 │   ├── storage/             -- 存储类
-│   └── power/               -- 电源管理类
+│   ├── power/               -- 电源管理类
+│   └── input/               -- 输入类
 ├── templates/               -- 跨平台代码模板
 ├── guides/                  -- 通用指南
 └── examples/                -- 本文件 (示例索引)
 ```
+
+## 完整项目示例
+
+| 文件 | 内容 | 涉及器件 |
+|------|------|----------|
+| `env-monitor-station.md` | 端到端示例：采集 + 显示 + MQTT 上报，FreeRTOS 多任务架构、总线互斥、数据快照 | SHT30 + SSD1306 + ESP32 WiFi |
 
 ## 示例索引
 
@@ -35,6 +42,7 @@ mcu-components/
 | `gas.md` | MQ 系列 ADC 读取代码、SGP30 I2C 驱动代码 | I2C / ADC |
 | `distance.md` | HC-SR04 GPIO 驱动代码 (定时器测量回波)、VL53L0X I2C 驱动代码、TFmini UART 驱动 | GPIO / I2C / UART |
 | `magnetic.md` | 霍尔传感器 GPIO 读取代码、HMC5883L I2C 驱动和罗盘航向计算代码、QMC5883L 驱动 (HMC5883L 替代) | GPIO / I2C |
+| `gps.md` | NMEA 校验和验证、RMC 语句解析、ddmm.mmmm 坐标转换 | UART |
 
 ### 执行器类 (references/actuators/)
 
@@ -46,6 +54,7 @@ mcu-components/
 | `relay.md` | GPIO 驱动继电器代码、多继电器互锁控制（电机正反转） | GPIO |
 | `solenoid.md` | 驱动代码（含 PWM 保持电流）、纯 GPIO 驱动示例（无 PWM 保持） | GPIO / PWM |
 | `buzzer.md` | 有源蜂鸣器 GPIO 驱动、无源蜂鸣器 PWM 驱动（播放音符/旋律）、旋律播放示例、非阻塞旋律播放（状态机方式） | GPIO / PWM |
+| `audio.md` | DFPlayer 协议驱动（UART 帧 + 校验）、ESP32 + MAX98357A I2S 播放 PCM | UART / I2S |
 
 ### 显示类 (references/display/)
 
@@ -68,6 +77,7 @@ mcu-components/
 | `can.md` | CAN 帧结构说明、MCP2515 SPI 驱动、STM32 bxCAN 配置示例 | SPI / CAN |
 | `rs485.md` | RS485 方向控制驱动、Modbus RTU 帧驱动 | UART |
 | `nfc.md` | Mifare 卡通信流程、RC522 SPI 寄存器驱动、完整读写流程 | SPI / I2C |
+| `ethernet.md` | W5500 SPI 帧读写、TCP 连接/发送、LAN8720 + lwIP 要点 | SPI / RMII |
 
 ### 存储类 (references/storage/)
 
@@ -89,6 +99,14 @@ mcu-components/
 | `battery-monitor.md` | 分压 ADC 驱动、INA219 驱动、MAX17043 驱动 | I2C / ADC |
 | `protection.md` | 硬件设计参考（选型/电路/保护为主） | 硬件设计参考 |
 
+### 输入类 (references/input/)
+
+| 文档 | 包含代码示例 | 接口 |
+|------|-------------|------|
+| `rotary-encoder.md` | EC11 四倍频状态机解码、STM32 定时器编码器模式、AS5600 角度读取 | GPIO / TIM / I2C |
+| `keypad.md` | 独立按键消抖+长按状态机、4x4 矩阵扫描、ADC 分压键盘识别 | GPIO / ADC |
+| `touch.md` | MPR121 驱动（阈值/基线配置）、ESP32 TouchPad 基线校准 | I2C / 片内外设 |
+
 ### 代码模板 (templates/)
 
 | 模板文件 | 内容 | 关键功能 |
@@ -99,6 +117,8 @@ mcu-components/
 | `driver-template-adc.c` | ADC 驱动模板 | 单次/多次平均/中值滤波、DMA 连续采集、电压转换、NTC 温度 |
 | `driver-template-pwm.c` | PWM 驱动模板 | 频率/占空比设置、多通道同步、呼吸灯、舵机控制 |
 | `driver-template-gpio.c` | GPIO 驱动模板 | 中断回调管理、按键消抖、软件 I2C、软件 SPI |
+| `driver-template.h` | 驱动头文件模板 | 统一错误码/HAL 注入/句柄与 API 最小集的标准形态 |
+| `driver-template-rtos.c` | FreeRTOS 封装模板 | 总线互斥锁、周期采集任务+数据快照、ISR→任务通知 |
 
 ### 通用指南 (guides/)
 
@@ -107,6 +127,9 @@ mcu-components/
 | `hardware-design.md` | 电源设计、去耦电容、PCB 布局、走线规范、接口防护、EMC 设计、电平匹配 | - |
 | `debugging-testing.md` | 硬件调试流程、工具使用、协议调试、测试用例规范、压力/边界/低功耗/环境测试、代码审查清单 | - |
 | `pitfalls.md` | 电源/时钟/通信/GPIO/ADC/中断/存储/EMC/低功耗 九大类常见问题与解决方案 | - |
+| `low-power.md` | 功耗预算方法、低功耗模式选择、硬件/软件设计要点、检查清单 | - |
+| `ota-bootloader.md` | 双分区设计、Bootloader 流程、断点续传/回滚/签名验证、测试清单 | - |
+| `coding-style.md` | 命名/结构/格式约定、版本号与发布规范、Git 提交规范、评审清单 | - |
 
 ## 如何使用本规范体系
 

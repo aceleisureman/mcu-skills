@@ -2,6 +2,15 @@
 
 本 Skill 的版本记录。团队更新规范时请在此追加条目（新版本在上）。
 
+## v1.2.0 - 2026-07-10
+
+- 新增输入类 references（旋转编码器/按键与矩阵键盘/电容触摸）
+- 新增 references：GPS 定位模块、以太网模块、音频播放模块（共 42 种元器件）
+- 新增模板：driver-template.h（驱动头文件标准形态）、driver-template-rtos.c（FreeRTOS 总线互斥/采集任务/ISR 通知）
+- 新增 guides：低功耗设计（low-power.md）、OTA 与 Bootloader（ota-bootloader.md）、代码风格与版本规范（coding-style.md）
+- 新增端到端完整示例：examples/env-monitor-station.md（SHT30 + OLED + MQTT）
+- SKILL.md 目录树/意图映射/型号索引与 examples/README.md 索引同步更新
+
 ## v1.1.0 - 2026-07-10
 
 - SKILL.md 增加 YAML frontmatter（name/description），适配云端 Agent Skill 平台的识别与自动触发

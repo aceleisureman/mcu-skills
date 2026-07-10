@@ -1,6 +1,6 @@
 ---
 name: mcu-components
-description: 单片机（MCU）元器件开发规范知识库，覆盖传感器、执行器、显示、通信、存储、电源六大类 36 种常用元器件的选型对比、硬件设计、驱动开发、调试测试与避坑指南，并提供 I2C/SPI/UART/ADC/PWM/GPIO 六套驱动代码模板。适用于 STM32/ESP32/51/Arduino 等平台。当用户进行单片机/嵌入式开发、编写元器件驱动、做硬件选型或电路设计、排查传感器/模块不工作等问题时使用。
+description: 单片机（MCU）元器件开发规范知识库，覆盖传感器、执行器、显示、通信、存储、电源、输入七大类 42 种常用元器件的选型对比、硬件设计、驱动开发、调试测试与避坑指南，并提供 I2C/SPI/UART/ADC/PWM/GPIO 驱动代码模板、驱动头文件模板与 FreeRTOS 多任务封装模板，另含低功耗设计、OTA/Bootloader、代码风格等通用指南和端到端完整示例。适用于 STM32/ESP32/51/Arduino 等平台。当用户进行单片机/嵌入式开发、编写元器件驱动、做硬件选型或电路设计、排查传感器/模块不工作等问题时使用。
 ---
 
 # MCU 元器件开发规范 (MCU Components Development Specification)
@@ -34,14 +34,16 @@ mcu-components/
 │   │   ├── imu.md                    # 惯性测量单元
 │   │   ├── gas.md                    # 气体传感器
 │   │   ├── distance.md               # 距离传感器
-│   │   └── magnetic.md               # 磁性传感器
+│   │   ├── magnetic.md               # 磁性传感器
+│   │   └── gps.md                    # GPS/GNSS 定位模块
 │   ├── actuators/                    # 执行器类
 │   │   ├── dc-motor.md               # 直流电机
 │   │   ├── stepper-motor.md          # 步进电机
 │   │   ├── servo.md                  # 舵机
 │   │   ├── relay.md                  # 继电器
 │   │   ├── solenoid.md               # 电磁阀/电磁铁
-│   │   └── buzzer.md                 # 蜂鸣器
+│   │   ├── buzzer.md                 # 蜂鸣器
+│   │   └── audio.md                  # 音频播放模块
 │   ├── display/                      # 显示类
 │   │   ├── oled.md                   # OLED 显示屏
 │   │   ├── lcd.md                    # 字符/图形 LCD
@@ -55,48 +57,66 @@ mcu-components/
 │   │   ├── nb-iot.md                 # NB-IoT
 │   │   ├── can.md                    # CAN 总线
 │   │   ├── rs485.md                  # RS485
-│   │   └── nfc.md                    # NFC/RFID
+│   │   ├── nfc.md                    # NFC/RFID
+│   │   └── ethernet.md               # 以太网模块
 │   ├── storage/                      # 存储类
 │   │   ├── eeprom.md                 # EEPROM
 │   │   ├── flash.md                  # Flash
 │   │   ├── sd-card.md                # SD 卡
 │   │   ├── fram.md                   # FRAM
 │   │   └── rtc.md                    # RTC 时钟
-│   └── power/                        # 电源管理类
-│       ├── ldo.md                    # LDO 线性稳压
-│       ├── dc-dc.md                  # DC-DC 开关电源
-│       ├── battery-charger.md        # 电池充电管理
-│       ├── battery-monitor.md        # 电池监控
-│       └── protection.md             # 电源保护
+│   ├── power/                        # 电源管理类
+│   │   ├── ldo.md                    # LDO 线性稳压
+│   │   ├── dc-dc.md                  # DC-DC 开关电源
+│   │   ├── battery-charger.md        # 电池充电管理
+│   │   ├── battery-monitor.md        # 电池监控
+│   │   └── protection.md             # 电源保护
+│   └── input/                        # 输入类
+│       ├── rotary-encoder.md         # 旋转编码器
+│       ├── keypad.md                 # 按键/矩阵键盘
+│       └── touch.md                  # 电容触摸
 ├── templates/                        # 代码模板库
 │   ├── driver-template-i2c.c         # I2C 驱动模板
 │   ├── driver-template-spi.c         # SPI 驱动模板
 │   ├── driver-template-uart.c        # UART 驱动模板
 │   ├── driver-template-adc.c         # ADC 驱动模板
 │   ├── driver-template-pwm.c         # PWM 驱动模板
-│   └── driver-template-gpio.c        # GPIO 驱动模板
+│   ├── driver-template-gpio.c        # GPIO 驱动模板
+│   ├── driver-template.h             # 驱动头文件模板（统一接口形态）
+│   └── driver-template-rtos.c        # FreeRTOS 多任务封装模板
 ├── guides/                           # 通用指南
 │   ├── hardware-design.md            # 通用硬件设计规范
 │   ├── debugging-testing.md          # 调试与测试规范
-│   └── pitfalls.md                   # 常见问题与避坑指南
+│   ├── pitfalls.md                   # 常见问题与避坑指南
+│   ├── low-power.md                  # 低功耗设计规范
+│   ├── ota-bootloader.md             # OTA 升级与 Bootloader 设计
+│   └── coding-style.md               # C 代码风格与版本规范
 └── examples/                         # 完整示例
-    └── README.md                     # 示例索引
+    ├── README.md                     # 示例索引
+    └── env-monitor-station.md        # 端到端示例: 温湿度监测站
 ```
 
 ## 意图 → 文档 映射
 
 | 用户意图关键词 | 加载文档 |
 |---|---|
-| 温度/湿度/压力/光照/加速度/气体/距离/磁场 传感器 | `references/sensors/` 下对应文件 |
-| 电机/舵机/继电器/电磁阀/蜂鸣器 | `references/actuators/` 下对应文件 |
+| 温度/湿度/压力/光照/加速度/气体/距离/磁场/GPS定位 传感器 | `references/sensors/` 下对应文件 |
+| 电机/舵机/继电器/电磁阀/蜂鸣器/音频播放 | `references/actuators/` 下对应文件 |
+| 旋转编码器/按键/矩阵键盘/电容触摸 | `references/input/` 下对应文件 |
 | OLED/LCD/TFT/电子纸/LED点阵 | `references/display/` 下对应文件 |
-| WiFi/蓝牙/LoRa/NB-IoT/CAN/RS485/NFC | `references/communication/` 下对应文件 |
+| WiFi/蓝牙/LoRa/NB-IoT/CAN/RS485/NFC/以太网 | `references/communication/` 下对应文件 |
 | EEPROM/Flash/SD卡/FRAM/RTC | `references/storage/` 下对应文件 |
 | LDO/DC-DC/充电/电池监控/电源保护 | `references/power/` 下对应文件 |
 | I2C/SPI/UART/ADC/PWM/GPIO 驱动模板 | `templates/` 下对应文件 |
+| 驱动头文件/API 接口定义 | `templates/driver-template.h` |
+| FreeRTOS/多任务/互斥锁/任务通知 | `templates/driver-template-rtos.c` |
 | 硬件设计/PCB/原理图 | `guides/hardware-design.md` |
 | 调试/测试/验证 | `guides/debugging-testing.md` |
 | 常见问题/报错/不工作/异常 | `guides/pitfalls.md` |
+| 低功耗/电池续航/休眠 | `guides/low-power.md` |
+| OTA/固件升级/Bootloader/IAP | `guides/ota-bootloader.md` |
+| 代码风格/命名规范/版本号/提交规范 | `guides/coding-style.md` |
+| 完整项目示例/多器件组合 | `examples/env-monitor-station.md` |
 
 ## 芯片/器件型号快速索引
 
@@ -110,6 +130,7 @@ mcu-components/
 | `actuators/servo.md` | SG90, MG90S, MG996R, DS3218, SR430, LX-16A, DS3225 |
 | `actuators/solenoid.md` | 推拉电磁铁, 微型电磁阀, 常闭电磁阀, 常开电磁阀, 脉冲电磁阀 |
 | `actuators/stepper-motor.md` | 28BYJ-48, NEMA17, NEMA23, NEMA11 |
+| `actuators/audio.md` | DFPlayer Mini, JQ8900, JQ6500, MAX98357A, PCM5102A, WT588D |
 | `communication/bluetooth.md` | HC-05, HC-06, JDY-31, ESP32, nRF52832, nRF52840, CH582 |
 | `communication/can.md` | MCP2515, TJA1050, SN65HVD230, ISO1042, ADM3053, STM32 bxCAN, STM32 FDCAN, SJA1000 |
 | `communication/lora.md` | SX1278, SX1276, SX1262, SX1268, E22-400T22D, E22-900T22D, E32-433T20D, RA-01, SX1280 |
@@ -117,6 +138,7 @@ mcu-components/
 | `communication/nfc.md` | RC522, MFRC522, PN532, PN5180, ST25R3911B |
 | `communication/rs485.md` | MAX485, MAX3485, SP3485, SP485R, MAX13442, ADM2582E |
 | `communication/wifi.md` | ESP-01S, ESP8266 MOD, ESP32-WROOM-32, ESP32-C3, ESP32-S3, ESP8285 |
+| `communication/ethernet.md` | W5500, W5100S, ENC28J60, LAN8720, CH395 |
 | `display/e-paper.md` | SSD1680, UC8176, SSD1675, IL3829, SSD1681, UC8176C |
 | `display/lcd.md` | LCD1602, LCD2004, LCD12864, LCD1602+PCF8574, LCD2004+PCF8574 |
 | `display/led-matrix.md` | MAX7219, TM1637, HT16K33, WS2812, TM1640 |
@@ -129,6 +151,7 @@ mcu-components/
 | `power/protection.md` | TVS 二极管, 自恢复保险丝 PTC, 压敏电阻 MOV, 肖特基二极管, MOSFET 反接保护, 气体放电管 GDT, ESD 保护阵列 |
 | `sensors/distance.md` | HC-SR04, HC-SR04P, VL53L0X, VL53L1X, TFmini, GP2Y0A21 |
 | `sensors/gas.md` | MQ-2, MQ-135, MQ-7, CCS811, SGP30 |
+| `sensors/gps.md` | NEO-6M, NEO-M8N, ATGM336H, L76K, ZED-F9P |
 | `sensors/humidity.md` | DHT11, DHT22, SHT30, SHT40, BME280, HIH-4030 |
 | `sensors/imu.md` | MPU6050, BMI270, ICM-42688, QMC5883L, HMC5883L |
 | `sensors/light.md` | BH1750, TSL2561, LDR, OV2640, OV5640 |
@@ -140,6 +163,9 @@ mcu-components/
 | `storage/fram.md` | FM25V10, FM25V20, FM25W256, MB85RS256, MB85RC256, MB85RS1M, FM25V05 |
 | `storage/rtc.md` | DS3231, PCF8563, DS1307, DS1302, DS3234, RV-3028 |
 | `storage/sd-card.md` | SD / SDHC / SDXC, SPI 模式, SDIO 模式 |
+| `input/rotary-encoder.md` | EC11, EC16, AS5600, HN3806, 光电编码器 |
+| `input/keypad.md` | 独立按键, 4x4 矩阵键盘, ADC 分压键盘, TM1638, 74HC165 |
+| `input/touch.md` | TTP223, TTP226, TTP229, MPR121, ESP32 TouchPad, STM32 TSC |
 
 ## 开发者使用
 
