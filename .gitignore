@@ -18,3 +18,7 @@ __pycache__/
 .env
 .env.*
 *.pem
+
+# 传输临时文件
+.devin-transfer.tgz
+*.tgz
