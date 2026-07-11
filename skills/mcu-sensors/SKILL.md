@@ -22,7 +22,7 @@ description: MCU 传感器选型与驱动 Skill，覆盖温度、湿度、压力
 | BH1750、TSL2561、LDR、OV2640/OV5640 | `references/light.md` |
 | MPU6050、BMI270、ICM、电子罗盘 | `references/imu.md` |
 | MQ 系列、CCS811、SGP30、GP2Y1014AU | `references/gas.md` |
-| HC-SR04、VL53L0X、TFmini、红外测距 | `references/distance.md` |
+| HC-SR04、VL53L0X、TFmini、红外测距、干簧管门磁 | `references/distance.md` |
 | 霍尔、HMC5883L、QMC5883L、MLX90393 | `references/magnetic.md` |
 | NEO-6M、ATGM336H、NMEA、RTK | `references/gps.md` |
 

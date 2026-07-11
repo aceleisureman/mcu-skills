@@ -373,6 +373,18 @@
           "target": "references/lora.md"
         },
         {
+          "id": "zigbee",
+          "intent": "ZigBee 透传通信",
+          "keywords": [
+            "ZigBee",
+            "CC2530",
+            "透传模块",
+            "DRF1609",
+            "无线组网"
+          ],
+          "target": "references/zigbee.md"
+        },
+        {
           "id": "nb-iot",
           "intent": "NB-IoT 与蜂窝通信",
           "keywords": [
@@ -442,6 +454,7 @@
           "references/can.md",
           "references/ethernet.md",
           "references/lora.md",
+          "references/zigbee.md",
           "references/nb-iot.md",
           "references/nfc.md",
           "references/rs485.md",
