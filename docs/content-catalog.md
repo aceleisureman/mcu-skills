@@ -272,7 +272,7 @@
 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。
 
 - Skill：[`project-organizer`](../skills/project-organizer/SKILL.md)
-- 版本：`v2.2.0`
+- 版本：`v2.2.1`
 - 层级：`utility`
 - 依赖：无
 

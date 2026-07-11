@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.2.1 - 2026-07-12
+
+- 修复 --release 推送方式：分开 push main 和单独 push tag
 ## v2.2.0 - 2026-07-12
 
 - 新增 /organize-manual-single 命令：单文件汇总功能/硬件/引脚/使用说明

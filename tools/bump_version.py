@@ -121,7 +121,11 @@ def run_validate() -> bool:
 
 
 def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool) -> bool:
-    """执行 git commit + tag + push，触发 GitHub Actions 自动创建 Release。"""
+    """执行 git commit + tag + push，触发 GitHub Actions 自动创建 Release。
+
+    关键：必须用 `git push origin <tag>` 单独推送每个 tag，不能用 `--tags` 批量推送，
+    否则 GitHub 把它视为主分支 push 而非 tag push，release workflow 不会触发。
+    """
     tag = f"{skill}-v{new_version}"
     print(f"\n{'='*50}")
     print(f"发布 {tag}")
@@ -141,8 +145,9 @@ def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool
     if dry_run:
         print(f"  [dry-run] git add -A")
         print(f"  [dry-run] git commit -m \"{commit_msg}\"")
-        print(f"  [dry-run] git tag {tag}")
-        print(f"  [dry-run] git push origin main --tags")
+        print(f"  [dry-run] git tag -a {tag} -m 'Release'")
+        print(f"  [dry-run] git push origin main")
+        print(f"  [dry-run] git push origin {tag}  # 单独推送触发 release workflow")
         return True
 
     print("  git add -A ...")
@@ -151,17 +156,20 @@ def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool
     print(f"  git commit ...")
     run_cmd(["git", "commit", "-m", commit_msg])
 
-    print(f"  git tag {tag} ...")
-    # 如果 tag 已存在先删除
+    print(f"  git tag -a {tag} -m 'Release' ...")
     run_cmd(["git", "tag", "-d", tag], check=False)
-    run_cmd(["git", "tag", tag])
+    run_cmd(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
 
-    print(f"  git push ...")
-    push_result = run_cmd(
-        ["git", "push", "origin", "main", "--tags"], check=False
-    )
-    if push_result.returncode != 0:
-        print(f"  [错误] push 失败:\n{push_result.stderr}", file=sys.stderr)
+    print(f"  git push origin main ...")
+    main_push = run_cmd(["git", "push", "origin", "main"], check=False)
+    if main_push.returncode != 0:
+        print(f"  [错误] push main 失败:\n{main_push.stderr}", file=sys.stderr)
+        return False
+
+    print(f"  git push origin {tag} ...")
+    tag_push = run_cmd(["git", "push", "origin", tag], check=False)
+    if tag_push.returncode != 0:
+        print(f"  [错误] push tag 失败:\n{tag_push.stderr}", file=sys.stderr)
         return False
 
     print(f"\n  已推送 tag {tag}")
@@ -244,27 +252,25 @@ def main() -> int:
                 commit_parts.extend(f"- {m}" for m in args.message)
             commit_msg = "\n".join(commit_parts)
 
-            # 生成 Release notes
-            release_notes = "\n".join(
-                f"### {skill} v{ver}\n" + "\n".join(f"- {m}" for m in args.message)
-                if args.message else f"### {skill} v{ver}\n- 版本更新"
-                for skill, ver in bumped
-            )
-
             if args.dry_run:
                 print(f"  [dry-run] git add -A")
                 print(f"  [dry-run] git commit -m \"{commit_msg}\"")
-                print(f"  [dry-run] git tag {tag}")
-                print(f"  [dry-run] git push origin main --tags")
+                print(f"  [dry-run] git tag -a {tag} -m 'Release'")
+                print(f"  [dry-run] git push origin main")
+                print(f"  [dry-run] git push origin {tag}")
                 return 0
 
             run_cmd(["git", "add", "-A"])
             run_cmd(["git", "commit", "-m", commit_msg])
             run_cmd(["git", "tag", "-d", tag], check=False)
-            run_cmd(["git", "tag", tag])
-            push = run_cmd(["git", "push", "origin", "main", "--tags"], check=False)
-            if push.returncode != 0:
-                print(f"  [错误] push 失败:\n{push.stderr}", file=sys.stderr)
+            run_cmd(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
+            main_push = run_cmd(["git", "push", "origin", "main"], check=False)
+            if main_push.returncode != 0:
+                print(f"  [错误] push main 失败:\n{main_push.stderr}", file=sys.stderr)
+                return 1
+            tag_push = run_cmd(["git", "push", "origin", tag], check=False)
+            if tag_push.returncode != 0:
+                print(f"  [错误] push tag 失败:\n{tag_push.stderr}", file=sys.stderr)
                 return 1
             print(f"\n  已推送 tag {tag}")
         else:
