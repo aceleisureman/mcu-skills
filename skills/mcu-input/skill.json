@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-input",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "MCU 输入与识别",
   "summary": "覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。",
   "layer": "domain",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [
     "mcu-driver-core"
   ],

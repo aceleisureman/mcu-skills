@@ -29,6 +29,10 @@ class ValidateTests(unittest.TestCase):
             "<!-- GENERATED:DEPENDENCY_TABLE:START -->\n"
             "<!-- GENERATED:DEPENDENCY_TABLE:END -->\n",
         )
+        self.write(
+            "docs/skill.schema.json",
+            (ROOT / "docs" / "skill.schema.json").read_text(encoding="utf-8"),
+        )
         self.write_skill("alpha", "foundation")
         self.write(
             "evals/routing-cases.json",

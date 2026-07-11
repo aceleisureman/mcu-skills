@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-power",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "MCU 电源",
   "summary": "覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。",
   "layer": "domain",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [
     "mcu-driver-core"
   ],
@@ -72,6 +79,16 @@
         "ESD 保护"
       ],
       "target": "references/protection.md"
+    },
+    {
+      "id": "ina219-monitor-example",
+      "intent": "INA219 电流电压监控示例",
+      "keywords": [
+        "INA219 示例",
+        "电流监控示例",
+        "功耗测量示例"
+      ],
+      "target": "examples/ina219-monitor/"
     }
   ]
 }

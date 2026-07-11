@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.1 - 2026-07-11
+
+- 新增单文件项目手册示例输出（examples/project-manual.md）
+- skill.json 新增 license/author/platforms 元数据字段
 ## v2.3.0 - 2026-07-11
 
 - 新增 /organize 系列斜杠命令定义（.codebuddy/commands，支持 npm 安装器分发）

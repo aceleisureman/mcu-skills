@@ -1,0 +1,50 @@
+name: publish-npm
+
+on:
+  push:
+    tags:
+      - "npm-v[0-9]*.[0-9]*.[0-9]*"
+
+concurrency:
+  group: publish-${{ github.ref }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate before publish
+        run: |
+          python3 tools/skill_registry.py --check
+          python3 tools/evaluate_routing.py --check-report
+          python3 tools/validate.py
+
+      - name: Check tag matches package version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#npm-v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "tag npm-v$TAG_VERSION 与 package.json version $PKG_VERSION 不一致" >&2
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish
+        if: ${{ env.NPM_TOKEN != '' }}
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
+
+      - name: Skip notice
+        if: ${{ env.NPM_TOKEN == '' }}
+        run: echo "未配置 NPM_TOKEN secret，跳过发布"

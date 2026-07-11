@@ -1,6 +1,6 @@
 {
   "name": "mcu-skills",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "MCU 嵌入式开发 Skills 知识库安装器：一键安装到 Claude Code、Codex、CodeBuddy 的全局 Skill 目录",
   "bin": {
     "mcu-skills": "bin/mcu-skills.js"

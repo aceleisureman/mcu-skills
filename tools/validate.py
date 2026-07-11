@@ -134,6 +134,90 @@ def load_metadata(
     return metadata
 
 
+def schema_errors(value: object, schema: dict[str, object], location: str) -> list[str]:
+    """按 docs/skill.schema.json 使用的 JSON Schema 子集校验（零依赖实现）。
+
+    支持: type、const、enum、pattern、minLength、minItems、items、
+    required、properties、additionalProperties(false)。
+    """
+    problems: list[str] = []
+
+    if "const" in schema:
+        if value != schema["const"]:
+            problems.append(f"{location}: 必须为 {schema['const']!r}")
+        return problems
+    if "enum" in schema:
+        if value not in schema["enum"]:  # type: ignore[operator]
+            problems.append(f"{location}: 必须是 {schema['enum']} 之一")
+        return problems
+
+    expected = schema.get("type")
+    if expected == "string":
+        if not isinstance(value, str):
+            problems.append(f"{location}: 必须为字符串")
+            return problems
+        min_length = schema.get("minLength")
+        if isinstance(min_length, int) and len(value.strip()) < min_length:
+            problems.append(f"{location}: 长度不得小于 {min_length}")
+        pattern = schema.get("pattern")
+        if isinstance(pattern, str) and not re.fullmatch(pattern, value):
+            problems.append(f"{location}: 不匹配 pattern {pattern} -> {value!r}")
+    elif expected == "array":
+        if not isinstance(value, list):
+            problems.append(f"{location}: 必须为数组")
+            return problems
+        min_items = schema.get("minItems")
+        if isinstance(min_items, int) and len(value) < min_items:
+            problems.append(f"{location}: 至少需要 {min_items} 个元素")
+        items = schema.get("items")
+        if isinstance(items, dict):
+            for index, element in enumerate(value):
+                problems.extend(schema_errors(element, items, f"{location}[{index}]"))
+    elif expected == "object" or "properties" in schema:
+        if not isinstance(value, dict):
+            problems.append(f"{location}: 必须为对象")
+            return problems
+        properties = schema.get("properties")
+        properties = properties if isinstance(properties, dict) else {}
+        required = schema.get("required")
+        for key in required if isinstance(required, list) else []:
+            if key not in value:
+                problems.append(f"{location}: 缺少必填字段 {key}")
+        if schema.get("additionalProperties") is False:
+            for key in value:
+                if key not in properties:
+                    problems.append(f"{location}: 不允许的字段 {key}")
+        for key, sub_schema in properties.items():
+            if key in value and isinstance(sub_schema, dict):
+                problems.extend(schema_errors(value[key], sub_schema, f"{location}.{key}"))
+    return problems
+
+
+def check_schema(
+    root: Path,
+    skills: list[Path],
+    metadata: dict[str, dict[str, object]],
+    errors: list[str],
+) -> None:
+    schema_path = root / "docs" / "skill.schema.json"
+    if not schema_path.is_file():
+        errors.append(f"{schema_path}: 缺少 skill.json 的 JSON Schema")
+        return
+    try:
+        schema = json.loads(read_text(schema_path))
+    except (json.JSONDecodeError, OSError) as exc:
+        errors.append(f"{schema_path}: 无效 JSON -> {exc}")
+        return
+    if not isinstance(schema, dict):
+        errors.append(f"{schema_path}: 顶层必须是 JSON object")
+        return
+    for skill in skills:
+        data = metadata.get(skill.name)
+        if data is None:
+            continue
+        errors.extend(schema_errors(data, schema, str(skill / "skill.json")))
+
+
 def check_skill_shell(
     root: Path,
     skills: list[Path],
@@ -492,6 +576,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
     else:
         check_skill_shell(root, skills, metadata, errors)
 
+    check_schema(root, skills, metadata, errors)
     route_count = check_metadata(root, skills, metadata, errors)
     check_dependency_cycles(metadata, errors)
 

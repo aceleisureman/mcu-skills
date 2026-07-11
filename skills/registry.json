@@ -5,10 +5,17 @@
     {
       "schema_version": 1,
       "name": "mcu-driver-core",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "title": "MCU 驱动开发核心",
       "summary": "提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。",
       "layer": "foundation",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [],
       "triggers": [
         "驱动模板",
@@ -182,10 +189,17 @@
     {
       "schema_version": 1,
       "name": "mcu-actuators",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "title": "MCU 执行器",
       "summary": "覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -323,10 +337,17 @@
     {
       "schema_version": 1,
       "name": "mcu-communication",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "title": "MCU 通信",
       "summary": "覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -476,10 +497,17 @@
     {
       "schema_version": 1,
       "name": "mcu-displays",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "title": "MCU 显示设备",
       "summary": "覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -580,10 +608,17 @@
     {
       "schema_version": 1,
       "name": "mcu-input",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "title": "MCU 输入与识别",
       "summary": "覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -690,10 +725,17 @@
     {
       "schema_version": 1,
       "name": "mcu-power",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "title": "MCU 电源",
       "summary": "覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -761,6 +803,16 @@
             "ESD 保护"
           ],
           "target": "references/protection.md"
+        },
+        {
+          "id": "ina219-monitor-example",
+          "intent": "INA219 电流电压监控示例",
+          "keywords": [
+            "INA219 示例",
+            "电流监控示例",
+            "功耗测量示例"
+          ],
+          "target": "examples/ina219-monitor/"
         }
       ],
       "resources": {
@@ -773,17 +825,27 @@
         ],
         "templates": [],
         "guides": [],
-        "examples": [],
+        "examples": [
+          "examples/ina219-monitor/ina219.c",
+          "examples/ina219-monitor/ina219.h"
+        ],
         "scripts": []
       }
     },
     {
       "schema_version": 1,
       "name": "mcu-sensors",
-      "version": "2.4.1",
+      "version": "2.4.2",
       "title": "MCU 传感器",
       "summary": "覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -1052,10 +1114,17 @@
     {
       "schema_version": 1,
       "name": "mcu-storage",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "title": "MCU 存储与 RTC",
       "summary": "覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。",
       "layer": "domain",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core"
       ],
@@ -1160,10 +1229,17 @@
     {
       "schema_version": 1,
       "name": "mcu-system-design",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "title": "MCU 系统设计",
       "summary": "编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。",
       "layer": "orchestrator",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [
         "mcu-driver-core",
         "mcu-sensors",
@@ -1347,10 +1423,17 @@
     {
       "schema_version": 1,
       "name": "project-organizer",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "title": "项目整理",
       "summary": "扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。",
       "layer": "utility",
+      "license": "MIT",
+      "author": "georgesven",
+      "platforms": [
+        "claude-code",
+        "codex",
+        "codebuddy"
+      ],
       "dependencies": [],
       "triggers": [
         "整理项目",
@@ -1393,6 +1476,15 @@
             "失效链接扫描"
           ],
           "target": "scripts/scan_project.py"
+        },
+        {
+          "id": "manual-single-example",
+          "intent": "单文件项目手册示例输出",
+          "keywords": [
+            "项目手册示例",
+            "manual-single 示例"
+          ],
+          "target": "examples/project-manual.md"
         }
       ],
       "resources": {
@@ -1402,7 +1494,9 @@
         ],
         "templates": [],
         "guides": [],
-        "examples": [],
+        "examples": [
+          "examples/project-manual.md"
+        ],
         "scripts": [
           "scripts/scan_project.py"
         ]

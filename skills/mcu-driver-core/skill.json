@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-driver-core",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "MCU 驱动开发核心",
   "summary": "提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。",
   "layer": "foundation",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [],
   "triggers": [
     "驱动模板",

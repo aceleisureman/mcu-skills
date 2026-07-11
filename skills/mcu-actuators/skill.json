@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-actuators",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "MCU 执行器",
   "summary": "覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。",
   "layer": "domain",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [
     "mcu-driver-core"
   ],

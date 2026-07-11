@@ -2,7 +2,7 @@
 # Skills 项目手册
 
 > 生成时间：2026-07-11
-> 整合功能清单、硬件清单、引脚分配表和使用说明。
+> 整合功能清单、硬件清单和使用说明。
 
 ---
 
@@ -162,78 +162,40 @@ MCU 嵌入式开发 Skill 知识库，覆盖传感器、执行器、显示、通
 
 ---
 
-## 4. 引脚分配表
+## 4. 使用说明
 
-### 4.1 BSP — 家用智能药箱 (STM32F103C8T6)
-
-> 来源：`→ mcu-driver-core/examples/bsp/bsp.h`
-
-| 引脚 | 外设 | 器件 | 方向 | 说明 |
-|------|------|------|------|------|
-| PA0 | EXTI0 | 门磁干簧管 | IN | 开门中断 |
-| PA2 | USART2_TX | ESP-01S WiFi | AF | WiFi |
-| PA3 | USART2_RX | ESP-01S WiFi | AF | WiFi |
-| PA4 | GPIO | HX711 SCK | OUT | 称重时钟 |
-| PA5 | GPIO | HX711 DOUT | IN | 称重数据 |
-| PA6 | TIM3_CH1 | SG90 舵机 | AF | 锁 PWM 50Hz |
-| PA8 | GPIO | DHT11 | I/O | 温湿度 |
-| PB0 | ADC1_IN9 | MQ-135 AO | IN | 气体模拟量 |
-| PB6 | I2C1_SCL | SSD1306 | AF | OLED 时钟 |
-| PB7 | I2C1_SDA | SSD1306 | AF | OLED 数据 |
-| PB10 | USART3_TX | JQ8900 语音 | AF | 语音 |
-| PB11 | USART3_RX | JQ8900 语音 | AF | 语音 |
-| PB12-PB15 | GPIO | 按键 K2/K1/K3/K4 | IN | 上拉, 低有效 |
-| PC13 | GPIO | LED/蜂鸣器 | OUT | 低电平点亮 |
-
-### 4.2 其他示例引脚汇总
-
-| 示例 | MCU | 引脚分配 | 来源 |
-|------|-----|----------|------|
-| DS18B20 | STM32 HAL | PA8 = DQ (1-Wire) | `ds18b20.h` |
-| DHT11 v2 | STM32 HAL | PC15 = DATA | `dht11_v2_dwt_waitpin.h` |
-| HC-SR04 | STM32 标准库 | PA6=TRIG, PA7=ECHO | `hcsr04.c` |
-| MPU6050 | STM32 标准库 | PB6=SCL, PB7=SDA | `mpu6050.c` |
-| GP2Y1014AU | STM32 标准库 | PA0=ADC, PA2=ILED, PB8=OLED SCL, PB9=OLED SDA | `gp2y1014au.c` |
-| GP2Y1014AU | Arduino | D7=ILED, A0=VOUT | `gp2y1014au.ino` |
-| 4 轮电机 | STM32 标准库 | PA0-PA3=PWM, PA4-PA7=方向1, PB0-PB1/PB10-PB11=方向2 | `motor_4wheel.c` |
-| SG90 舵机 | STM32 HAL | PA7=TIM3_CH2, PB0=TIM3_CH3 | `servo.c` |
-| DFPlayer | STM32 标准库 | PA2=TX, PA3=RX | `dfplayer.c` |
-| OLED v1 | STM32 HAL | PB6=SCL, PB7=SDA (硬件 I2C) | `oled_v1_dirty_page.h` |
-| OLED v2 | STM32 HAL | PB7=SCL, PB6=SDA (软件 I2C) | `oled_v2_burst_write.h` |
-| OLED v3 | STM32 HAL | PB4=SCL, PB5=SDA (软件 I2C) | `oled_v3_basic.h` |
-| 矩阵键盘 | STM32 HAL | 行: PB12-PB15, 列: PA0/PA1/PB8/PB9 | `keyboard_matrix_4x4.h` |
-| AS608 指纹 | STM32 HAL | PB10=TX, PB11=RX | `finger_as608.h` |
-| K10 人脸 | STM32 标准库 | PA9=TX, PA10=RX | `k10_face_recognition.h` |
-| GPS | STM32 标准库 | PA14=RX, PA15=TX | `serial_gps.c` |
-| 门控系统 | STM32 HAL | PA1=蜂鸣器, PA7=LED蓝, PA8=PIR, PB0=LED红 | `buzzer-pir-relay/*.h` |
-| DS1302 | STM32 HAL | CLK/RST/DAT (定义在 config.h) | `ds1302.c` |
-| Flash 参数 | STM32 HAL | 内部 Flash 末页 0x0800FC00 | `flash_param.c` |
-
----
-
-## 5. 使用说明
-
-### 5.1 如何查找器件驱动
+### 4.1 如何查找器件驱动
 
 1. 按型号查「功能清单」(第 2 节)，找到 Skill 和 `→ examples/` 路径。
 2. 按功能查各 Skill 的 `→ references/` 文档中的选型决策树。
-3. 按引脚查「引脚分配表」(第 4 节)。
 
-### 5.2 如何使用示例代码
+### 4.2 如何使用示例代码
 
 1. **STM32 HAL 示例**：在 STM32CubeMX 中配置对应外设（I2C/UART/ADC/TIM/GPIO），将示例 `.c/.h` 复制到工程中，修改引脚宏定义。
 2. **STM32 标准库示例**：在 Keil MDK 中建工程，添加 `stm32f10x.h` 和标准库文件，编译。
 3. **Arduino 示例**：直接用 Arduino IDE 打开 `.ino` 文件，选对板型和端口。
 
-### 5.3 新增 Skill 流程
+### 4.3 新增 Skill 流程
 
 1. 在 `skills/` 下新建目录，包含 `SKILL.md`、`skill.json`、`CHANGELOG.md`。
 2. 运行 `python3 tools/skill_registry.py --write` 更新 `registry.json`。
 3. 运行 `python3 tools/validate.py` 验证结构完整性。
 
-### 5.4 引脚冲突注意事项
+---
 
-- **PA2/PA3**：BSP 中用于 USART2 (WiFi)，GP2Y1014AU 中 PA2 用于 ILED，DFPlayer 中 PA2/PA3 用于 UART2。同一 MCU 上不可同时使用。
-- **PA8**：BSP 中用于 DHT11，DS18B20 示例中也用 PA8，门控系统中用于 PIR。需根据实际项目调整。
-- **PB6/PB7**：BSP 中用于硬件 I2C1 (OLED)，MPU6050 和 OLED v2 中用于软件 I2C。切换时注意初始化顺序。
-- **PB0**：BSP 中用于 MQ-135 ADC，门控系统中用于 LED Alarm，舵机示例中用于 TIM3_CH3。
+## 5. 系统流程图
+
+```mermaid
+flowchart TD
+    A[用户提出需求] --> B{提到器件型号或功能?}
+    B -- 是 --> C[路由到对应领域 Skill]
+    B -- 否 --> D[使用 mcu-driver-core 通用规范]
+    C --> E[读取器件开发规范]
+    E --> F{需要生成代码?}
+    F -- 是 --> G[结合驱动模板与引脚生成驱动]
+    F -- 否 --> H[输出选型/硬件/避坑建议]
+    G --> I[提示硬件注意事项]
+    D --> H
+```
+
+> 转图片：`npx -y @mermaid-js/mermaid-cli -i docs/project-manual.md -o docs/flow.png`，或到 mermaid.live 粘贴导出 PNG/SVG。

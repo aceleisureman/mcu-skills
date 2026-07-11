@@ -1,0 +1,11 @@
+{
+  "name": "mcu-skills",
+  "version": "1.0.0",
+  "description": "MCU 嵌入式开发 Skills：传感器、执行器、显示、通信、存储、电源、输入、系统设计、驱动核心与项目整理，含 /organize 系列命令。",
+  "author": {
+    "name": "georgesven"
+  },
+  "license": "MIT",
+  "keywords": ["mcu", "embedded", "sensors", "drivers", "project-organizer"],
+  "commands": "./.codebuddy/commands"
+}

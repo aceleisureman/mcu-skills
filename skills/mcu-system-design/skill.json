@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-system-design",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "title": "MCU 系统设计",
   "summary": "编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。",
   "layer": "orchestrator",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [
     "mcu-driver-core",
     "mcu-sensors",

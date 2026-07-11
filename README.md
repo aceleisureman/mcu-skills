@@ -7,16 +7,16 @@
 <!-- GENERATED:SKILL_TABLE:START -->
 | Skill | 层级 | 版本 | 依赖 | 用途 |
 |-------|------|------|------|------|
-| [`mcu-driver-core`](skills/mcu-driver-core/SKILL.md) | `foundation` | `v2.1.1` | 无 | 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。 |
-| [`mcu-actuators`](skills/mcu-actuators/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。 |
-| [`mcu-communication`](skills/mcu-communication/SKILL.md) | `domain` | `v2.2.1` | `mcu-driver-core` | 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。 |
-| [`mcu-displays`](skills/mcu-displays/SKILL.md) | `domain` | `v2.2.1` | `mcu-driver-core` | 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。 |
-| [`mcu-input`](skills/mcu-input/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。 |
-| [`mcu-power`](skills/mcu-power/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。 |
-| [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.4.1` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
-| [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
-| [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.2.1` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
-| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.3.0` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
+| [`mcu-driver-core`](skills/mcu-driver-core/SKILL.md) | `foundation` | `v2.1.2` | 无 | 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。 |
+| [`mcu-actuators`](skills/mcu-actuators/SKILL.md) | `domain` | `v2.1.2` | `mcu-driver-core` | 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。 |
+| [`mcu-communication`](skills/mcu-communication/SKILL.md) | `domain` | `v2.2.2` | `mcu-driver-core` | 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。 |
+| [`mcu-displays`](skills/mcu-displays/SKILL.md) | `domain` | `v2.2.2` | `mcu-driver-core` | 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。 |
+| [`mcu-input`](skills/mcu-input/SKILL.md) | `domain` | `v2.1.2` | `mcu-driver-core` | 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。 |
+| [`mcu-power`](skills/mcu-power/SKILL.md) | `domain` | `v2.1.2` | `mcu-driver-core` | 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。 |
+| [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.4.2` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
+| [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.2` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
+| [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.2.2` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
+| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.3.1` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
 <!-- GENERATED:SKILL_TABLE:END -->
 
 完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)。
@@ -31,7 +31,7 @@
 - **可组合**：复杂产品由 `mcu-system-design` 编排多个领域 Skill。
 - **机器可读**：每个 `skill.json` 声明版本、层级、依赖、触发词和资源路由。
 - **可扩展校验**：自动检查依赖、循环、孤儿资源、重复路由、URI 和生成漂移。
-- **可量化路由**：55 个典型问题持续评测单领域与组合 Skill 的精确率和召回率。
+- **可量化路由**：62 个典型问题（含口语化提问与负样本）持续评测单领域与组合 Skill 的精确率和召回率。
 
 ## 依赖模型
 
@@ -61,15 +61,23 @@ project-organizer     （独立）
 ├── evals/
 │   └── routing-cases.json  # 路由评测数据集
 ├── docs/                   # 架构、依赖图、迁移和生成索引
+├── bin/
+│   └── mcu-skills.js       # npm 安装器（Claude Code / Codex / CodeBuddy）
+├── .codebuddy/
+│   └── commands/           # /organize 系列斜杠命令定义
 ├── tools/
-│   ├── skill_registry.py   # registry、索引和依赖图生成/URI 解析
+│   ├── skill_registry.py   # registry、索引、依赖图与 SKILL.md 路由表生成/URI 解析
 │   ├── evaluate_routing.py # 路由评测与报告生成
-│   └── validate.py         # 结构、语义和生成漂移校验
+│   ├── validate.py         # 结构、语义和生成漂移校验
+│   ├── bump_version.py     # Skill 版本升级与发布
+│   └── extract_changelog.py # Release Notes 提取
 ├── tests/
 │   ├── test_validate.py
-│   └── test_routing.py
+│   ├── test_routing.py
+│   └── test_tools.py
 └── .github/workflows/
-    └── validate.yml
+    ├── validate.yml
+    └── release.yml
 ```
 
 每个 Skill 遵循：
@@ -105,6 +113,17 @@ npx mcu-skills uninstall mcu-sensors       # 卸载
 
 安装 `project-organizer` 时会同时注册 `/organize` 系列斜杠命令（Claude Code/CodeBuddy 为 `commands/`，Codex 为 `prompts/`）；Codex 还会在 `~/.codex/AGENTS.md` 中维护一个 Skill 索引区块。
 
+### Claude Code 插件安装
+
+仓库内置插件与 marketplace 清单（`.claude-plugin/`），在 Claude Code 中执行：
+
+```text
+/plugin marketplace add <repo-url-or-owner/repo>
+/plugin install mcu-skills@mcu-skills
+```
+
+即可获得全部 Skill 与 `/organize` 系列命令。
+
 ### 手动安装：Claude Code / Claude 平台
 
 复制需要的 Skill 目录到项目或个人 Skill 目录：
@@ -135,4 +154,19 @@ python3 tools/evaluate_routing.py
 python3 -m unittest discover -s tests -v
 ```
 
-不要手工编辑 `skills/registry.json`、内容索引、依赖图或路由评测报告。新增或修改 Skill 前阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。从旧版 `mcu-components` 迁移请参考 [`docs/migration-v2.md`](docs/migration-v2.md)。
+CI 等效检查（不改动工作区）：
+
+```sh
+python3 tools/skill_registry.py --check
+python3 tools/evaluate_routing.py --check-report
+ruff check tools tests && ruff format --check tools tests
+```
+
+版本升级与发布：
+
+```sh
+python3 tools/bump_version.py mcu-sensors --minor -m "变更说明"
+python3 tools/bump_version.py mcu-sensors --minor --release  # 升级 + commit + tag + push
+```
+
+不要手工编辑 `skills/registry.json`、内容索引、依赖图、路由评测报告，以及各 `SKILL.md` 中的 `GENERATED:ROUTE_TABLE` 意图路由表区块（由 `skill_registry.py --write` 从 `skill.json` 生成）。新增或修改 Skill 前阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。从旧版 `mcu-components` 迁移请参考 [`docs/migration-v2.md`](docs/migration-v2.md)。

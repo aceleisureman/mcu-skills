@@ -1,0 +1,17 @@
+{
+  "name": "mcu-skills",
+  "owner": {
+    "name": "georgesven"
+  },
+  "metadata": {
+    "description": "MCU 嵌入式开发 Skills 知识库",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "mcu-skills",
+      "source": "./",
+      "description": "10 个 MCU/项目整理 Skill + /organize 系列命令，一键安装。"
+    }
+  ]
+}

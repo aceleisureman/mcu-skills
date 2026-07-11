@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.2 - 2026-07-11
+
+- 新增 INA219 电流电压监控示例（examples/ina219-monitor）
+- skill.json 新增 license/author/platforms 元数据字段
 ## v2.1.1 - 2026-07-11
 
 - 意图路由表改为由 skill.json 自动生成（GENERATED:ROUTE_TABLE 区块）

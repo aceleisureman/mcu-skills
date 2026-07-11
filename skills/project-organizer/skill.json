@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "project-organizer",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "title": "项目整理",
   "summary": "扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。",
   "layer": "utility",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [],
   "triggers": [
     "整理项目",
@@ -47,6 +54,15 @@
         "失效链接扫描"
       ],
       "target": "scripts/scan_project.py"
+    },
+    {
+      "id": "manual-single-example",
+      "intent": "单文件项目手册示例输出",
+      "keywords": [
+        "项目手册示例",
+        "manual-single 示例"
+      ],
+      "target": "examples/project-manual.md"
     }
   ]
 }

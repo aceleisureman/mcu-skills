@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
   "name": "mcu-communication",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "title": "MCU 通信",
   "summary": "覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。",
   "layer": "domain",
+  "license": "MIT",
+  "author": "georgesven",
+  "platforms": [
+    "claude-code",
+    "codex",
+    "codebuddy"
+  ],
   "dependencies": [
     "mcu-driver-core"
   ],
