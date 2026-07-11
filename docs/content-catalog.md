@@ -272,7 +272,7 @@
 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。
 
 - Skill：[`project-organizer`](../skills/project-organizer/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.2.0`
 - 层级：`utility`
 - 依赖：无
 
@@ -281,7 +281,7 @@
 | 意图 | 关键词 | 目标 |
 |------|--------|------|
 | 目录、命名与清理规则 | 整理规则、命名规范、目录规范、垃圾文件清理 | [`organize-rules.md`](../skills/project-organizer/references/organize-rules.md) |
-| 功能、硬件、引脚和说明文档模板 | 功能清单、硬件清单、引脚分配表、使用说明文档 | [`feature-hardware-inventory.md`](../skills/project-organizer/references/feature-hardware-inventory.md) |
+| 功能、硬件、引脚和说明文档模板 | 功能清单、硬件清单、引脚分配表、使用说明文档、/organize-manual-single | [`feature-hardware-inventory.md`](../skills/project-organizer/references/feature-hardware-inventory.md) |
 | 只读项目扫描 | /organize-scan、扫描项目现状、失效链接扫描 | [`scan_project.py`](../skills/project-organizer/scripts/scan_project.py) |
 
 ### 资源

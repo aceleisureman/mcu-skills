@@ -24,7 +24,8 @@ description: 项目整理与规范化工具。对代码/文档项目进行结构
 | `/organize-hardware` | 整理硬件清单 | 列出全部使用硬件（含 MCU 型号/参数）、接口、用途、驱动文件 |
 | `/organize-pinout` | 整理硬件引脚 | 单独输出 MCU 引脚 ↔ 器件引脚分配表，含上拉/中断/冲突检查 |
 | `/organize-manual` | 生成使用说明文档 | 基于功能/硬件/引脚整理结果生成 Markdown 使用说明（docs/manual.md） |
-| `/organize-docs` | 一键汇总生成 | 依次执行 features → hardware → pinout → manual，产出全套项目文档 |
+| `/organize-manual-single` | 单文件汇总 | 依次执行 features → hardware → pinout → manual，合并为**单个** Markdown 文件 |
+| `/organize-docs` | 一键汇总生成 | 依次执行 features → hardware → pinout → manual，产出全套项目文档（4 个独立文件） |
 
 用户未使用命令但表达了整理意图时，等同于 `/organize`；表达"整理功能/硬件/引脚"、"生成使用说明"意图时，对应相应命令；表达"整理项目功能文档/全部文档"意图时，等同于 `/organize-docs`。这五个命令的详细执行规范与输出模板见 `references/feature-hardware-inventory.md`。
 
@@ -33,6 +34,45 @@ description: 项目整理与规范化工具。对代码/文档项目进行结构
 1. 依次执行 `/organize-features` → `/organize-hardware` → `/organize-pinout` → `/organize-manual`，共产出 4 份文档：`output://docs/features.md`、`output://docs/hardware.md`、`output://docs/pinout.md`、`output://docs/manual.md`
 2. 后一阶段引用前面阶段的结果，保证四份文档中型号、引脚、功能编号一致
 3. 完成后生成 `output://docs/README.md` 索引，列出四份文档及其用途，并汇报待确认项（标注为「待确认」的条目清单）
+
+### `/organize-manual-single` 单文件流程
+
+与 `/organize-docs` 执行相同的整理逻辑，但将功能清单、硬件清单、引脚表和使用说明合并到**同一个 Markdown 文件**中输出。
+
+1. 依次执行 features → hardware → pinout → manual 四个阶段的扫描和整理
+2. 将四部分内容合并为单个文件，结构如下：
+
+```
+# {项目名} 项目手册
+
+## 1. 项目概述
+（项目简介 + 主要功能概览）
+
+## 2. 功能清单
+（分级编号功能列表，1 / 1.1 / 1.2 ...）
+
+## 3. 硬件清单
+（MCU 参数表 + 外设器件表）
+
+## 4. 引脚分配表
+（MCU 引脚逐一列表 + 冲突检查）
+
+## 5. 使用说明
+（硬件准备 + 环境搭建 + 功能使用 + FAQ）
+```
+
+3. 各章节间编号和型号保持一致（功能清单中的硬件引用 → 硬件清单中的序号 → 引脚表中的器件）
+4. 输出到 `output://docs/project-manual.md`（或用户指定路径）
+5. 汇报待确认项（标注为「待确认」的条目清单）
+
+**与 `/organize-docs` 的区别**：
+
+| 维度 | `/organize-docs` | `/organize-manual-single` |
+|------|------------------|---------------------------|
+| 输出文件数 | 5 个（4 文档 + 索引） | 1 个 |
+| 适用场景 | 大型项目，多人协作分章维护 | 中小项目，一键查看全貌 |
+| 文件大小 | 各文件独立，单文件较短 | 单文件较长，但一文件全包含 |
+| 引用方式 | 文件间交叉引用 | 文件内章节引用 |
 
 ## 各阶段执行规范
 
