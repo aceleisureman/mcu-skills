@@ -1,16 +1,17 @@
-# 气体传感器开发规范
+# 气体与粉尘传感器开发规范
 
 ## 1. 概述与选型指南
 
 ### 常见型号对比
 
-| 型号 | 检测气体 | 接口 | 量程 | 供电 | 加热 | 特点 | 价格 |
+| 型号 | 检测对象 | 接口 | 量程 | 供电 | 加热 | 特点 | 价格 |
 |------|---------|------|------|------|------|------|------|
 | MQ-2 | 可燃气体/烟雾 | 模拟(ADC) | 300~10000ppm | 5V | 5V加热 | 廉价、通用 | ¥3~6 |
 | MQ-135 | 空气质量(NH3/CO2) | 模拟(ADC) | 10~1000ppm | 5V | 5V加热 | 多气体、空气监测 | ¥4~8 |
 | MQ-7 | 一氧化碳(CO) | 模拟(ADC) | 20~2000ppm | 5V | 5V/1.4V循环 | 需加热循环 | ¥4~8 |
 | CCS811 | eCO2/TVOC | I2C | 400~8192ppm / 0~1187ppb | 3.3V | 内置 | 数字输出、基线算法 | ¥8~20 |
 | SGP30 | eCO2/TVOC | I2C | 400~60000ppm / 0~60000ppb | 1.62~1.98V | 内置 | 内置基线校准、多像素 | ¥15~30 |
+| GP2Y1014AU | PM2.5 粉尘 | 模拟(ADC)+GPIO | 0~500μg/m³ | 5V | 内部LED脉冲 | 低成本、单粒子散射 | ¥8~15 |
 
 ### 选型决策树
 
@@ -20,6 +21,7 @@
 检测空气质量？ → 是 → 预算低？ → 是 → MQ-135 (模拟输出)
                           否 → 数字接口？ → 是 → SGP30 (I2C, 内置基线)
                                               否 → CCS811 (I2C, eCO2/TVOC)
+检测PM2.5/粉尘？ → 是 → GP2Y1014AU (模拟输出, 内部LED脉冲采样)
 需要精确CO2测量？ → 是 → MQ系列不适合 → 使用NDIR传感器(如MH-Z19)
 通用推荐 → SGP30 (I2C数字输出, 内置基线校准, TVOC+eCO2)
 ```
@@ -111,6 +113,48 @@ GND ──────────────────── CCS811 GND
 - nWAKE 拉低才能通信，通信时拉高
 - 首次使用需等待 20 分钟基线稳定
 - 可配合温湿度传感器做补偿（SHT30 等）
+
+### GP2Y1014AU 粉尘传感器电路 (ADC + GPIO)
+
+```
+                        5V
+                        │
+                    150Ω(限流)
+                        │
+GP2Y1014AU ── V-LED ────┘    (LED 正极, 内部LED驱动)
+GP2Y1014AU ── LED-GND ── GND  (LED 负极)
+
+MCU GPIO (ILED) ── 150Ω ── GP2Y1014AU V-LED  (脉冲驱动内部LED)
+
+GP2Y1014AU ── VOUT ──┬── 分压电阻 (转接板: 1kΩ + 10kΩ)
+                      │
+                      ├── ADC 输入引脚 (如 PA0)
+                      │
+                    10kΩ (下拉)
+                      │
+GND ─────────────────┘
+
+GP2Y1014AU ── VCC ─── 5V
+GP2Y1014AU ── GND ─── GND
+```
+
+**接线说明（参考实际模块）**：
+
+| GP2Y1014AU 引脚 | STM32 引脚 | 说明 |
+|-----------------|-----------|------|
+| VCC | 5V | 传感器供电 |
+| GND | GND | 公共地 |
+| VOUT (AO) | PA0 (ADC1_CH0) | 模拟输出，经分压电阻接入 |
+| V-LED (ILED) | PA2 (GPIO 推挽) | 内部 LED 脉冲控制 |
+
+**要点**：
+- 传感器供电 5V，VOUT 输出最高可达 3.5V 以上，3.3V MCU 的 ADC 不能直接接，需分压
+- 转接板通常使用 1kΩ + 10kΩ 分压（分压比 1/11），读取后电压值需乘以 11 还原
+- ILED 控制引脚用于触发内部 LED 脉冲，采样时序严格：高电平 0.28ms 后采样，总脉宽 0.32ms
+- 采样周期 10ms（LED 脉冲 0.32ms + 恢复 9.68ms），不可连续采样
+- 传感器内部有放大电路，VOUT 与粉尘浓度成近似线性关系
+- 安装时传感器开口朝下或水平，避免灰尘沉积在光路上
+- 不可在凝露环境中使用
 
 ## 3. 驱动开发规范
 
@@ -230,6 +274,135 @@ void mq135_set_calibration(mq_handle_t *h) {
     h->cal_a = -0.42f;
     h->cal_b = 2.95f;
 }
+```
+
+### GP2Y1014AU 粉尘传感器驱动代码
+
+```c
+/* ====== 配置参数（需根据实际硬件校准） ====== */
+#define GP2Y_NO_DUST_VOLTAGE   400     /* 遮住传感器时的零点电压(mV)，通常 400~900 */
+#define GP2Y_COV_RATIO         0.20f   /* 灵敏度转换系数 (μg/m³ per mV)，通常 0.17~0.20 */
+#define GP2Y_DIVIDER_RATIO     11      /* 分压比：1kΩ+10kΩ → 1/11，还原时乘 11 */
+#define GP2Y_VREF_MV           3300    /* ADC 参考电压 (mV) */
+#define GP2Y_ADC_MAX           4096    /* 12 位 ADC 满量程 */
+#define GP2Y_LED_PULSE_US      280     /* LED 点亮后等待采样时间 (μs) */
+#define GP2Y_LED_TOTAL_US      320     /* LED 总脉宽 (μs)，采样后补足到 0.32ms */
+#define GP2Y_RECOVERY_US       9680    /* 采样后恢复时间 (μs)，总周期 10ms */
+#define GP2Y_FILTER_SIZE       10      /* 滑动平均滤波窗口 */
+
+/* ====== 驱动结构 ====== */
+typedef struct {
+    adc_bus_t   *adc;           /* ADC 总线句柄 */
+    uint8_t      channel;       /* ADC 通道 */
+    gpio_pin_t   iled_pin;      /* LED 控制引脚 */
+    uint16_t     filter_buf[GP2Y_FILTER_SIZE];
+    uint16_t     filter_sum;
+    uint8_t      filter_idx;
+    bool         filter_init;
+    uint16_t     last_raw;      /* 最近一次原始 ADC 值 */
+    uint16_t     last_voltage;  /* 最近一次电压 (mV) */
+    float        last_density;  /* 最近一次浓度 (μg/m³) */
+} gp2y_handle_t;
+
+/* ====== 滑动平均滤波 ====== */
+static uint16_t gp2y_filter(gp2y_handle_t *h, uint16_t new_val) {
+    if (!h->filter_init) {
+        for (int i = 0; i < GP2Y_FILTER_SIZE; i++)
+            h->filter_buf[i] = new_val;
+        h->filter_sum = (uint32_t)new_val * GP2Y_FILTER_SIZE;
+        h->filter_init = true;
+        return new_val;
+    }
+    h->filter_sum -= h->filter_buf[h->filter_idx];
+    h->filter_buf[h->filter_idx] = new_val;
+    h->filter_sum += new_val;
+    h->filter_idx = (h->filter_idx + 1) % GP2Y_FILTER_SIZE;
+    return h->filter_sum / GP2Y_FILTER_SIZE;
+}
+
+/* ====== 核心采样（严格遵循 datasheet 时序） ====== */
+gas_status_t gp2y_read(gp2y_handle_t *h, float *density_ugm3) {
+    /* 1. 开启内部 LED */
+    gpio_write(h->iled_pin, 1);
+
+    /* 2. 等待 280μs（datasheet 规定的采样窗口） */
+    delay_us(GP2Y_LED_PULSE_US);
+
+    /* 3. 立即采集 ADC */
+    uint16_t raw;
+    if (adc_read(h->adc, h->channel, &raw)) return GAS_ERR_TIMEOUT;
+    h->last_raw = raw;
+
+    /* 4. 补足脉宽至 0.32ms 后关闭 LED */
+    delay_us(GP2Y_LED_TOTAL_US - GP2Y_LED_PULSE_US);
+    gpio_write(h->iled_pin, 0);
+
+    /* 5. 恢复等待（总周期 10ms） */
+    delay_us(GP2Y_RECOVERY_US);
+
+    /* 6. 滑动平均滤波 */
+    uint16_t filtered = gp2y_filter(h, raw);
+
+    /* 7. 电压换算：ADC → mV，再乘分压比还原 */
+    h->last_voltage = (uint16_t)(
+        ((uint32_t)filtered * GP2Y_VREF_MV) / GP2Y_ADC_MAX
+        * GP2Y_DIVIDER_RATIO
+    );
+
+    /* 8. 浓度计算：减去零点电压 × 灵敏度系数 */
+    if (h->last_voltage > GP2Y_NO_DUST_VOLTAGE) {
+        h->last_density = (float)(h->last_voltage - GP2Y_NO_DUST_VOLTAGE)
+                          * GP2Y_COV_RATIO;
+    } else {
+        h->last_density = 0;
+    }
+
+    if (density_ugm3) *density_ugm3 = h->last_density;
+    return GAS_OK;
+}
+
+/* ====== 零点校准（在干净空气中执行） ====== */
+gas_status_t gp2y_calibrate_zero(gp2y_handle_t *h, uint16_t samples) {
+    /* 警告: 必须在无尘环境中执行，建议遮住传感器开口 */
+    uint32_t voltage_sum = 0;
+    for (uint16_t i = 0; i < samples; i++) {
+        gp2y_read(h, NULL);
+        voltage_sum += h->last_voltage;
+        delay_ms(100);
+    }
+    /* 校准后的零点电压取平均值 */
+    uint16_t zero_voltage = voltage_sum / samples;
+    /* 注意：校准结果需写入 Flash/EEPROM 持久化 */
+    printf("GP2Y zero-point: %d mV (update NO_DUST_VOLTAGE)\n", zero_voltage);
+    return GAS_OK;
+}
+```
+
+**采样时序图**：
+
+```
+ILED  ___              ┌──────────────────┐                    ___
+       ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾                  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+                        │←─ 280μs ─→│←40μs→│
+                        ↑           ↑
+                       LED开       ADC采样点
+                                             │←──── 9680μs 恢复 ────→│
+                                             │                        │
+                                        总周期 = 10ms
+```
+
+**浓度换算公式**：
+
+```
+V_actual(mV) = (ADC_raw × V_ref / ADC_max) × Divider_Ratio
+Density(μg/m³) = max(0, (V_actual - V_zero) × COV_RATIO)
+
+典型参数：
+  V_ref     = 3300 mV  (3.3V MCU)
+  ADC_max   = 4096     (12-bit)
+  Divider   = 11       (1kΩ + 10kΩ 分压板)
+  V_zero    = 400 mV   (无粉尘时零点，需实测校准)
+  COV_RATIO = 0.20     (μg/m³ per mV)
 ```
 
 ### SGP30 I2C 驱动代码
@@ -354,30 +527,35 @@ gas_status_t sgp30_set_baseline(sgp30_handle_t *h, uint16_t co2, uint16_t tvoc) 
 - [ ] I2C 总线：示波器检查 SCL/SDA 波形
 - [ ] 传感器暴露在空气中，不可密封
 - [ ] 确认去耦电容已贴装
+- [ ] GP2Y1014AU：确认 ILED 引脚 GPIO 推挽输出、ADC 引脚模拟输入
+- [ ] GP2Y1014AU：确认分压电阻焊接正确（1kΩ+10kΩ），ADC 输入电压不超过 VREF
 
 ### 通信验证
 - **MQ系列**：万用表测 AOUT 电压，预热后应在 0.5~4V 范围
 - **SGP30**：I2C 扫描确认地址 0x58 响应；读取序列号验证
 - **CCS811**：I2C 扫描确认地址 0x5A/0x5B；读取硬件ID应为 0x81
+- **GP2Y1014AU**：遮住传感器开口，VOUT 应低于 NO_DUST_VOLTAGE；对准烟雾源，VOUT 应明显上升
 
 ### 校准流程
 1. **MQ系列**：在干净空气中预热 24 小时，采集 Rs 值作为 R0
 2. **SGP30**：首次使用需运行 12 小时建立基线，之后每小时保存基线到 Flash
 3. **CCS811**：首次使用需等待 20 分钟基线稳定，可配合温湿度做补偿
+4. **GP2Y1014AU**：遮住传感器开口采集多组 VOUT 取均值作为 NO_DUST_VOLTAGE，写入 Flash
 
 ### 数据校验
 - MQ系列：在已知浓度气体环境中验证 Rs/R0 比值是否符合数据手册曲线
 - SGP30：干净空气中 eCO2 约 400~450ppm，TVOC 接近 0
 - CCS811：干净空气中 eCO2 约 400ppm，TVOC 接近 0
+- GP2Y1014AU：干净空气中浓度应接近 0 μg/m³；对着烟雾浓度应快速上升至 100+ μg/m³
 
 ### 性能指标
 
-| 指标 | MQ-2 | MQ-7 | SGP30 | CCS811 |
-|------|------|------|-------|--------|
-| 预热时间 | 2min(日常)/24h(首次) | 2min(日常)/48h(首次) | 15s | 20min |
-| 采样间隔 | 1s | 150s(加热循环) | 1s(必须) | 1s |
-| 功耗 | ~800mW | ~150mW(平均) | ~14mW | ~60mW |
-| 寿命 | ~5年 | ~5年 | ~10年 | ~5年 |
+| 指标 | MQ-2 | MQ-7 | SGP30 | CCS811 | GP2Y1014AU |
+|------|------|------|-------|--------|------------|
+| 预热时间 | 2min(日常)/24h(首次) | 2min(日常)/48h(首次) | 15s | 20min | 即时(无需预热) |
+| 采样间隔 | 1s | 150s(加热循环) | 1s(必须) | 1s | 10ms(最快)，实际建议 1s |
+| 功耗 | ~800mW | ~150mW(平均) | ~14mW | ~60mW | ~20mW(LED脉冲平均) |
+| 寿命 | ~5年 | ~5年 | ~10年 | ~5年 | ~5年 |
 
 ## 5. 常见问题与避坑指南
 
@@ -398,6 +576,12 @@ gas_status_t sgp30_set_baseline(sgp30_handle_t *h, uint16_t co2, uint16_t tvoc) 
 | 传感器响应慢 | 气体扩散不足 | 保持空气流通，避免密闭安装 |
 | SGP30必须每秒调用 | 协议要求 | 使用定时器中断每1s调用measure_air |
 | MQ传感器交叉敏感 | 对多种气体响应 | 使用多传感器阵列+算法区分 |
+| GP2Y1014AU 读数为0或负值 | NO_DUST_VOLTAGE 设置过高 | 遮住传感器实测零点电压，调低该参数 |
+| GP2Y1014AU 读数偏低 | 分压比未乘或乘错 | 确认转接板分压电阻，1kΩ+10kΩ 需乘 11 |
+| GP2Y1014AU 读数跳变大 | 滤波窗口太小或采样过频 | 使用 10 次滑动平均，采样间隔 ≥ 1s |
+| GP2Y1014AU 时序不准 | delay_us 不精确 | 使用定时器或 DWT 周期计数器实现微秒延时 |
+| GP2Y1014AU 浓度不线性 | COV_RATIO 系数不准 | 用已知浓度粉尘源校准，调整 0.17~0.20 范围 |
+| GP2Y1014AU LED 不亮 | ILED 引脚接错或驱动能力不足 | 确认 GPIO 推挽输出，串联 150Ω 限流电阻 |
 
 ## 相关文档
 

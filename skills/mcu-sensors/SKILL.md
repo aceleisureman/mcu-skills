@@ -21,7 +21,7 @@ description: MCU 传感器选型与驱动 Skill，覆盖温度、湿度、压力
 | BMP280、HX711、MPX 系列 | `references/pressure.md` |
 | BH1750、TSL2561、LDR、OV2640/OV5640 | `references/light.md` |
 | MPU6050、BMI270、ICM、电子罗盘 | `references/imu.md` |
-| MQ 系列、CCS811、SGP30 | `references/gas.md` |
+| MQ 系列、CCS811、SGP30、GP2Y1014AU | `references/gas.md` |
 | HC-SR04、VL53L0X、TFmini、红外测距 | `references/distance.md` |
 | 霍尔、HMC5883L、QMC5883L、MLX90393 | `references/magnetic.md` |
 | NEO-6M、ATGM336H、NMEA、RTK | `references/gps.md` |
@@ -33,6 +33,7 @@ description: MCU 传感器选型与驱动 Skill，覆盖温度、湿度、压力
 | ADC 水位与 MQ135 | `examples/adc-water/` |
 | BH1750 | `examples/bh1750-light/` |
 | CCS811/SGP30 | `examples/ccs811-sgp30/` |
+| GP2Y1014AU 粉尘 | `examples/gp2y1014au/` |
 | DHT11/DHT22 多种时序实现 | `examples/dht11-dht22/` |
 | DS18B20 | `examples/ds18b20/` |
 | GPS 解析 | `examples/gps/` |
