@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "name": "mcu-input",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "title": "MCU 输入与识别",
   "summary": "覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。",
   "layer": "domain",
-  "dependencies": ["mcu-driver-core"],
+  "dependencies": [
+    "mcu-driver-core"
+  ],
   "triggers": [
     "人机输入",
     "按键扫描",
@@ -17,37 +19,62 @@
     {
       "id": "rotary-encoder",
       "intent": "旋转编码器",
-      "keywords": ["旋转编码器", "EC11", "增量编码器", "绝对编码器"],
+      "keywords": [
+        "旋转编码器",
+        "EC11",
+        "增量编码器",
+        "绝对编码器"
+      ],
       "target": "references/rotary-encoder.md"
     },
     {
       "id": "keypad",
       "intent": "独立按键与矩阵键盘",
-      "keywords": ["独立按键", "矩阵键盘", "ADC 键盘", "按键去抖"],
+      "keywords": [
+        "独立按键",
+        "矩阵键盘",
+        "ADC 键盘",
+        "按键去抖"
+      ],
       "target": "references/keypad.md"
     },
     {
       "id": "touch",
       "intent": "电容触摸",
-      "keywords": ["电容触摸", "TTP223", "TTP229", "MPR121"],
+      "keywords": [
+        "电容触摸",
+        "TTP223",
+        "TTP229",
+        "MPR121"
+      ],
       "target": "references/touch.md"
     },
     {
       "id": "fingerprint-example",
       "intent": "AS608 指纹示例",
-      "keywords": ["AS608", "指纹识别"],
+      "keywords": [
+        "AS608",
+        "指纹识别"
+      ],
       "target": "examples/fingerprint/"
     },
     {
       "id": "voice-vision-example",
       "intent": "ASRPro 语音与 K210 视觉识别示例",
-      "keywords": ["ASRPro", "K210 视觉识别", "离线语音识别"],
+      "keywords": [
+        "ASRPro",
+        "K210 视觉识别",
+        "离线语音识别"
+      ],
       "target": "examples/asrpro-voice/"
     },
     {
       "id": "keyboard-example",
       "intent": "按键与矩阵键盘示例",
-      "keywords": ["矩阵键盘示例", "按键扫描示例"],
+      "keywords": [
+        "矩阵键盘示例",
+        "按键扫描示例"
+      ],
       "target": "examples/keyboard/"
     }
   ]

@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.1.1 - 2026-07-11
+
+- 意图路由表改为由 skill.json 自动生成（GENERATED:ROUTE_TABLE 区块）
 ## v2.1.0 - 2026-07-10
 
 - 增加 `skill.json` 路由与依赖元数据

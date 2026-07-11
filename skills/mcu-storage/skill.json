@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "name": "mcu-storage",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "title": "MCU 存储与 RTC",
   "summary": "覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。",
   "layer": "domain",
-  "dependencies": ["mcu-driver-core"],
+  "dependencies": [
+    "mcu-driver-core"
+  ],
   "triggers": [
     "非易失存储",
     "参数持久化",
@@ -17,43 +19,71 @@
     {
       "id": "eeprom",
       "intent": "I2C EEPROM",
-      "keywords": ["EEPROM", "AT24C", "24LC"],
+      "keywords": [
+        "EEPROM",
+        "AT24C",
+        "24LC"
+      ],
       "target": "references/eeprom.md"
     },
     {
       "id": "flash",
       "intent": "SPI NOR Flash",
-      "keywords": ["SPI Flash", "W25Q", "GD25Q", "NOR Flash"],
+      "keywords": [
+        "SPI Flash",
+        "W25Q",
+        "GD25Q",
+        "NOR Flash"
+      ],
       "target": "references/flash.md"
     },
     {
       "id": "sd-card",
       "intent": "SD 卡与 FatFs",
-      "keywords": ["SD 卡", "SDIO", "FatFs", "SDHC"],
+      "keywords": [
+        "SD 卡",
+        "SDIO",
+        "FatFs",
+        "SDHC"
+      ],
       "target": "references/sd-card.md"
     },
     {
       "id": "fram",
       "intent": "FRAM",
-      "keywords": ["FRAM", "FM25", "MB85"],
+      "keywords": [
+        "FRAM",
+        "FM25",
+        "MB85"
+      ],
       "target": "references/fram.md"
     },
     {
       "id": "rtc",
       "intent": "实时时钟",
-      "keywords": ["RTC", "DS3231", "PCF8563", "DS1302"],
+      "keywords": [
+        "RTC",
+        "DS3231",
+        "PCF8563",
+        "DS1302"
+      ],
       "target": "references/rtc.md"
     },
     {
       "id": "rtc-example",
       "intent": "DS1302 RTC 示例",
-      "keywords": ["DS1302 示例"],
+      "keywords": [
+        "DS1302 示例"
+      ],
       "target": "examples/ds1302-rtc/"
     },
     {
       "id": "flash-param-example",
       "intent": "Flash 参数保存示例",
-      "keywords": ["Flash 参数示例", "参数保存示例"],
+      "keywords": [
+        "Flash 参数示例",
+        "参数保存示例"
+      ],
       "target": "examples/flash-param/"
     }
   ]

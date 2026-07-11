@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mcu-displays",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "title": "MCU 显示设备",
   "summary": "覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。",
   "layer": "domain",

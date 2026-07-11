@@ -7,16 +7,16 @@
 <!-- GENERATED:SKILL_TABLE:START -->
 | Skill | 层级 | 版本 | 依赖 | 用途 |
 |-------|------|------|------|------|
-| [`mcu-driver-core`](skills/mcu-driver-core/SKILL.md) | `foundation` | `v2.1.0` | 无 | 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。 |
-| [`mcu-actuators`](skills/mcu-actuators/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。 |
-| [`mcu-communication`](skills/mcu-communication/SKILL.md) | `domain` | `v2.2.0` | `mcu-driver-core` | 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。 |
-| [`mcu-displays`](skills/mcu-displays/SKILL.md) | `domain` | `v2.2.0` | `mcu-driver-core` | 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。 |
-| [`mcu-input`](skills/mcu-input/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。 |
-| [`mcu-power`](skills/mcu-power/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。 |
-| [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.4.0` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
-| [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
-| [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.2.0` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
-| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.2.2` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
+| [`mcu-driver-core`](skills/mcu-driver-core/SKILL.md) | `foundation` | `v2.1.1` | 无 | 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。 |
+| [`mcu-actuators`](skills/mcu-actuators/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。 |
+| [`mcu-communication`](skills/mcu-communication/SKILL.md) | `domain` | `v2.2.1` | `mcu-driver-core` | 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。 |
+| [`mcu-displays`](skills/mcu-displays/SKILL.md) | `domain` | `v2.2.1` | `mcu-driver-core` | 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。 |
+| [`mcu-input`](skills/mcu-input/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。 |
+| [`mcu-power`](skills/mcu-power/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。 |
+| [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.4.1` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
+| [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.1` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
+| [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.2.1` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
+| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.3.0` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
 <!-- GENERATED:SKILL_TABLE:END -->
 
 完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)。
@@ -88,7 +88,24 @@ skills/<skill-name>/
 
 ## 安装
 
-### Claude Code / Claude 平台
+### npm 安装器（推荐）
+
+使用内置的 `mcu-skills` 安装器一键安装到 Claude Code（`~/.claude`）、Codex（`~/.codex`）和 CodeBuddy（`~/.codebuddy`）的全局 Skill 目录：
+
+```sh
+# 在仓库根目录（或 npm 包安装后）执行
+npx mcu-skills install                     # 安装全部 Skill 到检测到的平台
+npx mcu-skills install mcu-sensors         # 安装单个 Skill（自动带依赖闭包）
+npx mcu-skills install --target claude     # 只安装到 Claude Code
+npx mcu-skills install --target codex      # 只安装到 Codex
+npx mcu-skills install --target codebuddy  # 只安装到 CodeBuddy
+npx mcu-skills list                        # 查看安装状态
+npx mcu-skills uninstall mcu-sensors       # 卸载
+```
+
+安装 `project-organizer` 时会同时注册 `/organize` 系列斜杠命令（Claude Code/CodeBuddy 为 `commands/`，Codex 为 `prompts/`）；Codex 还会在 `~/.codex/AGENTS.md` 中维护一个 Skill 索引区块。
+
+### 手动安装：Claude Code / Claude 平台
 
 复制需要的 Skill 目录到项目或个人 Skill 目录：
 

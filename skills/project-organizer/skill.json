@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "project-organizer",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "title": "项目整理",
   "summary": "扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。",
   "layer": "utility",

@@ -1,0 +1,29 @@
+{
+  "name": "mcu-skills",
+  "version": "1.0.0",
+  "description": "MCU 嵌入式开发 Skills 知识库安装器：一键安装到 Claude Code、Codex、CodeBuddy 的全局 Skill 目录",
+  "bin": {
+    "mcu-skills": "bin/mcu-skills.js"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    ".codebuddy/commands/",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcu",
+    "embedded",
+    "skills",
+    "claude-code",
+    "codex",
+    "codebuddy",
+    "agent"
+  ],
+  "author": "georgesven",
+  "license": "MIT"
+}

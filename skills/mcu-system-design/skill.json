@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mcu-system-design",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "title": "MCU 系统设计",
   "summary": "编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。",
   "layer": "orchestrator",

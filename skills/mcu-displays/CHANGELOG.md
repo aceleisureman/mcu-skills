@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.2.1 - 2026-07-11
+
+- 意图路由表改为由 skill.json 自动生成（GENERATED:ROUTE_TABLE 区块）
 ## v2.2.0 - 2026-07-11
 
 - 新增 SSD1306 16×16 中文字模生成规范

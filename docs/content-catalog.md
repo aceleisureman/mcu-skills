@@ -9,7 +9,7 @@
 提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。
 
 - Skill：[`mcu-driver-core`](../skills/mcu-driver-core/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.1.1`
 - 层级：`foundation`
 - 依赖：无
 
@@ -43,7 +43,7 @@
 覆盖电机、舵机、继电器、电磁负载、蜂鸣器和音频模块的驱动与保护。
 
 - Skill：[`mcu-actuators`](../skills/mcu-actuators/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.1.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -72,7 +72,7 @@
 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。
 
 - Skill：[`mcu-communication`](../skills/mcu-communication/SKILL.md)
-- 版本：`v2.2.0`
+- 版本：`v2.2.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -101,7 +101,7 @@
 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。
 
 - Skill：[`mcu-displays`](../skills/mcu-displays/SKILL.md)
-- 版本：`v2.2.0`
+- 版本：`v2.2.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -126,7 +126,7 @@
 覆盖编码器、键盘、触摸、指纹、语音和视觉识别输入。
 
 - Skill：[`mcu-input`](../skills/mcu-input/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.1.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -151,7 +151,7 @@
 覆盖稳压、变换、充电、电量监控和保护电路的选型、热设计与 PCB。
 
 - Skill：[`mcu-power`](../skills/mcu-power/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.1.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -174,7 +174,7 @@
 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。
 
 - Skill：[`mcu-sensors`](../skills/mcu-sensors/SKILL.md)
-- 版本：`v2.4.0`
+- 版本：`v2.4.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -213,7 +213,7 @@
 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。
 
 - Skill：[`mcu-storage`](../skills/mcu-storage/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.1.1`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -239,7 +239,7 @@
 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。
 
 - Skill：[`mcu-system-design`](../skills/mcu-system-design/SKILL.md)
-- 版本：`v2.2.0`
+- 版本：`v2.2.1`
 - 层级：`orchestrator`
 - 依赖：`mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input`
 
@@ -272,7 +272,7 @@
 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。
 
 - Skill：[`project-organizer`](../skills/project-organizer/SKILL.md)
-- 版本：`v2.2.2`
+- 版本：`v2.3.0`
 - 层级：`utility`
 - 依赖：无
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0 - 2026-07-11
+
+- 新增 /organize 系列斜杠命令定义（.codebuddy/commands，支持 npm 安装器分发）
+- 意图路由表改为由 skill.json 自动生成
 ## v2.2.2 - 2026-07-12
 
 - 版本更新

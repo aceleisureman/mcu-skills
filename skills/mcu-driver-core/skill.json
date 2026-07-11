@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mcu-driver-core",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "title": "MCU 驱动开发核心",
   "summary": "提供可移植驱动模板、硬件设计、调试测试、常见陷阱和代码规范。",
   "layer": "foundation",
@@ -18,85 +18,133 @@
     {
       "id": "driver-api",
       "intent": "统一驱动 API、状态码和配置结构",
-      "keywords": ["驱动 API", "状态码", "配置结构"],
+      "keywords": [
+        "驱动 API",
+        "状态码",
+        "配置结构"
+      ],
       "target": "templates/driver-template.h"
     },
     {
       "id": "i2c",
       "intent": "I2C 驱动模板",
-      "keywords": ["I2C 驱动", "I2C 模板"],
+      "keywords": [
+        "I2C 驱动",
+        "I2C 模板"
+      ],
       "target": "templates/driver-template-i2c.c"
     },
     {
       "id": "spi",
       "intent": "SPI 驱动模板",
-      "keywords": ["SPI 驱动", "SPI 模板"],
+      "keywords": [
+        "SPI 驱动",
+        "SPI 模板"
+      ],
       "target": "templates/driver-template-spi.c"
     },
     {
       "id": "uart",
       "intent": "UART 与 AT 指令驱动模板",
-      "keywords": ["UART 驱动", "AT 指令驱动"],
+      "keywords": [
+        "UART 驱动",
+        "AT 指令驱动"
+      ],
       "target": "templates/driver-template-uart.c"
     },
     {
       "id": "adc",
       "intent": "ADC 采样模板",
-      "keywords": ["ADC 采样", "ADC 模板"],
+      "keywords": [
+        "ADC 采样",
+        "ADC 模板"
+      ],
       "target": "templates/driver-template-adc.c"
     },
     {
       "id": "pwm",
       "intent": "PWM 输出模板",
-      "keywords": ["PWM 输出", "PWM 模板"],
+      "keywords": [
+        "PWM 输出",
+        "PWM 模板"
+      ],
       "target": "templates/driver-template-pwm.c"
     },
     {
       "id": "gpio",
       "intent": "GPIO 与外部中断模板",
-      "keywords": ["GPIO 驱动", "外部中断"],
+      "keywords": [
+        "GPIO 驱动",
+        "外部中断"
+      ],
       "target": "templates/driver-template-gpio.c"
     },
     {
       "id": "rtos",
       "intent": "FreeRTOS 任务、互斥和 ISR 通知模板",
-      "keywords": ["FreeRTOS 驱动", "总线互斥", "ISR 通知"],
+      "keywords": [
+        "FreeRTOS 驱动",
+        "总线互斥",
+        "ISR 通知"
+      ],
       "target": "templates/driver-template-rtos.c"
     },
     {
       "id": "hardware-design",
       "intent": "原理图、PCB、EMC 与电平匹配",
-      "keywords": ["硬件设计审查", "PCB EMC", "电平匹配"],
+      "keywords": [
+        "硬件设计审查",
+        "PCB EMC",
+        "电平匹配"
+      ],
       "target": "guides/hardware-design.md"
     },
     {
       "id": "debugging",
       "intent": "调试流程、协议分析和测试用例",
-      "keywords": ["协议分析", "逻辑分析仪调试", "驱动测试"],
+      "keywords": [
+        "协议分析",
+        "逻辑分析仪调试",
+        "驱动测试"
+      ],
       "target": "guides/debugging-testing.md"
     },
     {
       "id": "pitfalls",
       "intent": "常见硬件与固件陷阱",
-      "keywords": ["嵌入式避坑", "硬件陷阱", "固件陷阱"],
+      "keywords": [
+        "嵌入式避坑",
+        "硬件陷阱",
+        "固件陷阱"
+      ],
       "target": "guides/pitfalls.md"
     },
     {
       "id": "coding-style",
       "intent": "命名、格式、版本和评审规范",
-      "keywords": ["嵌入式代码规范", "驱动代码评审", "C 代码风格"],
+      "keywords": [
+        "嵌入式代码规范",
+        "驱动代码评审",
+        "C 代码风格"
+      ],
       "target": "guides/coding-style.md"
     },
     {
       "id": "bsp-example",
       "intent": "BSP 分层示例",
-      "keywords": ["BSP 示例", "板级接口示例"],
+      "keywords": [
+        "BSP 示例",
+        "板级接口示例"
+      ],
       "target": "examples/bsp/"
     },
     {
       "id": "soft-i2c-example",
       "intent": "GPIO 模拟 I2C 示例",
-      "keywords": ["软件 I2C", "模拟 I2C"],
+      "keywords": [
+        "软件 I2C",
+        "模拟 I2C"
+      ],
       "target": "examples/soft-i2c/"
     }
   ]
