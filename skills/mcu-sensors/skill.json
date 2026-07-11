@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mcu-sensors",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "title": "MCU 传感器",
   "summary": "覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。",
   "layer": "domain",
