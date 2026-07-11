@@ -329,6 +329,160 @@ void oled_draw_string(oled_handle_t *h, int16_t x, int16_t y,
 }
 ```
 
+### 中文字模（16×16）
+
+#### 数据格式规范
+
+每个汉字固定 32 字节，按行存储；16 行，每行 2 字节；高位对应左侧像素。禁止混用"逐列式、上下页交错、低位在前"等格式。
+
+```
+汉字点阵布局 (16×16, 32 bytes)
+
+Row 0:  [byte0] [byte1]     ← 第 0 行, 左 8px + 右 8px
+Row 1:  [byte2] [byte3]
+...
+Row 15: [byte30] [byte31]
+
+每字节: bit7(MSB) → bit0(LSB) 对应 左 → 右
+```
+
+#### 字体来源
+
+优先使用 Unifont 或文泉驿点阵字体，字号 16px；画布固定 16×16，字符按实际包围盒居中，二值化阈值建议 128。
+
+#### 编码索引
+
+UTF-8 三字节打包为 24 位整数：
+
+| 字符 | UTF-8 字节 | 24 位索引 |
+|------|-----------|-----------|
+| 温 | E6 B8 A9 | 0xE6B8A9 |
+| 湿 | E6 B9 BF | 0xE6B9BF |
+| ： | EF BC 9A | 0xEFBC9A |
+
+#### 字模生成脚本
+
+```python
+from PIL import Image, ImageDraw, ImageFont
+
+CHARS = "温湿："
+FONT = "/usr/share/fonts/truetype/unifont/unifont.ttf"
+font = ImageFont.truetype(FONT, 16)
+
+for ch in CHARS:
+    image = Image.new("1", (16, 16), 0)
+    draw = ImageDraw.Draw(image)
+    box = draw.textbbox((0, 0), ch, font=font)
+    x = (16 - (box[2] - box[0])) // 2 - box[0]
+    y = (16 - (box[3] - box[1])) // 2 - box[1]
+    draw.text((x, y), ch, font=font, fill=1)
+
+    data = []
+    for row in range(16):
+        for half in range(2):
+            value = 0
+            for bit in range(8):
+                if image.getpixel((half * 8 + bit, row)):
+                    value |= 0x80 >> bit
+            data.append(value)
+
+    code = int.from_bytes(ch.encode("utf-8"), "big")
+    print(f"{ch}: 0x{code:06X}")
+    print(",".join(f"0x{x:02X}" for x in data))
+```
+
+#### SSD1306 页列转换
+
+字模按行存储，SSD1306 显存按页列存储（每列 8 像素纵向排列），显示时需转换：
+
+```c
+/**
+ * 将 16×16 行式字模转换为 SSD1306 页列数据
+ * @param font   32 字节行式字模数据
+ * @param page   输出缓冲区, 至少 32 字节 (2 页 × 16 列)
+ */
+void oled_font16x16_to_page(const uint8_t *font, uint8_t *page) {
+    memset(page, 0, 32);
+    for (int row = 0; row < 16; row++) {
+        for (int col = 0; col < 16; col++) {
+            if (font[row * 2 + col / 8] & (0x80 >> (col % 8))) {
+                page[(row / 8) * 16 + col] |= 1 << (row % 8);
+            }
+        }
+    }
+}
+```
+
+#### 汉字显示函数
+
+```c
+/**
+ * 查找 UTF-8 字符在字模表中的索引
+ * @param ch    UTF-8 字符串指针 (指向当前字符首字节)
+ * @param len   输出: 该字符占用的字节数 (1~3)
+ * @return 字模索引, 未找到返回 -1
+ */
+typedef struct {
+    uint32_t code;       /* UTF-8 打包的 24 位编码 */
+    const uint8_t *data; /* 32 字节字模数据指针 */
+} chinese_glyph_t;
+
+extern const chinese_glyph_t chinese_font_table[];
+
+int16_t chinese_find(const char *ch, uint8_t *len) {
+    uint8_t bytes = (ch[0] & 0x80) ? ((ch[0] & 0xE0) == 0xC0 ? 2 : 3) : 1;
+    *len = bytes;
+    uint32_t code = 0;
+    for (uint8_t i = 0; i < bytes; i++)
+        code = (code << 8) | (uint8_t)ch[i];
+
+    for (uint16_t i = 0; chinese_font_table[i].data != NULL; i++) {
+        if (chinese_font_table[i].code == code)
+            return i;
+    }
+    return -1;
+}
+
+void oled_draw_chinese(oled_handle_t *h, int16_t x, int16_t y, const char *str) {
+    while (*str) {
+        uint8_t len;
+        int16_t idx = chinese_find(str, &len);
+
+        if (idx >= 0) {
+            uint8_t page_buf[32];
+            oled_font16x16_to_page(chinese_font_table[idx].data, page_buf);
+
+            /* 将 2 页 × 16 列写入 VRAM */
+            for (uint8_t p = 0; p < 2; p++) {
+                for (uint8_t c = 0; c < 16; c++) {
+                    if (x + c < h->width && y + p * 8 < h->height) {
+                        uint16_t vi = (x + c) + ((y / 8) + p) * h->width;
+                        h->vram[vi] = page_buf[p * 16 + c];
+                    }
+                }
+            }
+            x += 16;
+        } else {
+            /* 非中文字符回退 ASCII 6×8 */
+            oled_draw_char(h, x, y, *str, oled_font_6x8);
+            x += 6;
+            len = 1;
+        }
+        str += len;
+    }
+}
+```
+
+#### 校验规则
+
+| 检查项 | 规则 |
+|--------|------|
+| 字符数量一致性 | 字模表中字符数量必须等于编码索引表数量 |
+| 数据长度 | 每个字模数据长度必须等于 32 字节 |
+| 点阵预览 | 生成后先输出终端点阵预览，确认偏旁位置正确 |
+| 显示异常排查 | ASCII 正常而汉字异常时，只检查字模格式和转换算法，不修改 SSD1306 的 A0/A1、C0/C8 整屏方向命令 |
+| 构建缓存 | 更新字模后执行 `make clean`，避免旧的 `chinese_font.o` 被复用 |
+
 ### 图形绘制
 
 #### 画线（Bresenham 算法）
