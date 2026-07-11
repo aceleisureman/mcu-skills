@@ -1,0 +1,73 @@
+name: release
+
+on:
+  push:
+    tags:
+      # 单 Skill 发布: mcu-sensors-v2.2.0
+      - "*-v*"
+      # 批量发布: v2026-07-11
+      - "v[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate before release
+        run: |
+          python3 tools/skill_registry.py --write
+          python3 tools/validate.py
+
+      - name: Extract release info from tag
+        id: info
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+          # 判断是单 Skill 还是批量发布
+          if echo "$TAG" | grep -qE '^[a-z].*-v[0-9]'; then
+            # 单 Skill: mcu-sensors-v2.2.0
+            SKILL=$(echo "$TAG" | sed 's/-v[0-9].*//')
+            VERSION=$(echo "$TAG" | sed 's/.*-v//')
+            TITLE="$SKILL v$VERSION"
+          else
+            # 批量: v2026-07-11
+            TITLE="Skills Release $TAG"
+          fi
+
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
+          # 从 CHANGELOG 提取该版本的变更说明
+          if [ -n "$SKILL" ] && [ -n "$VERSION" ]; then
+            BODY=$(awk "/^## v$VERSION/{flag=1} /^## v/{if(flag==2)exit; flag=2} flag==2" \
+              "skills/$SKILL/CHANGELOG.md" 2>/dev/null || echo "")
+          else
+            BODY=$(git log --format='- %s' HEAD~1..HEAD)
+          fi
+
+          # 如果没提取到，用最近 commit message
+          if [ -z "$BODY" ]; then
+            BODY=$(git log --format='- %s' HEAD~1..HEAD)
+          fi
+
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.info.outputs.title }}
+          body: ${{ steps.info.outputs.body }}
+          tag_name: ${{ steps.info.outputs.tag }}
+          generate_release_notes: true
