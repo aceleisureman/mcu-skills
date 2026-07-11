@@ -174,7 +174,7 @@
 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。
 
 - Skill：[`mcu-sensors`](../skills/mcu-sensors/SKILL.md)
-- 版本：`v2.2.0`
+- 版本：`v2.3.0`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
