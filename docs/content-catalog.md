@@ -92,7 +92,7 @@
 
 ### 资源
 
-- references（8）：[`bluetooth.md`](../skills/mcu-communication/references/bluetooth.md)、[`can.md`](../skills/mcu-communication/references/can.md)、[`ethernet.md`](../skills/mcu-communication/references/ethernet.md)、[`lora.md`](../skills/mcu-communication/references/lora.md)、[`nb-iot.md`](../skills/mcu-communication/references/nb-iot.md)、[`nfc.md`](../skills/mcu-communication/references/nfc.md)、[`rs485.md`](../skills/mcu-communication/references/rs485.md)、[`wifi.md`](../skills/mcu-communication/references/wifi.md)
+- references（9）：[`bluetooth.md`](../skills/mcu-communication/references/bluetooth.md)、[`can.md`](../skills/mcu-communication/references/can.md)、[`ethernet.md`](../skills/mcu-communication/references/ethernet.md)、[`lora.md`](../skills/mcu-communication/references/lora.md)、[`nb-iot.md`](../skills/mcu-communication/references/nb-iot.md)、[`nfc.md`](../skills/mcu-communication/references/nfc.md)、[`rs485.md`](../skills/mcu-communication/references/rs485.md)、[`wifi.md`](../skills/mcu-communication/references/wifi.md)、[`zigbee.md`](../skills/mcu-communication/references/zigbee.md)
 - examples（1）：[`esp8266-wifi/`](../skills/mcu-communication/examples/esp8266-wifi/)
 
 ## MCU 显示设备
@@ -204,7 +204,7 @@
 ### 资源
 
 - references（9）：[`distance.md`](../skills/mcu-sensors/references/distance.md)、[`gas.md`](../skills/mcu-sensors/references/gas.md)、[`gps.md`](../skills/mcu-sensors/references/gps.md)、[`humidity.md`](../skills/mcu-sensors/references/humidity.md)、[`imu.md`](../skills/mcu-sensors/references/imu.md)、[`light.md`](../skills/mcu-sensors/references/light.md)、[`magnetic.md`](../skills/mcu-sensors/references/magnetic.md)、[`pressure.md`](../skills/mcu-sensors/references/pressure.md)、[`temperature.md`](../skills/mcu-sensors/references/temperature.md)
-- examples（10）：[`adc-water/`](../skills/mcu-sensors/examples/adc-water/)、[`bh1750-light/`](../skills/mcu-sensors/examples/bh1750-light/)、[`ccs811-sgp30/`](../skills/mcu-sensors/examples/ccs811-sgp30/)、[`dht11-dht22/`](../skills/mcu-sensors/examples/dht11-dht22/)、[`ds18b20/`](../skills/mcu-sensors/examples/ds18b20/)、[`gps/`](../skills/mcu-sensors/examples/gps/)、[`hc-sr04/`](../skills/mcu-sensors/examples/hc-sr04/)、[`hx711/`](../skills/mcu-sensors/examples/hx711/)、[`max30102/`](../skills/mcu-sensors/examples/max30102/)、[`mpu6050/`](../skills/mcu-sensors/examples/mpu6050/)
+- examples（11）：[`adc-water/`](../skills/mcu-sensors/examples/adc-water/)、[`bh1750-light/`](../skills/mcu-sensors/examples/bh1750-light/)、[`ccs811-sgp30/`](../skills/mcu-sensors/examples/ccs811-sgp30/)、[`dht11-dht22/`](../skills/mcu-sensors/examples/dht11-dht22/)、[`ds18b20/`](../skills/mcu-sensors/examples/ds18b20/)、[`gp2y1014au/`](../skills/mcu-sensors/examples/gp2y1014au/)、[`gps/`](../skills/mcu-sensors/examples/gps/)、[`hc-sr04/`](../skills/mcu-sensors/examples/hc-sr04/)、[`hx711/`](../skills/mcu-sensors/examples/hx711/)、[`max30102/`](../skills/mcu-sensors/examples/max30102/)、[`mpu6050/`](../skills/mcu-sensors/examples/mpu6050/)
 
 ## MCU 存储与 RTC
 
@@ -262,7 +262,7 @@
 ### 资源
 
 - guides（3）：[`low-power.md`](../skills/mcu-system-design/guides/low-power.md)、[`ota-bootloader.md`](../skills/mcu-system-design/guides/ota-bootloader.md)、[`stm32-project-patterns.md`](../skills/mcu-system-design/guides/stm32-project-patterns.md)
-- examples（2）：[`buzzer-pir-relay/`](../skills/mcu-system-design/examples/buzzer-pir-relay/)、[`env-monitor-station.md`](../skills/mcu-system-design/examples/env-monitor-station.md)
+- examples（3）：[`buzzer-pir-relay/`](../skills/mcu-system-design/examples/buzzer-pir-relay/)、[`env-monitor-station.md`](../skills/mcu-system-design/examples/env-monitor-station.md)、[`gas-cabinet-monitor.md`](../skills/mcu-system-design/examples/gas-cabinet-monitor.md)
 
 ## 项目整理
 

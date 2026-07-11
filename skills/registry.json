@@ -373,18 +373,6 @@
           "target": "references/lora.md"
         },
         {
-          "id": "zigbee",
-          "intent": "ZigBee 透传通信",
-          "keywords": [
-            "ZigBee",
-            "CC2530",
-            "透传模块",
-            "DRF1609",
-            "无线组网"
-          ],
-          "target": "references/zigbee.md"
-        },
-        {
           "id": "nb-iot",
           "intent": "NB-IoT 与蜂窝通信",
           "keywords": [
@@ -454,11 +442,11 @@
           "references/can.md",
           "references/ethernet.md",
           "references/lora.md",
-          "references/zigbee.md",
           "references/nb-iot.md",
           "references/nfc.md",
           "references/rs485.md",
-          "references/wifi.md"
+          "references/wifi.md",
+          "references/zigbee.md"
         ],
         "templates": [],
         "guides": [],
@@ -1019,6 +1007,10 @@
           "examples/dht11-dht22/dht22.h",
           "examples/ds18b20/ds18b20.c",
           "examples/ds18b20/ds18b20.h",
+          "examples/gp2y1014au/gp2y1014au.c",
+          "examples/gp2y1014au/gp2y1014au.h",
+          "examples/gp2y1014au/gp2y1014au.ino",
+          "examples/gp2y1014au/main.c",
           "examples/gps/gps_parse.c",
           "examples/gps/gps_parse.h",
           "examples/gps/serial_gps.c",
@@ -1292,19 +1284,6 @@
             "PIR 继电器联动"
           ],
           "target": "examples/buzzer-pir-relay/"
-        },
-        {
-          "id": "gas-cabinet-monitor",
-          "intent": "多节点气瓶柜安全监控端到端示例",
-          "keywords": [
-            "气瓶柜",
-            "主从双 MCU",
-            "ZigBee 无线",
-            "OneNET MQTT 上云",
-            "指纹门禁",
-            "气体检测联动"
-          ],
-          "target": "examples/gas-cabinet-monitor.md"
         }
       ],
       "resources": {
