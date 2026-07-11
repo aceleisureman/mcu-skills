@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "name": "mcu-communication",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "title": "MCU 通信",
   "summary": "覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。",
   "layer": "domain",
-  "dependencies": ["mcu-driver-core"],
+  "dependencies": [
+    "mcu-driver-core"
+  ],
   "triggers": [
     "通信模块选型",
     "无线通信",
@@ -17,55 +19,110 @@
     {
       "id": "wifi",
       "intent": "WiFi、AT 与 MQTT",
-      "keywords": ["WiFi", "ESP8266", "ESP32", "MQTT", "WiFi AT"],
+      "keywords": [
+        "WiFi",
+        "ESP8266",
+        "ESP32",
+        "MQTT",
+        "WiFi AT"
+      ],
       "target": "references/wifi.md"
     },
     {
       "id": "bluetooth",
       "intent": "经典蓝牙与 BLE",
-      "keywords": ["蓝牙", "BLE", "HC-05", "GATT", "nRF52"],
+      "keywords": [
+        "蓝牙",
+        "BLE",
+        "HC-05",
+        "GATT",
+        "nRF52"
+      ],
       "target": "references/bluetooth.md"
     },
     {
       "id": "lora",
       "intent": "LoRa 点对点通信",
-      "keywords": ["LoRa", "SX1278", "SX1276"],
+      "keywords": [
+        "LoRa",
+        "SX1278",
+        "SX1276"
+      ],
       "target": "references/lora.md"
+    },
+    {
+      "id": "zigbee",
+      "intent": "ZigBee 透传通信",
+      "keywords": [
+        "ZigBee",
+        "CC2530",
+        "透传模块",
+        "DRF1609",
+        "无线组网"
+      ],
+      "target": "references/zigbee.md"
     },
     {
       "id": "nb-iot",
       "intent": "NB-IoT 与蜂窝通信",
-      "keywords": ["NB-IoT", "BC95", "蜂窝通信"],
+      "keywords": [
+        "NB-IoT",
+        "BC95",
+        "蜂窝通信"
+      ],
       "target": "references/nb-iot.md"
     },
     {
       "id": "can",
       "intent": "CAN 总线",
-      "keywords": ["CAN 总线", "MCP2515", "bxCAN", "FDCAN"],
+      "keywords": [
+        "CAN 总线",
+        "MCP2515",
+        "bxCAN",
+        "FDCAN"
+      ],
       "target": "references/can.md"
     },
     {
       "id": "rs485",
       "intent": "RS485 与 Modbus RTU",
-      "keywords": ["RS485", "Modbus RTU", "485 总线"],
+      "keywords": [
+        "RS485",
+        "Modbus RTU",
+        "485 总线"
+      ],
       "target": "references/rs485.md"
     },
     {
       "id": "nfc",
       "intent": "NFC 与 RFID",
-      "keywords": ["NFC", "RFID", "RC522", "PN532", "Mifare"],
+      "keywords": [
+        "NFC",
+        "RFID",
+        "RC522",
+        "PN532",
+        "Mifare"
+      ],
       "target": "references/nfc.md"
     },
     {
       "id": "ethernet",
       "intent": "以太网",
-      "keywords": ["以太网", "W5500", "LAN8720", "lwIP"],
+      "keywords": [
+        "以太网",
+        "W5500",
+        "LAN8720",
+        "lwIP"
+      ],
       "target": "references/ethernet.md"
     },
     {
       "id": "esp8266-example",
       "intent": "ESP8266 AT 与 MQTT 示例",
-      "keywords": ["ESP8266 示例", "MQTT 示例"],
+      "keywords": [
+        "ESP8266 示例",
+        "MQTT 示例"
+      ],
       "target": "examples/esp8266-wifi/"
     }
   ]

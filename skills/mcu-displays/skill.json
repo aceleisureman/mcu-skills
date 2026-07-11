@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "name": "mcu-displays",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "title": "MCU 显示设备",
   "summary": "覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。",
   "layer": "domain",
-  "dependencies": ["mcu-driver-core"],
+  "dependencies": [
+    "mcu-driver-core"
+  ],
   "triggers": [
     "显示屏选型",
     "显示驱动",
@@ -17,37 +19,65 @@
     {
       "id": "oled",
       "intent": "OLED 显示",
-      "keywords": ["OLED", "SSD1306", "SH1106"],
+      "keywords": [
+        "OLED",
+        "SSD1306",
+        "SH1106"
+      ],
       "target": "references/oled.md"
     },
     {
       "id": "lcd",
       "intent": "字符与图形 LCD",
-      "keywords": ["LCD1602", "PCF8574", "ST7920", "字符 LCD"],
+      "keywords": [
+        "LCD1602",
+        "PCF8574",
+        "ST7920",
+        "字符 LCD"
+      ],
       "target": "references/lcd.md"
     },
     {
       "id": "tft",
       "intent": "彩色 TFT",
-      "keywords": ["TFT", "ILI9341", "ST7789"],
+      "keywords": [
+        "TFT",
+        "ILI9341",
+        "ST7789"
+      ],
       "target": "references/tft.md"
     },
     {
       "id": "e-paper",
       "intent": "电子纸",
-      "keywords": ["电子纸", "电子墨水屏", "SSD1680", "UC8176"],
+      "keywords": [
+        "电子纸",
+        "电子墨水屏",
+        "SSD1680",
+        "UC8176"
+      ],
       "target": "references/e-paper.md"
     },
     {
       "id": "led-matrix",
       "intent": "LED 点阵、数码管与灯带",
-      "keywords": ["LED 点阵", "数码管", "MAX7219", "TM1637", "WS2812"],
+      "keywords": [
+        "LED 点阵",
+        "数码管",
+        "MAX7219",
+        "TM1637",
+        "WS2812"
+      ],
       "target": "references/led-matrix.md"
     },
     {
       "id": "oled-example",
       "intent": "OLED 刷新示例",
-      "keywords": ["OLED 示例", "OLED 脏页刷新", "OLED 批量写入"],
+      "keywords": [
+        "OLED 示例",
+        "OLED 脏页刷新",
+        "OLED 批量写入"
+      ],
       "target": "examples/oled/"
     }
   ]

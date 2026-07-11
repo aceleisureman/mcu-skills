@@ -72,7 +72,7 @@
 覆盖 WiFi、蓝牙、LoRa、蜂窝、CAN、RS485、NFC 和以太网通信。
 
 - Skill：[`mcu-communication`](../skills/mcu-communication/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.2.0`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -83,6 +83,7 @@
 | WiFi、AT 与 MQTT | WiFi、ESP8266、ESP32、MQTT、WiFi AT | [`wifi.md`](../skills/mcu-communication/references/wifi.md) |
 | 经典蓝牙与 BLE | 蓝牙、BLE、HC-05、GATT、nRF52 | [`bluetooth.md`](../skills/mcu-communication/references/bluetooth.md) |
 | LoRa 点对点通信 | LoRa、SX1278、SX1276 | [`lora.md`](../skills/mcu-communication/references/lora.md) |
+| ZigBee 透传通信 | ZigBee、CC2530、透传模块、DRF1609、无线组网 | [`zigbee.md`](../skills/mcu-communication/references/zigbee.md) |
 | NB-IoT 与蜂窝通信 | NB-IoT、BC95、蜂窝通信 | [`nb-iot.md`](../skills/mcu-communication/references/nb-iot.md) |
 | CAN 总线 | CAN 总线、MCP2515、bxCAN、FDCAN | [`can.md`](../skills/mcu-communication/references/can.md) |
 | RS485 与 Modbus RTU | RS485、Modbus RTU、485 总线 | [`rs485.md`](../skills/mcu-communication/references/rs485.md) |
@@ -100,7 +101,7 @@
 覆盖 OLED、LCD、TFT、电子纸和 LED 显示的接口、显存与刷新优化。
 
 - Skill：[`mcu-displays`](../skills/mcu-displays/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.2.0`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -173,7 +174,7 @@
 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。
 
 - Skill：[`mcu-sensors`](../skills/mcu-sensors/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.2.0`
 - 层级：`domain`
 - 依赖：`mcu-driver-core`
 
@@ -191,6 +192,7 @@
 | 霍尔与磁场传感器 | 霍尔传感器、HMC5883L、QMC5883L、MLX90393 | [`magnetic.md`](../skills/mcu-sensors/references/magnetic.md) |
 | GPS 与 GNSS | GPS 模块、GNSS、NEO-6M、ATGM336H、NMEA | [`gps.md`](../skills/mcu-sensors/references/gps.md) |
 | ADC 水位与 MQ135 示例 | 水位传感器示例、MQ135 示例 | [`adc-water/`](../skills/mcu-sensors/examples/adc-water/) |
+| GP2Y1014AU 粉尘传感器示例 | GP2Y1014AU、粉尘传感器示例、PM2.5 示例 | [`gp2y1014au/`](../skills/mcu-sensors/examples/gp2y1014au/) |
 | BH1750 示例 | BH1750 示例 | [`bh1750-light/`](../skills/mcu-sensors/examples/bh1750-light/) |
 | CCS811 与 SGP30 示例 | CCS811 示例、SGP30 示例 | [`ccs811-sgp30/`](../skills/mcu-sensors/examples/ccs811-sgp30/) |
 | DHT11 与 DHT22 时序示例 | DHT11 示例、DHT22 示例 | [`dht11-dht22/`](../skills/mcu-sensors/examples/dht11-dht22/) |
@@ -237,7 +239,7 @@
 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。
 
 - Skill：[`mcu-system-design`](../skills/mcu-system-design/SKILL.md)
-- 版本：`v2.1.0`
+- 版本：`v2.2.0`
 - 层级：`orchestrator`
 - 依赖：`mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input`
 
@@ -258,6 +260,7 @@
 | 多项目 STM32 工程模式 | STM32 工程模式、STM32 项目模式、跨项目模式 | [`stm32-project-patterns.md`](../skills/mcu-system-design/guides/stm32-project-patterns.md) |
 | 环境监测站端到端示例 | 环境监测站、环境监测站示例、多传感器上云 | [`env-monitor-station.md`](../skills/mcu-system-design/examples/env-monitor-station.md) |
 | 门控系统端到端示例 | 门控系统、PIR 继电器联动 | [`buzzer-pir-relay/`](../skills/mcu-system-design/examples/buzzer-pir-relay/) |
+| 多节点气瓶柜安全监控端到端示例 | 气瓶柜、主从双 MCU、ZigBee 无线、OneNET MQTT 上云、指纹门禁、气体检测联动 | [`gas-cabinet-monitor.md`](../skills/mcu-system-design/examples/gas-cabinet-monitor.md) |
 
 ### 资源
 
