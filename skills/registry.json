@@ -1279,6 +1279,19 @@
             "PIR 继电器联动"
           ],
           "target": "examples/buzzer-pir-relay/"
+        },
+        {
+          "id": "gas-cabinet-monitor",
+          "intent": "多节点气瓶柜安全监控端到端示例",
+          "keywords": [
+            "气瓶柜",
+            "主从双 MCU",
+            "ZigBee 无线",
+            "OneNET MQTT 上云",
+            "指纹门禁",
+            "气体检测联动"
+          ],
+          "target": "examples/gas-cabinet-monitor.md"
         }
       ],
       "resources": {
@@ -1298,7 +1311,8 @@
           "examples/buzzer-pir-relay/pir.h",
           "examples/buzzer-pir-relay/relays.c",
           "examples/buzzer-pir-relay/relays.h",
-          "examples/env-monitor-station.md"
+          "examples/env-monitor-station.md",
+          "examples/gas-cabinet-monitor.md"
         ],
         "scripts": []
       }
