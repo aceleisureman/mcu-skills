@@ -2,7 +2,7 @@
   "schema_version": 1,
   "generated_by": "tools/evaluate_routing.py",
   "summary": {
-    "cases": 55,
+    "cases": 62,
     "skill_precision": 1.0,
     "skill_recall": 1.0,
     "skill_f1": 1.0,
@@ -15,1342 +15,311 @@
     {
       "id": "core-i2c-template",
       "query": "怎样设计一个可移植的 I2C 驱动模板？",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/templates/driver-template-i2c.c"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/templates/driver-template-i2c.c"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "I2C 驱动",
-          "驱动模板"
-        ]
-      },
       "passed": true
     },
     {
       "id": "core-uart-at",
       "query": "需要 UART 驱动来实现 AT 指令状态机。",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/templates/driver-template-uart.c"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/templates/driver-template-uart.c"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "UART 驱动"
-        ]
-      },
       "passed": true
     },
     {
       "id": "core-gpio-interrupt",
       "query": "给我 GPIO 驱动和外部中断的通用骨架。",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/templates/driver-template-gpio.c"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/templates/driver-template-gpio.c"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "GPIO 驱动",
-          "外部中断"
-        ]
-      },
       "passed": true
     },
     {
       "id": "core-rtos",
       "query": "FreeRTOS 驱动中怎样实现总线互斥和 ISR 通知？",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/templates/driver-template-rtos.c"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/templates/driver-template-rtos.c"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "FreeRTOS 驱动",
-          "ISR 通知",
-          "总线互斥"
-        ]
-      },
       "passed": true
     },
     {
       "id": "core-hardware-review",
       "query": "请做硬件设计审查，重点检查 PCB EMC 和电平匹配。",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/guides/hardware-design.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/guides/hardware-design.md"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "PCB EMC",
-          "电平匹配",
-          "硬件设计审查"
-        ]
-      },
       "passed": true
     },
     {
       "id": "core-code-review",
       "query": "按嵌入式代码规范做驱动代码评审。",
-      "expected_skills": [
-        "mcu-driver-core"
-      ],
-      "predicted_skills": [
-        "mcu-driver-core"
-      ],
-      "expected_targets": [
-        "skill://mcu-driver-core/guides/coding-style.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-driver-core/guides/coding-style.md"
-      ],
-      "matches": {
-        "mcu-driver-core": [
-          "嵌入式代码规范",
-          "驱动代码评审"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-temperature",
       "query": "DS18B20 温度传感器应该怎样接线和读取？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/temperature.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/temperature.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "DS18B20",
-          "温度传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-humidity",
       "query": "DHT11 湿度传感器采集不稳定怎么处理？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/humidity.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/humidity.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "DHT11",
-          "湿度传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-pressure",
       "query": "BMP280 压力传感器如何校准？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/pressure.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/pressure.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "BMP280",
-          "压力传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-light",
       "query": "BH1750 光照传感器的量程怎样配置？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/light.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/light.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "BH1750",
-          "光照传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-imu",
       "query": "MPU6050 IMU 的姿态数据怎样滤波？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/imu.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/imu.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "IMU",
-          "MPU6050"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-gas",
       "query": "CCS811 空气质量传感器需要怎样预热？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/gas.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/gas.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "CCS811",
-          "空气质量"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-distance",
       "query": "HC-SR04 测距传感器如何避免超时卡死？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/distance.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/distance.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "HC-SR04",
-          "测距传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "sensor-gps",
       "query": "NEO-6M GPS 模块的 NMEA 数据怎么解析？",
-      "expected_skills": [
-        "mcu-sensors"
-      ],
-      "predicted_skills": [
-        "mcu-sensors"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/gps.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/gps.md"
-      ],
-      "matches": {
-        "mcu-sensors": [
-          "GPS 模块",
-          "NEO-6M",
-          "NMEA"
-        ]
-      },
       "passed": true
     },
     {
       "id": "actuator-dc-motor",
       "query": "L298N 直流电机 H 桥要怎样做续流保护？",
-      "expected_skills": [
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/dc-motor.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/dc-motor.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "H 桥",
-          "L298N",
-          "直流电机"
-        ]
-      },
       "passed": true
     },
     {
       "id": "actuator-stepper",
       "query": "A4988 步进电机怎样设置细分和限流？",
-      "expected_skills": [
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/stepper-motor.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/stepper-motor.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "A4988",
-          "步进电机"
-        ]
-      },
       "passed": true
     },
     {
       "id": "actuator-servo",
       "query": "PWM 舵机的角度和脉宽应该怎样映射？",
-      "expected_skills": [
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/servo.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/servo.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "PWM 舵机",
-          "舵机"
-        ]
-      },
       "passed": true
     },
     {
       "id": "actuator-relay",
       "query": "固态继电器选型时怎样考虑漏电流？",
-      "expected_skills": [
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/relay.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/relay.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "固态继电器",
-          "继电器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "actuator-audio",
       "query": "DFPlayer 音频播放模块如何通过串口控制？",
-      "expected_skills": [
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/audio.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/audio.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "DFPlayer",
-          "音频播放模块"
-        ]
-      },
       "passed": true
     },
     {
       "id": "display-oled",
       "query": "SSD1306 OLED 如何降低显存占用？",
-      "expected_skills": [
-        "mcu-displays"
-      ],
-      "predicted_skills": [
-        "mcu-displays"
-      ],
-      "expected_targets": [
-        "skill://mcu-displays/references/oled.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-displays/references/oled.md"
-      ],
-      "matches": {
-        "mcu-displays": [
-          "OLED",
-          "SSD1306"
-        ]
-      },
       "passed": true
     },
     {
       "id": "display-lcd",
       "query": "PCF8574 驱动 LCD1602 时地址如何确认？",
-      "expected_skills": [
-        "mcu-displays"
-      ],
-      "predicted_skills": [
-        "mcu-displays"
-      ],
-      "expected_targets": [
-        "skill://mcu-displays/references/lcd.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-displays/references/lcd.md"
-      ],
-      "matches": {
-        "mcu-displays": [
-          "LCD1602",
-          "PCF8574"
-        ]
-      },
       "passed": true
     },
     {
       "id": "display-tft",
       "query": "ST7789 TFT 怎样提升刷屏速度？",
-      "expected_skills": [
-        "mcu-displays"
-      ],
-      "predicted_skills": [
-        "mcu-displays"
-      ],
-      "expected_targets": [
-        "skill://mcu-displays/references/tft.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-displays/references/tft.md"
-      ],
-      "matches": {
-        "mcu-displays": [
-          "ST7789",
-          "TFT"
-        ]
-      },
       "passed": true
     },
     {
       "id": "display-epaper",
       "query": "SSD1680 电子纸怎样实现局部刷新？",
-      "expected_skills": [
-        "mcu-displays"
-      ],
-      "predicted_skills": [
-        "mcu-displays"
-      ],
-      "expected_targets": [
-        "skill://mcu-displays/references/e-paper.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-displays/references/e-paper.md"
-      ],
-      "matches": {
-        "mcu-displays": [
-          "SSD1680",
-          "电子纸"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-wifi",
       "query": "ESP8266 WiFi AT 如何实现断线重连？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "ESP8266",
-          "WiFi",
-          "WiFi AT"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-ble",
       "query": "BLE GATT 服务和特征值怎样设计？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/bluetooth.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/bluetooth.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "BLE",
-          "GATT"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-lora",
       "query": "SX1278 LoRa 点对点通信如何调扩频因子？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/lora.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/lora.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "LoRa",
-          "SX1278"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-can",
       "query": "MCP2515 CAN 总线节点怎样设置终端电阻？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/can.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/can.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "CAN 总线",
-          "MCP2515"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-rs485",
       "query": "RS485 Modbus RTU 的方向控制怎么做？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/rs485.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/rs485.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "Modbus RTU",
-          "RS485"
-        ]
-      },
       "passed": true
     },
     {
       "id": "communication-ethernet",
       "query": "W5500 以太网如何进行网络重连？",
-      "expected_skills": [
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-communication/references/ethernet.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-communication/references/ethernet.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "W5500",
-          "以太网",
-          "网络重连"
-        ]
-      },
       "passed": true
     },
     {
       "id": "storage-eeprom",
       "query": "AT24C EEPROM 如何做分页写入？",
-      "expected_skills": [
-        "mcu-storage"
-      ],
-      "predicted_skills": [
-        "mcu-storage"
-      ],
-      "expected_targets": [
-        "skill://mcu-storage/references/eeprom.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-storage/references/eeprom.md"
-      ],
-      "matches": {
-        "mcu-storage": [
-          "AT24C",
-          "EEPROM"
-        ]
-      },
       "passed": true
     },
     {
       "id": "storage-flash",
       "query": "W25Q SPI Flash 擦写寿命怎样管理？",
-      "expected_skills": [
-        "mcu-storage"
-      ],
-      "predicted_skills": [
-        "mcu-storage"
-      ],
-      "expected_targets": [
-        "skill://mcu-storage/references/flash.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-storage/references/flash.md"
-      ],
-      "matches": {
-        "mcu-storage": [
-          "SPI Flash",
-          "W25Q"
-        ]
-      },
       "passed": true
     },
     {
       "id": "storage-sd",
       "query": "SD 卡 FatFs 掉电时怎样保证文件一致性？",
-      "expected_skills": [
-        "mcu-storage"
-      ],
-      "predicted_skills": [
-        "mcu-storage"
-      ],
-      "expected_targets": [
-        "skill://mcu-storage/references/sd-card.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-storage/references/sd-card.md"
-      ],
-      "matches": {
-        "mcu-storage": [
-          "FatFs",
-          "SD 卡"
-        ]
-      },
       "passed": true
     },
     {
       "id": "storage-rtc",
       "query": "DS3231 RTC 如何处理备用电池和校时？",
-      "expected_skills": [
-        "mcu-storage"
-      ],
-      "predicted_skills": [
-        "mcu-storage"
-      ],
-      "expected_targets": [
-        "skill://mcu-storage/references/rtc.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-storage/references/rtc.md"
-      ],
-      "matches": {
-        "mcu-storage": [
-          "DS3231",
-          "RTC"
-        ]
-      },
       "passed": true
     },
     {
       "id": "power-ldo",
       "query": "ME6211 LDO 的压差和静态电流怎么评估？",
-      "expected_skills": [
-        "mcu-power"
-      ],
-      "predicted_skills": [
-        "mcu-power"
-      ],
-      "expected_targets": [
-        "skill://mcu-power/references/ldo.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-power/references/ldo.md"
-      ],
-      "matches": {
-        "mcu-power": [
-          "LDO",
-          "ME6211"
-        ]
-      },
       "passed": true
     },
     {
       "id": "power-dcdc",
       "query": "MP1584 DC-DC 的电感和反馈电阻怎样选？",
-      "expected_skills": [
-        "mcu-power"
-      ],
-      "predicted_skills": [
-        "mcu-power"
-      ],
-      "expected_targets": [
-        "skill://mcu-power/references/dc-dc.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-power/references/dc-dc.md"
-      ],
-      "matches": {
-        "mcu-power": [
-          "DC-DC",
-          "MP1584"
-        ]
-      },
       "passed": true
     },
     {
       "id": "power-charger",
       "query": "TP4056 电池充电电流如何设置？",
-      "expected_skills": [
-        "mcu-power"
-      ],
-      "predicted_skills": [
-        "mcu-power"
-      ],
-      "expected_targets": [
-        "skill://mcu-power/references/battery-charger.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-power/references/battery-charger.md"
-      ],
-      "matches": {
-        "mcu-power": [
-          "TP4056",
-          "电池充电"
-        ]
-      },
       "passed": true
     },
     {
       "id": "power-protection",
       "query": "输入口怎样做 TVS 和反接保护？",
-      "expected_skills": [
-        "mcu-power"
-      ],
-      "predicted_skills": [
-        "mcu-power"
-      ],
-      "expected_targets": [
-        "skill://mcu-power/references/protection.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-power/references/protection.md"
-      ],
-      "matches": {
-        "mcu-power": [
-          "TVS",
-          "反接保护"
-        ]
-      },
       "passed": true
     },
     {
       "id": "input-encoder",
       "query": "EC11 旋转编码器如何去抖并判断方向？",
-      "expected_skills": [
-        "mcu-input"
-      ],
-      "predicted_skills": [
-        "mcu-input"
-      ],
-      "expected_targets": [
-        "skill://mcu-input/references/rotary-encoder.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-input/references/rotary-encoder.md"
-      ],
-      "matches": {
-        "mcu-input": [
-          "EC11",
-          "旋转编码器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "input-keypad",
       "query": "矩阵键盘的按键去抖和鬼键怎么处理？",
-      "expected_skills": [
-        "mcu-input"
-      ],
-      "predicted_skills": [
-        "mcu-input"
-      ],
-      "expected_targets": [
-        "skill://mcu-input/references/keypad.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-input/references/keypad.md"
-      ],
-      "matches": {
-        "mcu-input": [
-          "按键去抖",
-          "矩阵键盘"
-        ]
-      },
       "passed": true
     },
     {
       "id": "input-touch",
       "query": "MPR121 电容触摸的阈值怎样标定？",
-      "expected_skills": [
-        "mcu-input"
-      ],
-      "predicted_skills": [
-        "mcu-input"
-      ],
-      "expected_targets": [
-        "skill://mcu-input/references/touch.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-input/references/touch.md"
-      ],
-      "matches": {
-        "mcu-input": [
-          "MPR121",
-          "电容触摸"
-        ]
-      },
       "passed": true
     },
     {
       "id": "input-fingerprint",
       "query": "AS608 指纹识别模块如何录入和比对？",
-      "expected_skills": [
-        "mcu-input"
-      ],
-      "predicted_skills": [
-        "mcu-input"
-      ],
-      "expected_targets": [
-        "skill://mcu-input/examples/fingerprint/"
-      ],
-      "predicted_targets": [
-        "skill://mcu-input/examples/fingerprint/"
-      ],
-      "matches": {
-        "mcu-input": [
-          "AS608",
-          "指纹识别"
-        ]
-      },
       "passed": true
     },
     {
       "id": "system-low-power",
       "query": "完整产品的低功耗设计、睡眠唤醒和功耗预算怎么做？",
-      "expected_skills": [
-        "mcu-system-design"
-      ],
-      "predicted_skills": [
-        "mcu-system-design"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/guides/low-power.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-system-design/guides/low-power.md"
-      ],
-      "matches": {
-        "mcu-system-design": [
-          "低功耗设计",
-          "功耗预算",
-          "睡眠唤醒"
-        ]
-      },
       "passed": true
     },
     {
       "id": "system-ota",
       "query": "需要 Bootloader、双分区和 OTA 回滚方案。",
-      "expected_skills": [
-        "mcu-system-design"
-      ],
-      "predicted_skills": [
-        "mcu-system-design"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/guides/ota-bootloader.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-system-design/guides/ota-bootloader.md"
-      ],
-      "matches": {
-        "mcu-system-design": [
-          "Bootloader",
-          "OTA 回滚",
-          "双分区"
-        ]
-      },
       "passed": true
     },
     {
       "id": "system-stm32-patterns",
       "query": "请总结 STM32 工程模式和跨项目模式。",
-      "expected_skills": [
-        "mcu-system-design"
-      ],
-      "predicted_skills": [
-        "mcu-system-design"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/guides/stm32-project-patterns.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-system-design/guides/stm32-project-patterns.md"
-      ],
-      "matches": {
-        "mcu-system-design": [
-          "STM32 工程模式",
-          "跨项目模式"
-        ]
-      },
       "passed": true
     },
     {
       "id": "system-environment-station",
       "query": "我要实现环境监测站示例。",
-      "expected_skills": [
-        "mcu-system-design"
-      ],
-      "predicted_skills": [
-        "mcu-system-design"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/examples/env-monitor-station.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-system-design/examples/env-monitor-station.md"
-      ],
-      "matches": {
-        "mcu-system-design": [
-          "环境监测站",
-          "环境监测站示例"
-        ]
-      },
       "passed": true
     },
     {
       "id": "system-door",
       "query": "设计一个 PIR 继电器联动的门控系统。",
-      "expected_skills": [
-        "mcu-system-design",
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-system-design",
-        "mcu-actuators"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/examples/buzzer-pir-relay/",
-        "skill://mcu-actuators/references/relay.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-system-design/examples/buzzer-pir-relay/",
-        "skill://mcu-actuators/references/relay.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "继电器"
-        ],
-        "mcu-system-design": [
-          "PIR 继电器联动",
-          "门控系统"
-        ]
-      },
       "passed": true
     },
     {
       "id": "organizer-rules",
       "query": "请按整理规则清理项目并规范目录结构。",
-      "expected_skills": [
-        "project-organizer"
-      ],
-      "predicted_skills": [
-        "project-organizer"
-      ],
-      "expected_targets": [
-        "skill://project-organizer/references/organize-rules.md"
-      ],
-      "predicted_targets": [
-        "skill://project-organizer/references/organize-rules.md"
-      ],
-      "matches": {
-        "project-organizer": [
-          "整理规则",
-          "清理项目",
-          "规范目录结构"
-        ]
-      },
       "passed": true
     },
     {
       "id": "organizer-inventory",
       "query": "生成硬件清单、功能清单和引脚分配表。",
-      "expected_skills": [
-        "project-organizer"
-      ],
-      "predicted_skills": [
-        "project-organizer"
-      ],
-      "expected_targets": [
-        "skill://project-organizer/references/feature-hardware-inventory.md"
-      ],
-      "predicted_targets": [
-        "skill://project-organizer/references/feature-hardware-inventory.md"
-      ],
-      "matches": {
-        "project-organizer": [
-          "功能清单",
-          "引脚分配表",
-          "生成硬件清单",
-          "硬件清单"
-        ]
-      },
       "passed": true
     },
     {
       "id": "organizer-scan",
       "query": "执行 /organize-scan 扫描项目现状和失效链接。",
-      "expected_skills": [
-        "project-organizer"
-      ],
-      "predicted_skills": [
-        "project-organizer"
-      ],
-      "expected_targets": [
-        "skill://project-organizer/scripts/scan_project.py"
-      ],
-      "predicted_targets": [
-        "skill://project-organizer/scripts/scan_project.py"
-      ],
-      "matches": {
-        "project-organizer": [
-          "/organize",
-          "/organize-scan",
-          "扫描项目现状"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-sensor-cloud",
       "query": "DHT11 湿度传感器的数据通过 MQTT 上传。",
-      "expected_skills": [
-        "mcu-sensors",
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-sensors",
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/humidity.md",
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/humidity.md",
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "MQTT"
-        ],
-        "mcu-sensors": [
-          "DHT11",
-          "湿度传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-sensor-display",
       "query": "把 DS18B20 温度传感器数据显示在 SSD1306 OLED 上。",
-      "expected_skills": [
-        "mcu-sensors",
-        "mcu-displays"
-      ],
-      "predicted_skills": [
-        "mcu-sensors",
-        "mcu-displays"
-      ],
-      "expected_targets": [
-        "skill://mcu-sensors/references/temperature.md",
-        "skill://mcu-displays/references/oled.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-sensors/references/temperature.md",
-        "skill://mcu-displays/references/oled.md"
-      ],
-      "matches": {
-        "mcu-displays": [
-          "OLED",
-          "SSD1306"
-        ],
-        "mcu-sensors": [
-          "DS18B20",
-          "温度传感器"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-motor-clock",
       "query": "让 A4988 步进电机按照 DS3231 RTC 的时间执行。",
-      "expected_skills": [
-        "mcu-actuators",
-        "mcu-storage"
-      ],
-      "predicted_skills": [
-        "mcu-actuators",
-        "mcu-storage"
-      ],
-      "expected_targets": [
-        "skill://mcu-actuators/references/stepper-motor.md",
-        "skill://mcu-storage/references/rtc.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/stepper-motor.md",
-        "skill://mcu-storage/references/rtc.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "A4988",
-          "步进电机"
-        ],
-        "mcu-storage": [
-          "DS3231",
-          "RTC"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-power-ble",
       "query": "用 INA219 做电池监控，并通过 BLE 上报。",
-      "expected_skills": [
-        "mcu-power",
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-power",
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-power/references/battery-monitor.md",
-        "skill://mcu-communication/references/bluetooth.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-power/references/battery-monitor.md",
-        "skill://mcu-communication/references/bluetooth.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "BLE"
-        ],
-        "mcu-power": [
-          "INA219",
-          "电池监控"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-input-relay",
       "query": "矩阵键盘输入密码后控制固态继电器。",
-      "expected_skills": [
-        "mcu-input",
-        "mcu-actuators"
-      ],
-      "predicted_skills": [
-        "mcu-actuators",
-        "mcu-input"
-      ],
-      "expected_targets": [
-        "skill://mcu-input/references/keypad.md",
-        "skill://mcu-actuators/references/relay.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-actuators/references/relay.md",
-        "skill://mcu-input/references/keypad.md"
-      ],
-      "matches": {
-        "mcu-actuators": [
-          "固态继电器",
-          "继电器"
-        ],
-        "mcu-input": [
-          "矩阵键盘"
-        ]
-      },
       "passed": true
     },
     {
       "id": "multi-environment-system",
       "query": "环境监测站使用 SHT30、SSD1306 OLED 和 MQTT。",
-      "expected_skills": [
-        "mcu-system-design",
-        "mcu-sensors",
-        "mcu-displays",
-        "mcu-communication"
-      ],
-      "predicted_skills": [
-        "mcu-displays",
-        "mcu-system-design",
-        "mcu-sensors",
-        "mcu-communication"
-      ],
-      "expected_targets": [
-        "skill://mcu-system-design/examples/env-monitor-station.md",
-        "skill://mcu-sensors/references/temperature.md",
-        "skill://mcu-displays/references/oled.md",
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "predicted_targets": [
-        "skill://mcu-displays/references/oled.md",
-        "skill://mcu-sensors/references/temperature.md",
-        "skill://mcu-system-design/examples/env-monitor-station.md",
-        "skill://mcu-communication/references/wifi.md"
-      ],
-      "matches": {
-        "mcu-communication": [
-          "MQTT"
-        ],
-        "mcu-displays": [
-          "OLED",
-          "SSD1306"
-        ],
-        "mcu-sensors": [
-          "SHT30"
-        ],
-        "mcu-system-design": [
-          "环境监测站"
-        ]
-      },
+      "passed": true
+    },
+    {
+      "id": "colloquial-ds18b20-85",
+      "query": "我的 DS18B20 读出来一直是 85 度，怎么回事？",
+      "passed": true
+    },
+    {
+      "id": "colloquial-esp32-reconnect",
+      "query": "esp32 mqtt 老是掉线，怎么做自动重连",
+      "passed": true
+    },
+    {
+      "id": "colloquial-mpu-hyphen",
+      "query": "MPU-6050 姿态角漂移得厉害怎么办",
+      "passed": true
+    },
+    {
+      "id": "colloquial-oled-garbled",
+      "query": "ssd1306 屏幕显示花屏乱码",
+      "passed": true
+    },
+    {
+      "id": "negative-web-crawler",
+      "query": "帮我写一个 Python 爬虫抓取网页数据",
+      "passed": true
+    },
+    {
+      "id": "negative-frontend",
+      "query": "React 前端页面白屏了怎么排查",
+      "passed": true
+    },
+    {
+      "id": "negative-smalltalk",
+      "query": "今天天气怎么样，推荐一部电影",
       "passed": true
     }
   ]

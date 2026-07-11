@@ -6,6 +6,10 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -14,6 +18,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Lint
+        run: |
+          python3 -m pip install --quiet ruff
+          ruff check tools tests
+          ruff format --check tools tests
       - name: Check generated registry and docs
         run: python3 tools/skill_registry.py --check
       - name: Check routing evaluation

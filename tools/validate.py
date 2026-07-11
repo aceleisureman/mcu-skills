@@ -6,11 +6,12 @@ from __future__ import annotations
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote
 
-from evaluate_routing import check_report, evaluate, thresholds_pass
-from skill_registry import check_outputs, parse_skill_uri, resolve_skill_uri
+from evaluate_routing import evaluate, report_path, report_text, thresholds_pass
+from skill_registry import build_registry, check_outputs, parse_skill_uri, resolve_skill_uri
 
 
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
@@ -52,6 +53,7 @@ LAYERS = {"foundation", "domain", "orchestrator", "utility"}
 SKIP_DIRS = {".git", ".codebuddy", "__pycache__"}
 
 
+@lru_cache(maxsize=None)
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
@@ -67,6 +69,11 @@ def parse_frontmatter(path: Path, errors: list[str]) -> dict[str, str]:
     for line in match.group(1).splitlines():
         key, separator, value = line.partition(":")
         if not separator or line.startswith((" ", "\t")):
+            if line.strip():
+                print(
+                    f"[warning] {path}: frontmatter 行未被识别（仅支持顶层 key: value）-> {line}",
+                    file=sys.stderr,
+                )
             continue
         values[key.strip()] = value.strip().strip("\"'")
     return values
@@ -79,8 +86,7 @@ def discover_skills(root: Path, errors: list[str]) -> list[Path]:
         return []
 
     skills = sorted(
-        path for path in skills_dir.iterdir()
-        if path.is_dir() and (path / "SKILL.md").is_file()
+        path for path in skills_dir.iterdir() if path.is_dir() and (path / "SKILL.md").is_file()
     )
     if not skills:
         errors.append(f"{skills_dir}: 未找到任何 Skill")
@@ -247,7 +253,11 @@ def check_metadata(
             errors.append(f"{path}: layer 必须是 {sorted(LAYERS)} 之一")
         if not isinstance(dependencies_value, list) or len(dependencies) != len(dependencies_value):
             errors.append(f"{path}: dependencies 必须全部为字符串")
-        if not isinstance(triggers_value, list) or len(triggers) != len(triggers_value) or not triggers:
+        if (
+            not isinstance(triggers_value, list)
+            or len(triggers) != len(triggers_value)
+            or not triggers
+        ):
             errors.append(f"{path}: triggers 必须是非空字符串数组")
         if not isinstance(routes_value, list) or len(routes) != len(routes_value) or not routes:
             errors.append(f"{path}: routes 必须是非空对象数组")
@@ -294,7 +304,11 @@ def check_metadata(
             route_ids.add(route_id)
             if not isinstance(intent, str) or not intent.strip():
                 errors.append(f"{path}: route '{route_id}' 缺少 intent")
-            if not isinstance(keywords_value, list) or len(keywords) != len(keywords_value) or not keywords:
+            if (
+                not isinstance(keywords_value, list)
+                or len(keywords) != len(keywords_value)
+                or not keywords
+            ):
                 errors.append(f"{path}: route '{route_id}' keywords 必须为非空字符串数组")
             if not isinstance(target, str) or not target:
                 errors.append(f"{path}: route '{route_id}' 缺少 target")
@@ -468,6 +482,7 @@ def markdown_files(root: Path) -> list[Path]:
 
 def validate(root: Path) -> tuple[list[str], dict[str, int]]:
     root = root.resolve()
+    read_text.cache_clear()
     errors: list[str] = []
     skills = discover_skills(root, errors)
     metadata = load_metadata(skills, errors)
@@ -492,9 +507,11 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
             component_references += 1
             check_component_reference(path, errors)
 
+    registry: dict[str, object] | None = None
     if len(metadata) == len(skills):
         try:
-            stale_outputs = check_outputs(root)
+            registry = build_registry(root)
+            stale_outputs = check_outputs(root, registry)
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(f"生成 registry 失败 -> {exc}")
         else:
@@ -509,7 +526,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
         errors.append(f"{cases_path}: 缺少路由评测数据集")
     elif len(metadata) == len(skills):
         try:
-            routing_report = evaluate(root)
+            routing_report = evaluate(root, registry)
         except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
             errors.append(f"{cases_path}: 路由评测失败 -> {exc}")
         else:
@@ -518,9 +535,10 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
                 routing_cases = int(summary.get("cases", 0))
             if not thresholds_pass(routing_report):
                 errors.append(f"{cases_path}: 路由评测未达到质量阈值")
-            if not check_report(root):
+            report_file = report_path(root)
+            if not report_file.is_file() or read_text(report_file) != report_text(routing_report):
                 errors.append(
-                    f"{root / 'docs/routing-evaluation.json'}: "
+                    f"{report_file}: "
                     "评测报告已过期，运行 python3 tools/evaluate_routing.py --write-report"
                 )
 

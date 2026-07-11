@@ -14,20 +14,19 @@ description: MCU 非易失存储与实时时钟 Skill，覆盖 EEPROM、SPI NOR 
 
 ## 意图路由
 
-| 需求或型号 | 读取文件 |
-|------------|----------|
-| AT24Cxx、24LCxx、I2C EEPROM | `references/eeprom.md` |
-| W25Qxx、GD25Qxx、SPI NOR Flash | `references/flash.md` |
-| SD、SDHC、SDIO、FatFs | `references/sd-card.md` |
-| FM25、MB85、FRAM | `references/fram.md` |
-| DS3231、PCF8563、DS1302、RTC | `references/rtc.md` |
+> 下表由 `python3 tools/skill_registry.py --write` 从 skill.json 生成，请勿手工编辑。
 
-## 示例
-
-| 场景 | 路径 |
-|------|------|
-| DS1302 RTC | `examples/ds1302-rtc/` |
-| Flash 参数保存 | `examples/flash-param/` |
+<!-- GENERATED:ROUTE_TABLE:START -->
+| 意图 | 关键词或型号 | 读取文件 |
+|------|------------|----------|
+| I2C EEPROM | EEPROM、AT24C、24LC | `references/eeprom.md` |
+| SPI NOR Flash | SPI Flash、W25Q、GD25Q、NOR Flash | `references/flash.md` |
+| SD 卡与 FatFs | SD 卡、SDIO、FatFs、SDHC | `references/sd-card.md` |
+| FRAM | FRAM、FM25、MB85 | `references/fram.md` |
+| 实时时钟 | RTC、DS3231、PCF8563、DS1302 | `references/rtc.md` |
+| DS1302 RTC 示例 | DS1302 示例 | `examples/ds1302-rtc/` |
+| Flash 参数保存示例 | Flash 参数示例、参数保存示例 | `examples/flash-param/` |
+<!-- GENERATED:ROUTE_TABLE:END -->
 
 ## 输出要求
 

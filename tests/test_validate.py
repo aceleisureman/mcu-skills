@@ -21,9 +21,7 @@ class ValidateTests(unittest.TestCase):
         self.root = Path(self.temp_dir.name)
         self.write(
             "README.md",
-            "# Test\n\n"
-            "<!-- GENERATED:SKILL_TABLE:START -->\n"
-            "<!-- GENERATED:SKILL_TABLE:END -->\n",
+            "# Test\n\n<!-- GENERATED:SKILL_TABLE:START -->\n<!-- GENERATED:SKILL_TABLE:END -->\n",
         )
         self.write(
             "skills/README.md",
@@ -150,11 +148,7 @@ class ValidateTests(unittest.TestCase):
     def test_component_reference_requires_five_sections(self) -> None:
         self.write(
             "skills/alpha/references/device.md",
-            "# 测试器件开发规范\n\n"
-            "## 1. 选型\n\n"
-            "## 2. 硬件\n\n"
-            "## 3. 驱动\n\n"
-            "## 5. 避坑\n",
+            "# 测试器件开发规范\n\n## 1. 选型\n\n## 2. 硬件\n\n## 3. 驱动\n\n## 5. 避坑\n",
         )
         self.generate()
         self.assertTrue(any("## 4" in error for error in self.errors()))

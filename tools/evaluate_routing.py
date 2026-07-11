@@ -13,6 +13,9 @@ from skill_registry import build_registry
 
 NORMALIZE_RE = re.compile(r"[\W_]+", re.UNICODE)
 
+# 得分低于最高分 Skill 此比例的弱命中不进入预测结果，避免短词偶然匹配造成误召回。
+MIN_SCORE_RATIO = 0.2
+
 
 def normalize(value: str) -> str:
     return NORMALIZE_RE.sub("", value.casefold())
@@ -71,6 +74,17 @@ def route_query(
             skill_scores[name] = score
             matches[name] = sorted(set(matched_terms))
 
+    if skill_scores:
+        cutoff = max(skill_scores.values()) * MIN_SCORE_RATIO
+        dropped = {name for name, score in skill_scores.items() if score < cutoff}
+        skill_scores = {name: score for name, score in skill_scores.items() if name not in dropped}
+        route_scores = {
+            target: score
+            for target, score in route_scores.items()
+            if target.removeprefix("skill://").split("/", maxsplit=1)[0] not in dropped
+        }
+        matches = {name: terms for name, terms in matches.items() if name not in dropped}
+
     predicted_skills = [
         name for name, _ in sorted(skill_scores.items(), key=lambda item: (-item[1], item[0]))
     ]
@@ -94,8 +108,9 @@ def safe_ratio(numerator: int, denominator: int) -> float:
     return numerator / denominator if denominator else 1.0
 
 
-def evaluate(root: Path) -> dict[str, object]:
-    registry = build_registry(root)
+def evaluate(root: Path, registry: dict[str, object] | None = None) -> dict[str, object]:
+    if registry is None:
+        registry = build_registry(root)
     cases = load_cases(root / "evals" / "routing-cases.json")
     true_positive = 0
     predicted_total = 0
@@ -126,22 +141,31 @@ def evaluate(root: Path) -> dict[str, object]:
         target_true_positive += len(target_hits)
         target_predicted_total += len(predicted_target_set)
         target_expected_total += len(expected_target_set)
-        if predicted_skills and predicted_skills[0] in expected_skill_set:
+        if predicted_skills:
+            if predicted_skills[0] in expected_skill_set:
+                top1_hits += 1
+        elif not expected_skill_set:
             top1_hits += 1
 
-        results.append({
-            "id": case_id,
-            "query": query,
-            "expected_skills": expected_skills,
-            "predicted_skills": predicted_skills,
-            "expected_targets": expected_targets,
-            "predicted_targets": predicted_targets,
-            "matches": matches,
-            "passed": (
-                predicted_skill_set == expected_skill_set
-                and expected_target_set <= predicted_target_set
-            ),
-        })
+        passed = (
+            predicted_skill_set == expected_skill_set
+            and expected_target_set <= predicted_target_set
+        )
+        if passed:
+            results.append({"id": case_id, "query": query, "passed": True})
+        else:
+            results.append(
+                {
+                    "id": case_id,
+                    "query": query,
+                    "expected_skills": expected_skills,
+                    "predicted_skills": predicted_skills,
+                    "expected_targets": expected_targets,
+                    "predicted_targets": predicted_targets,
+                    "matches": matches,
+                    "passed": False,
+                }
+            )
 
     precision = safe_ratio(true_positive, predicted_total)
     recall = safe_ratio(true_positive, expected_total)

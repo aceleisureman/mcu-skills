@@ -30,12 +30,16 @@ import json
 import re
 import subprocess
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 SEMVER_RE = re.compile(r"(\d+)\.(\d+)\.(\d+)")
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from skill_registry import generated_outputs  # noqa: E402
 
 
 def parse_version(v: str) -> tuple[int, int, int]:
@@ -56,8 +60,7 @@ def bump(ver: str, kind: str) -> str:
 
 def list_skills() -> list[str]:
     return sorted(
-        p.name for p in SKILLS_DIR.iterdir()
-        if p.is_dir() and (p / "skill.json").is_file()
+        p.name for p in SKILLS_DIR.iterdir() if p.is_dir() and (p / "skill.json").is_file()
     )
 
 
@@ -110,9 +113,7 @@ def run_registry_write() -> None:
 
 def run_validate() -> bool:
     print("  验证...")
-    result = run_cmd(
-        [sys.executable, str(ROOT / "tools" / "validate.py")], check=False
-    )
+    result = run_cmd([sys.executable, str(ROOT / "tools" / "validate.py")], check=False)
     if result.returncode != 0:
         print(f"  [错误] 验证失败:\n{result.stdout}", file=sys.stderr)
         return False
@@ -120,47 +121,61 @@ def run_validate() -> bool:
     return True
 
 
-def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool) -> bool:
+def tag_exists(tag: str) -> bool:
+    result = run_cmd(["git", "rev-parse", "-q", "--verify", f"refs/tags/{tag}"], check=False)
+    return result.returncode == 0
+
+
+def release_files(skills: list[str]) -> list[str]:
+    """只提交本次升级相关的文件，不把工作区其它改动带入 release commit。"""
+    files = []
+    for skill in skills:
+        files.append(f"skills/{skill}/skill.json")
+        files.append(f"skills/{skill}/CHANGELOG.md")
+    for path in generated_outputs(ROOT):
+        files.append(path.relative_to(ROOT).as_posix())
+    files.append("docs/routing-evaluation.json")
+    return sorted(set(files))
+
+
+def commit_tag_push(
+    tag: str,
+    commit_msg: str,
+    files: list[str],
+    dry_run: bool,
+) -> bool:
     """执行 git commit + tag + push，触发 GitHub Actions 自动创建 Release。
 
     关键：必须用 `git push origin <tag>` 单独推送每个 tag，不能用 `--tags` 批量推送，
     否则 GitHub 把它视为主分支 push 而非 tag push，release workflow 不会触发。
     """
-    tag = f"{skill}-v{new_version}"
-    print(f"\n{'='*50}")
-    print(f"发布 {tag}")
-    print(f"{'='*50}")
-
-    # 检查工作区是否有未提交的改动（应该有刚改的文件）
-    status = run_cmd(["git", "status", "--porcelain"])
-    if not status.stdout.strip():
-        print("  [警告] 工作区无变更，跳过发布")
+    if tag_exists(tag):
+        print(f"  [错误] tag {tag} 已存在，拒绝覆盖已发布版本", file=sys.stderr)
         return False
 
-    # commit
-    commit_msg = f"release: {skill} v{new_version}"
-    if messages:
-        commit_msg += "\n\n" + "\n".join(f"- {m}" for m in messages)
-
     if dry_run:
-        print(f"  [dry-run] git add -A")
-        print(f"  [dry-run] git commit -m \"{commit_msg}\"")
-        print(f"  [dry-run] git tag -a {tag} -m 'Release'")
-        print(f"  [dry-run] git push origin main")
+        print(f"  [dry-run] git add {' '.join(files)}")
+        print(f'  [dry-run] git commit -m "{commit_msg}"')
+        print(f"  [dry-run] git tag -a {tag} -m 'Release {tag}'")
+        print("  [dry-run] git push origin main")
         print(f"  [dry-run] git push origin {tag}  # 单独推送触发 release workflow")
         return True
 
-    print("  git add -A ...")
-    run_cmd(["git", "add", "-A"])
+    print("  git add <release files> ...")
+    run_cmd(["git", "add", "--", *files])
 
-    print(f"  git commit ...")
+    staged = run_cmd(["git", "diff", "--cached", "--name-only"])
+    if not staged.stdout.strip():
+        print("  [警告] 无可提交变更，跳过发布")
+        return False
+
+    print("  git commit ...")
     run_cmd(["git", "commit", "-m", commit_msg])
 
-    print(f"  git tag -a {tag} -m 'Release' ...")
-    run_cmd(["git", "tag", "-d", tag], check=False)
+    print(f"  git tag -a {tag} -m 'Release {tag}' ...")
     run_cmd(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
 
-    print(f"  git push origin main ...")
+    print("  git push origin main ...")
     main_push = run_cmd(["git", "push", "origin", "main"], check=False)
     if main_push.returncode != 0:
         print(f"  [错误] push main 失败:\n{main_push.stderr}", file=sys.stderr)
@@ -173,8 +188,20 @@ def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool
         return False
 
     print(f"\n  已推送 tag {tag}")
-    print(f"  GitHub Actions 将自动创建 Release")
+    print("  GitHub Actions 将自动创建 Release")
     return True
+
+
+def git_release(skill: str, new_version: str, messages: list[str], dry_run: bool) -> bool:
+    tag = f"{skill}-v{new_version}"
+    print(f"\n{'=' * 50}")
+    print(f"发布 {tag}")
+    print(f"{'=' * 50}")
+
+    commit_msg = f"release: {skill} v{new_version}"
+    if messages:
+        commit_msg += "\n\n" + "\n".join(f"- {m}" for m in messages)
+    return commit_tag_push(tag, commit_msg, release_files([skill]), dry_run)
 
 
 def main() -> int:
@@ -193,7 +220,11 @@ def main() -> int:
     level.add_argument("--set", metavar="VER", help="指定版本号")
 
     parser.add_argument("-m", "--message", action="append", default=[], help="变更说明（可多次）")
-    parser.add_argument("--release", action="store_true", help="升级后自动 git commit + tag + push，触发 GitHub Release")
+    parser.add_argument(
+        "--release",
+        action="store_true",
+        help="升级后自动 git commit + tag + push，触发 GitHub Release",
+    )
     parser.add_argument("--dry-run", action="store_true", help="只预览不执行发布操作")
 
     args = parser.parse_args()
@@ -221,15 +252,15 @@ def main() -> int:
         else:
             new_version = bump(old_version, kind)
 
-        print(f"\n{'='*50}")
+        print(f"\n{'=' * 50}")
         print(f"升级 {skill}: {old_version} → {new_version}")
-        print(f"{'='*50}")
+        print(f"{'=' * 50}")
 
         update_skill_json(skill, new_version)
         update_changelog(skill, new_version, args.message)
         bumped.append((skill, new_version))
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     run_registry_write()
 
     if not run_validate():
@@ -238,11 +269,11 @@ def main() -> int:
 
     if args.release:
         if args.all and len(bumped) > 1:
-            # 多 Skill 一起发布，用一个汇总 tag
-            tag = f"v{date.today().isoformat()}"
-            print(f"\n{'='*50}")
+            # 多 Skill 一起发布，用一个带时间戳的汇总 tag，同日多次发布不会冲突
+            tag = f"v{datetime.now().strftime('%Y-%m-%d-%H%M%S')}"
+            print(f"\n{'=' * 50}")
             print(f"发布 {tag}（{len(bumped)} 个 Skill）")
-            print(f"{'='*50}")
+            print(f"{'=' * 50}")
 
             commit_parts = [f"release: {len(bumped)} skills bump"]
             for skill, ver in bumped:
@@ -252,39 +283,21 @@ def main() -> int:
                 commit_parts.extend(f"- {m}" for m in args.message)
             commit_msg = "\n".join(commit_parts)
 
-            if args.dry_run:
-                print(f"  [dry-run] git add -A")
-                print(f"  [dry-run] git commit -m \"{commit_msg}\"")
-                print(f"  [dry-run] git tag -a {tag} -m 'Release'")
-                print(f"  [dry-run] git push origin main")
-                print(f"  [dry-run] git push origin {tag}")
-                return 0
-
-            run_cmd(["git", "add", "-A"])
-            run_cmd(["git", "commit", "-m", commit_msg])
-            run_cmd(["git", "tag", "-d", tag], check=False)
-            run_cmd(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
-            main_push = run_cmd(["git", "push", "origin", "main"], check=False)
-            if main_push.returncode != 0:
-                print(f"  [错误] push main 失败:\n{main_push.stderr}", file=sys.stderr)
+            files = release_files([skill for skill, _ in bumped])
+            if not commit_tag_push(tag, commit_msg, files, args.dry_run):
                 return 1
-            tag_push = run_cmd(["git", "push", "origin", tag], check=False)
-            if tag_push.returncode != 0:
-                print(f"  [错误] push tag 失败:\n{tag_push.stderr}", file=sys.stderr)
-                return 1
-            print(f"\n  已推送 tag {tag}")
         else:
             # 单 Skill 发布
             for skill, new_version in bumped:
                 if not git_release(skill, new_version, args.message, args.dry_run):
                     return 1
 
-        print(f"\n  GitHub Actions 将自动创建 Release")
-        print(f"  查看进度: GitHub repo → Actions")
+        print("\n  GitHub Actions 将自动创建 Release")
+        print("  查看进度: GitHub repo → Actions")
     else:
         print(f"\n完成！共升级 {len(bumped)} 个 Skill。")
-        print(f"下一步:")
-        print(f"  python3 tools/validate.py          # 验证")
+        print("下一步:")
+        print("  python3 tools/validate.py          # 验证")
         print(f"  python3 tools/bump_version.py {targets[0]} --release  # 发布")
     return 0
 

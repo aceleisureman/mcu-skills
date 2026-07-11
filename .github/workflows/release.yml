@@ -4,12 +4,15 @@ on:
   push:
     tags:
       # 单 Skill 发布: mcu-sensors-v2.2.0
-      - "*-v*"
-      # 批量发布: v2026-07-11
-      - "v[0-9]*"
+      - "[a-z]*-v[0-9]*.[0-9]*.[0-9]*"
+      # 批量发布: v2026-07-11-163000
+      - "v20[0-9][0-9]-*"
 
 permissions:
   contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
 
 jobs:
   release:
@@ -25,7 +28,8 @@ jobs:
 
       - name: Validate before release
         run: |
-          python3 tools/skill_registry.py --write
+          python3 tools/skill_registry.py --check
+          python3 tools/evaluate_routing.py --check-report
           python3 tools/validate.py
 
       - name: Extract release info from tag
@@ -49,8 +53,7 @@ jobs:
 
           # 从 CHANGELOG 提取该版本的变更说明
           if [ -n "$SKILL" ] && [ -n "$VERSION" ]; then
-            BODY=$(awk "/^## v$VERSION/{flag=1} /^## v/{if(flag==2)exit; flag=2} flag==2" \
-              "skills/$SKILL/CHANGELOG.md" 2>/dev/null || echo "")
+            BODY=$(python3 tools/extract_changelog.py "skills/$SKILL/CHANGELOG.md" "$VERSION" || echo "")
           else
             BODY=$(git log --format='- %s' HEAD~1..HEAD)
           fi

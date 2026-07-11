@@ -14,17 +14,18 @@ description: MCU 显示设备开发 Skill，覆盖 OLED、字符/图形 LCD、TF
 
 ## 意图路由
 
-| 需求或型号 | 读取文件 |
-|------------|----------|
-| SSD1306、SH1106、OLED | `references/oled.md` |
-| LCD1602、PCF8574、ST7920 | `references/lcd.md` |
-| ILI9341、ST7789、彩色 TFT | `references/tft.md` |
-| SSD1680、UC8176、电子纸 | `references/e-paper.md` |
-| MAX7219、TM1637、WS2812、点阵/数码管 | `references/led-matrix.md` |
+> 下表由 `python3 tools/skill_registry.py --write` 从 skill.json 生成，请勿手工编辑。
 
-## 示例
-
-- OLED 多种刷新实现：`examples/oled/`
+<!-- GENERATED:ROUTE_TABLE:START -->
+| 意图 | 关键词或型号 | 读取文件 |
+|------|------------|----------|
+| OLED 显示 | OLED、SSD1306、SH1106 | `references/oled.md` |
+| 字符与图形 LCD | LCD1602、PCF8574、ST7920、字符 LCD | `references/lcd.md` |
+| 彩色 TFT | TFT、ILI9341、ST7789 | `references/tft.md` |
+| 电子纸 | 电子纸、电子墨水屏、SSD1680、UC8176 | `references/e-paper.md` |
+| LED 点阵、数码管与灯带 | LED 点阵、数码管、MAX7219、TM1637、WS2812 | `references/led-matrix.md` |
+| OLED 刷新示例 | OLED 示例、OLED 脏页刷新、OLED 批量写入 | `examples/oled/` |
+<!-- GENERATED:ROUTE_TABLE:END -->
 
 ## 输出要求
 

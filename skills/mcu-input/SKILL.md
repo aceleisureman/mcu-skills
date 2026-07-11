@@ -14,14 +14,18 @@ description: MCU 人机输入与识别模块 Skill，覆盖旋转编码器、独
 
 ## 意图路由
 
-| 需求或型号 | 读取文件 |
-|------------|----------|
-| EC11、增量/绝对编码器 | `references/rotary-encoder.md` |
-| 独立按键、矩阵键盘、ADC 键盘 | `references/keypad.md` |
-| TTP223、TTP229、MPR121、MCU 电容触摸 | `references/touch.md` |
-| AS608 指纹 | `examples/fingerprint/` |
-| ASRPro 语音、K210 视觉识别 | `examples/asrpro-voice/` |
-| 按键与矩阵键盘实现 | `examples/keyboard/` |
+> 下表由 `python3 tools/skill_registry.py --write` 从 skill.json 生成，请勿手工编辑。
+
+<!-- GENERATED:ROUTE_TABLE:START -->
+| 意图 | 关键词或型号 | 读取文件 |
+|------|------------|----------|
+| 旋转编码器 | 旋转编码器、EC11、增量编码器、绝对编码器 | `references/rotary-encoder.md` |
+| 独立按键与矩阵键盘 | 独立按键、矩阵键盘、ADC 键盘、按键去抖 | `references/keypad.md` |
+| 电容触摸 | 电容触摸、TTP223、TTP229、MPR121 | `references/touch.md` |
+| AS608 指纹示例 | AS608、指纹识别 | `examples/fingerprint/` |
+| ASRPro 语音与 K210 视觉识别示例 | ASRPro、K210 视觉识别、离线语音识别 | `examples/asrpro-voice/` |
+| 按键与矩阵键盘示例 | 矩阵键盘示例、按键扫描示例 | `examples/keyboard/` |
+<!-- GENERATED:ROUTE_TABLE:END -->
 
 ## 输出要求
 

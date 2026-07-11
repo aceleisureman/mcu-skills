@@ -22,6 +22,8 @@ BAD_NAME = re.compile(r"[ ()（）]|副本|新建|final", re.IGNORECASE)
 VERSION_COPY = re.compile(r"(?:^|[-_])v\d+(?=[-_.]|$)", re.IGNORECASE)
 VERSIONED_SOURCE_SUFFIXES = {".c", ".cc", ".cpp", ".h", ".hpp", ".py"}
 VERSIONED_DOC_NAMES = re.compile(r"^migration-v\d+\.md$", re.IGNORECASE)
+# 以下链接/路径检查正则与 tools/validate.py 中的同名逻辑保持同步
+#（本 Skill 需独立分发，故有意复制而非导入）。
 MD_LINK = re.compile(r"\]\(([^)]+)\)")
 FULL_MD_LINK = re.compile(r"\[[^\]]*\]\([^)]+\)")
 INLINE_CODE = re.compile(r"`([^`\n]+)`")

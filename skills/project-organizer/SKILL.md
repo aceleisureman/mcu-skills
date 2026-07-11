@@ -106,8 +106,15 @@ description: 项目整理与规范化工具。对代码/文档项目进行结构
 
 输出：变更统计（删除/移动/重命名数量）、整理前后目录树对比、已更新的引用链接清单、建议的后续维护规则（如 .gitignore 增补、命名约定）。
 
-## 相关文档
+## 意图路由
 
-- `references/organize-rules.md` — 详细整理规则（命名约定、目录结构模式、垃圾文件清单、.gitignore 推荐）
-- `references/feature-hardware-inventory.md` — 功能点/硬件清单/引脚表/使用说明的执行规范与输出模板
-- `scripts/scan_project.py` — 项目扫描脚本（只读），`python3 scripts/scan_project.py <项目路径>` 直接输出问题清单
+> 下表由 `python3 tools/skill_registry.py --write` 从 skill.json 生成，请勿手工编辑。
+
+<!-- GENERATED:ROUTE_TABLE:START -->
+| 意图 | 关键词或型号 | 读取文件 |
+|------|------------|----------|
+| 目录、命名与清理规则 | 整理规则、命名规范、目录规范、垃圾文件清理 | `references/organize-rules.md` |
+| 功能、硬件、引脚和说明文档模板 | 功能清单、硬件清单、引脚分配表、使用说明文档、/organize-manual-single | `references/feature-hardware-inventory.md` |
+| 只读项目扫描 | /organize-scan、扫描项目现状、失效链接扫描 | `scripts/scan_project.py` |
+<!-- GENERATED:ROUTE_TABLE:END -->
+

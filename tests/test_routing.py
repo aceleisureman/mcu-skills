@@ -25,11 +25,7 @@ class RoutingEvaluationTests(unittest.TestCase):
         self.assertTrue(evaluate_routing.thresholds_pass(self.report))
 
     def test_all_curated_cases_match_exactly(self) -> None:
-        failed = [
-            result["id"]
-            for result in self.report["results"]
-            if not result["passed"]
-        ]
+        failed = [result["id"] for result in self.report["results"] if not result["passed"]]
         self.assertEqual([], failed)
 
     def test_router_is_case_insensitive(self) -> None:

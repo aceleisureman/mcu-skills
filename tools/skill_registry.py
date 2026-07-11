@@ -16,6 +16,8 @@ README_START = "<!-- GENERATED:SKILL_TABLE:START -->"
 README_END = "<!-- GENERATED:SKILL_TABLE:END -->"
 SKILLS_START = "<!-- GENERATED:DEPENDENCY_TABLE:START -->"
 SKILLS_END = "<!-- GENERATED:DEPENDENCY_TABLE:END -->"
+ROUTES_START = "<!-- GENERATED:ROUTE_TABLE:START -->"
+ROUTES_END = "<!-- GENERATED:ROUTE_TABLE:END -->"
 
 
 def load_metadata(root: Path) -> list[dict[str, object]]:
@@ -40,7 +42,9 @@ def inventory_skill(skill_dir: Path) -> dict[str, list[str]]:
     for resource_dir in RESOURCE_DIRS:
         base = skill_dir / resource_dir
         inventory[resource_dir] = (
-            sorted(path.relative_to(skill_dir).as_posix() for path in base.rglob("*") if path.is_file())
+            sorted(
+                path.relative_to(skill_dir).as_posix() for path in base.rglob("*") if path.is_file()
+            )
             if base.is_dir()
             else []
         )
@@ -122,6 +126,19 @@ def render_dependency_table(registry: dict[str, object], prefix: str = "") -> st
     return "\n".join(lines)
 
 
+def render_route_table(item: dict[str, object]) -> str:
+    lines = [
+        "| 意图 | 关键词或型号 | 读取文件 |",
+        "|------|------------|----------|",
+    ]
+    for route_object in as_list(item.get("routes")):
+        if not isinstance(route_object, dict):
+            continue
+        keywords = "、".join(str(value) for value in as_list(route_object.get("keywords")))
+        lines.append(f"| {route_object['intent']} | {keywords} | `{route_object['target']}` |")
+    return "\n".join(lines)
+
+
 def replace_generated_block(text: str, start: str, end: str, body: str) -> str:
     if start not in text or end not in text:
         raise ValueError(f"缺少生成标记: {start} / {end}")
@@ -161,22 +178,24 @@ def render_catalog(registry: dict[str, object]) -> str:
         if not isinstance(item_object, dict):
             continue
         name = str(item_object["name"])
-        lines.extend([
-            "",
-            f"## {item_object['title']}",
-            "",
-            str(item_object["summary"]),
-            "",
-            f"- Skill：[`{name}`](../skills/{name}/SKILL.md)",
-            f"- 版本：`v{item_object['version']}`",
-            f"- 层级：`{item_object['layer']}`",
-            f"- 依赖：{dependency_text(item_object)}",
-            "",
-            "### 路由",
-            "",
-            "| 意图 | 关键词 | 目标 |",
-            "|------|--------|------|",
-        ])
+        lines.extend(
+            [
+                "",
+                f"## {item_object['title']}",
+                "",
+                str(item_object["summary"]),
+                "",
+                f"- Skill：[`{name}`](../skills/{name}/SKILL.md)",
+                f"- 版本：`v{item_object['version']}`",
+                f"- 层级：`{item_object['layer']}`",
+                f"- 依赖：{dependency_text(item_object)}",
+                "",
+                "### 路由",
+                "",
+                "| 意图 | 关键词 | 目标 |",
+                "|------|--------|------|",
+            ]
+        )
         for route_object in as_list(item_object.get("routes")):
             if not isinstance(route_object, dict):
                 continue
@@ -203,10 +222,7 @@ def node_id(name: str) -> str:
 
 
 def render_dependency_graph(registry: dict[str, object]) -> str:
-    skills = [
-        item for item in as_list(registry["skills"])
-        if isinstance(item, dict)
-    ]
+    skills = [item for item in as_list(registry["skills"]) if isinstance(item, dict)]
     lines = [
         "# Skill 依赖图",
         "",
@@ -222,25 +238,27 @@ def render_dependency_graph(registry: dict[str, object]) -> str:
         source = node_id(str(item["name"]))
         for dependency in as_list(item.get("dependencies")):
             lines.append(f"  {source} --> {node_id(str(dependency))}")
-    lines.extend([
-        "```",
-        "",
-        "## 直接依赖",
-        "",
-        render_dependency_table(registry, "../skills/"),
-        "",
-    ])
+    lines.extend(
+        [
+            "```",
+            "",
+            "## 直接依赖",
+            "",
+            render_dependency_table(registry, "../skills/"),
+            "",
+        ]
+    )
     return "\n".join(lines)
 
 
-def generated_outputs(root: Path) -> dict[Path, str]:
-    registry = build_registry(root)
+def generated_outputs(root: Path, registry: dict[str, object] | None = None) -> dict[Path, str]:
+    if registry is None:
+        registry = build_registry(root)
     readme = root / "README.md"
     skills_readme = root / "skills" / "README.md"
-    return {
-        root / "skills" / "registry.json": json.dumps(
-            registry, ensure_ascii=False, indent=2
-        ) + "\n",
+    outputs = {
+        root / "skills" / "registry.json": json.dumps(registry, ensure_ascii=False, indent=2)
+        + "\n",
         root / "docs" / "content-catalog.md": render_catalog(registry),
         root / "docs" / "dependency-graph.md": render_dependency_graph(registry),
         readme: replace_generated_block(
@@ -256,6 +274,22 @@ def generated_outputs(root: Path) -> dict[Path, str]:
             render_dependency_table(registry),
         ),
     }
+    for item_object in as_list(registry["skills"]):
+        if not isinstance(item_object, dict):
+            continue
+        skill_md = root / "skills" / str(item_object["name"]) / "SKILL.md"
+        if not skill_md.is_file():
+            continue
+        text = skill_md.read_text(encoding="utf-8")
+        if ROUTES_START not in text or ROUTES_END not in text:
+            continue
+        outputs[skill_md] = replace_generated_block(
+            text,
+            ROUTES_START,
+            ROUTES_END,
+            render_route_table(item_object),
+        )
+    return outputs
 
 
 def write_outputs(root: Path, verbose: bool = True) -> None:
@@ -266,9 +300,9 @@ def write_outputs(root: Path, verbose: bool = True) -> None:
             print(f"updated {path.relative_to(root)}")
 
 
-def check_outputs(root: Path) -> list[Path]:
+def check_outputs(root: Path, registry: dict[str, object] | None = None) -> list[Path]:
     stale = []
-    for path, expected in generated_outputs(root).items():
+    for path, expected in generated_outputs(root, registry).items():
         if not path.is_file() or path.read_text(encoding="utf-8") != expected:
             stale.append(path)
     return stale
