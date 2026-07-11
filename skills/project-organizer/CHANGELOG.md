@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.2.2 - 2026-07-12
+
+- 版本更新
 ## v2.2.1 - 2026-07-12
 
 - 修复 --release 推送方式：分开 push main 和单独 push tag

@@ -16,7 +16,7 @@
 | [`mcu-sensors`](skills/mcu-sensors/SKILL.md) | `domain` | `v2.4.0` | `mcu-driver-core` | 覆盖环境、运动、气体、距离、磁性和定位传感器的选型、硬件与驱动。 |
 | [`mcu-storage`](skills/mcu-storage/SKILL.md) | `domain` | `v2.1.0` | `mcu-driver-core` | 覆盖 EEPROM、Flash、SD 卡、FRAM 和 RTC 的驱动、寿命与掉电一致性。 |
 | [`mcu-system-design`](skills/mcu-system-design/SKILL.md) | `orchestrator` | `v2.2.0` | `mcu-driver-core`、`mcu-sensors`、`mcu-actuators`、`mcu-displays`、`mcu-communication`、`mcu-storage`、`mcu-power`、`mcu-input` | 编排多个硬件领域，覆盖系统架构、功耗、任务、OTA、故障降级和验证。 |
-| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.2.1` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
+| [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.2.2` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
 <!-- GENERATED:SKILL_TABLE:END -->
 
 完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)。
