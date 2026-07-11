@@ -11,7 +11,7 @@
 
 - **主机（协调器节点）**：STM32F103C8T6，负责环境监测（温湿度/可燃气体/CO）、联动控制（风扇/电磁阀）、ZigBee 协调、ESP8266 WiFi + OneNET MQTT 上云。
 - **从机（门禁节点）**：STM32F103C8T6，负责指纹识别开锁、门磁检测、声光告警、OLED 显示、ZigBee 子节点通信。
-- **上位机**：QT (PyQt6) 桌面应用，通过 OneNET API 远程监控。
+- **上位机**：PyQt5 桌面应用，通过 OneNET OpenAPI (HTTP) 远程监控。
 - **通信链路**：ZigBee 透传（主机↔从机）、WiFi MQTT（主机→OneNET 云）。
 
 ```
@@ -35,7 +35,7 @@
                                              │ HTTP API
                                       ┌──────▼───────┐
                                       │  QT 上位机    │
-                                      │  (PyQt6)     │
+                                      │  (PyQt5)     │
                                       └──────────────┘
 ```
 
@@ -75,7 +75,7 @@
 | 组件 | 技术 | 说明 |
 |------|------|------|
 | 云平台 | OneNET MQTT 物联网套件 | 物模型属性上报/下发 |
-| 上位机 | PyQt6 + QML | 桌面 GUI，通过 OneNET API 远程监控 |
+| 上位机 | PyQt5 + requests | 桌面 GUI，通过 OneNET OpenAPI HTTP 查询/下发属性 |
 | 协议 | MQTT 1883 (AT+MQTT 命令) | ESP-AT v2.x 固件 |
 
 ---
@@ -255,6 +255,51 @@
 └── Makefile
 ```
 
+### 7.3 上位机
+
+```
+上位机/
+├── onenet_gui.py             # PyQt5 桌面 GUI (单文件, ~400 行)
+├── venv/                     # Python 虚拟环境 (PyQt5 + requests)
+└── (无其他源码文件)
+```
+
+**上位机技术栈**：
+
+| 项目 | 说明 |
+|------|------|
+| 框架 | PyQt5 (纯 Python, 无 QML) |
+| 依赖 | `pip3 install PyQt5 requests` |
+| 云端交互 | OneNET OpenAPI (HTTP REST) |
+| 鉴权 | HMAC-SHA1 签名 token (base64 编码) |
+| 数据刷新 | QTimer 每 5 秒轮询查询设备属性 |
+| 异步 | QThread 子线程发 HTTP 请求，避免 UI 阻塞 |
+| UI 风格 | 暗色主题 (QSS 样式表), MetricCard 卡片布局 |
+
+**OneNET OpenAPI 交互**：
+
+| 操作 | HTTP 方法 | API 路径 | 说明 |
+|------|----------|----------|------|
+| 查询属性 | GET | `/thingmodel/query-device-property` | 获取设备最新属性值 |
+| 下发属性 | POST | `/thingmodel/set-device-property` | 下发可写属性 (enroll_id / alarm_clear) |
+
+**鉴权 token 生成**：
+
+```python
+# HMAC-SHA1 签名
+sign_str = f"{expire_time}\nsha1\n{resource}\n2018-10-31"
+sign = base64.b64encode(
+    hmac.new(base64.b64decode(access_key), sign_str.encode(), hashlib.sha1).digest()
+).decode()
+token = f"version=2018-10-31&res={quote(resource)}&et={expire_time}&method=sha1&sign={quote(sign)}"
+```
+
+**上位机功能**：
+- 环境监测卡片：温度、湿度、MQ-2、MQ-7 实时数值
+- 设备状态卡片：告警/风扇/电磁阀/柜门/电磁锁/从机在线
+- 远程操作：录入指纹 (下发 enroll_id)、解除异常开门告警 (下发 alarm_clear)
+- 运行日志：操作记录和错误信息
+
 ---
 
 ## 8. 关键设计决策
@@ -415,7 +460,7 @@ RGB LED (共阴):
 | 传感器 | `mcu-sensors` | DHT11 单总线时序、MQ-2/MQ-7 双通道 AO+DO 检测、干簧管门磁开关 |
 | 执行器 | `mcu-actuators` | 继电器驱动（电磁阀/风扇/电磁锁）、有源蜂鸣器、电磁铁驱动 |
 | 显示 | `mcu-displays` | SSD1306 软件 I2C、16×16 中文字模与页列转换 |
-| 通信 | `mcu-communication` | ESP8266 AT+MQTT 连接 OneNET、ZigBee 透传帧协议 |
+| 通信 | `mcu-communication` | ESP8266 AT+MQTT 连接 OneNET、ZigBee 透传帧协议、OneNET OpenAPI HTTP 鉴权 |
 | 输入 | `mcu-input` | AS608 指纹识别（GenImg/Search/Enroll/Delete） |
 | 驱动核心 | `mcu-driver-core` | HAL 抽象层、GPIO/ADC/UART 模板、调试串口命令行 |
 | 系统设计 | `mcu-system-design` | 主从架构、气体联动控制、心跳/重发/离线判断、云端下行 |
