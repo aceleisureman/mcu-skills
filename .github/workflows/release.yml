@@ -74,20 +74,23 @@ jobs:
           fi
 
           # 附带可导入 ZIP 说明（GitHub 源码 ZIP 因目录过深无法直接导入）
-          BODY="${BODY}
+          # 用 printf 追加，避免 run 块内嵌多行引号破坏 YAML
+          NOTE=$(printf '%s\n' \
+            '' \
+            '## 导入说明' \
+            '' \
+            '请下载本 Release 的 **Skill ZIP 附件**（根目录含 `SKILL.md`），不要用 GitHub 「Source code (zip)」。' \
+            '' \
+            '- 单 Skill：`<skill>-v<version>.zip` → 直接导入' \
+            '- 全量：`mcu-skills-bundle.zip` → 结构为 `<skill>/SKILL.md`（一层子目录）' \
+            '- 推荐安装：`npx mcu-skills install`')
+          BODY="${BODY}${NOTE}"
 
-## 导入说明
-
-请下载本 Release 的 **Skill ZIP 附件**（根目录含 \`SKILL.md\`），不要用 GitHub 「Source code (zip)」。
-
-- 单 Skill：\`<skill>-v<version>.zip\` → 直接导入
-- 全量：\`mcu-skills-bundle.zip\` → 结构为 \`<skill>/SKILL.md\`（一层子目录）
-- 推荐安装：\`npx mcu-skills install\`
-"
-
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "body<<EOF"
+            printf '%s\n' "$BODY"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Package importable skill ZIPs
         if: ${{ steps.info.outputs.skip != 'true' }}

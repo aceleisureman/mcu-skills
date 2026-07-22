@@ -32,9 +32,7 @@ SKIP_FILE_SUFFIXES = {".pyc", ".pyo"}
 
 
 def list_skills() -> list[str]:
-    return sorted(
-        p.name for p in SKILLS_DIR.iterdir() if p.is_dir() and (p / "SKILL.md").is_file()
-    )
+    return sorted(p.name for p in SKILLS_DIR.iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
 
 
 def skill_version(name: str) -> str:
@@ -107,7 +105,9 @@ def write_bundle_zip(skills: list[str], out_dir: Path) -> Path:
                 arcname = f"{skill}/{rel}"
                 zf.write(path, arcname)
         names = zf.namelist()
-        skill_md_count = sum(1 for name in names if name.endswith("/SKILL.md") or name == "SKILL.md")
+        skill_md_count = sum(
+            1 for name in names if name.endswith("/SKILL.md") or name == "SKILL.md"
+        )
         if skill_md_count < len(skills):
             raise RuntimeError(
                 f"全量包 SKILL.md 数量不足: 期望 {len(skills)}，实际 {skill_md_count}"
