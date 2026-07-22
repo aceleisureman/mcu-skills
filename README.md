@@ -2,6 +2,8 @@
 
 面向 AI Agent 和嵌入式团队的模块化 Skill 集合。仓库采用 `skills/<skill-name>/SKILL.md` 结构，每个 Skill 都有独立触发范围、路由入口、版本记录和按需加载资源。
 
+安装器包版本：`mcu-skills@1.3.0`（见 [`package.json`](package.json)）。
+
 ## Skill 目录
 
 <!-- GENERATED:SKILL_TABLE:START -->
@@ -19,7 +21,7 @@
 | [`project-organizer`](skills/project-organizer/SKILL.md) | `utility` | `v2.3.1` | 无 | 扫描和规范化项目，并生成嵌入式功能、硬件、引脚与使用说明文档。 |
 <!-- GENERATED:SKILL_TABLE:END -->
 
-完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)。
+完整文件索引见 [`docs/content-catalog.md`](docs/content-catalog.md)，依赖图见 [`docs/dependency-graph.md`](docs/dependency-graph.md)，架构说明见 [`docs/architecture.md`](docs/architecture.md)，元数据 Schema 见 [`docs/skill.schema.json`](docs/skill.schema.json)。
 
 ## 为什么拆分
 
@@ -59,10 +61,18 @@ project-organizer     （独立）
 ├── skills/                 # 10 个独立 Skill
 │   └── registry.json       # 自动汇总的机器可读 registry
 ├── evals/
-│   └── routing-cases.json  # 路由评测数据集
-├── docs/                   # 架构、依赖图、迁移和生成索引
+│   └── routing-cases.json  # 路由评测数据集（62 用例）
+├── docs/
+│   ├── architecture.md     # 四层架构与 URI 规则
+│   ├── content-catalog.md  # 自动生成的内容索引
+│   ├── dependency-graph.md # 自动生成的依赖图
+│   ├── migration-v2.md     # 从 mcu-components 迁移说明
+│   ├── routing-evaluation.json  # 路由评测报告
+│   └── skill.schema.json   # skill.json JSON Schema
 ├── bin/
 │   └── mcu-skills.js       # npm 安装器（Claude Code / Codex / CodeBuddy）
+├── package.json            # npm 包 mcu-skills@1.3.0
+├── .claude-plugin/         # Claude Code 插件与 marketplace 清单
 ├── .codebuddy/
 │   └── commands/           # /organize 系列斜杠命令定义
 ├── tools/
@@ -76,8 +86,9 @@ project-organizer     （独立）
 │   ├── test_routing.py
 │   └── test_tools.py
 └── .github/workflows/
-    ├── validate.yml
-    └── release.yml
+    ├── validate.yml        # PR/推送结构与路由校验
+    ├── release.yml         # Skill tag 发布 GitHub Release
+    └── publish.yml         # npm-v* tag 发布到 npm
 ```
 
 每个 Skill 遵循：
@@ -144,6 +155,24 @@ python3 tools/skill_registry.py --resolve \
   skill://mcu-driver-core/templates/driver-template-i2c.c
 ```
 
+## `/organize` 系列命令
+
+安装 `project-organizer` 后可用（命令定义见 [`.codebuddy/commands/`](.codebuddy/commands/)）：
+
+| 命令 | 功能 |
+|------|------|
+| `/organize` | 完整整理流程：scan → plan →（确认后）apply → report |
+| `/organize-scan` | 只读扫描项目现状 |
+| `/organize-plan` | 生成整理方案供确认 |
+| `/organize-apply` | 在用户确认后执行整理 |
+| `/organize-report` | 输出整理报告 |
+| `/organize-features` | 生成分级编号功能清单 |
+| `/organize-hardware` | 生成硬件清单（含 MCU） |
+| `/organize-pinout` | 生成引脚分配表 |
+| `/organize-manual` | 生成使用说明文档 |
+| `/organize-manual-single` | 合并为单文件用户手册 |
+| `/organize-docs` | 一键产出功能/硬件/引脚/说明全套文档 |
+
 ## 维护
 
 ```sh
@@ -165,8 +194,16 @@ ruff check tools tests && ruff format --check tools tests
 版本升级与发布：
 
 ```sh
+# 单 Skill 升级
 python3 tools/bump_version.py mcu-sensors --minor -m "变更说明"
 python3 tools/bump_version.py mcu-sensors --minor --release  # 升级 + commit + tag + push
+
+# npm 包发布（tag 需与 package.json version 一致，触发 publish.yml）
+# 例如 package.json 为 1.3.0 时：
+git tag npm-v1.3.0
+git push origin npm-v1.3.0
 ```
 
-不要手工编辑 `skills/registry.json`、内容索引、依赖图、路由评测报告，以及各 `SKILL.md` 中的 `GENERATED:ROUTE_TABLE` 意图路由表区块（由 `skill_registry.py --write` 从 `skill.json` 生成）。新增或修改 Skill 前阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。从旧版 `mcu-components` 迁移请参考 [`docs/migration-v2.md`](docs/migration-v2.md)。
+不要手工编辑 `skills/registry.json`、内容索引、依赖图、路由评测报告，以及各 `SKILL.md` 中的 `GENERATED:ROUTE_TABLE` 意图路由表区块（由 `skill_registry.py --write` 从 `skill.json` 生成）。根 `README.md` 与 `skills/README.md` 中的 Skill 索引表区块也由同一命令生成；若只改用途文案，请同步更新对应 `skill.json` 的 `summary` 后重新 `--write`。
+
+新增或修改 Skill 前阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。从旧版 `mcu-components` 迁移请参考 [`docs/migration-v2.md`](docs/migration-v2.md)。
