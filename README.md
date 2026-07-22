@@ -79,6 +79,7 @@ project-organizer     （独立）
 │   ├── skill_registry.py   # registry、索引、依赖图与 SKILL.md 路由表生成/URI 解析
 │   ├── evaluate_routing.py # 路由评测与报告生成
 │   ├── validate.py         # 结构、语义和生成漂移校验
+│   ├── package_skills.py   # 生成可 ZIP 导入的 Skill 压缩包
 │   ├── bump_version.py     # Skill 版本升级与发布
 │   └── extract_changelog.py # Release Notes 提取
 ├── tests/
@@ -134,6 +135,24 @@ npx mcu-skills uninstall mcu-sensors       # 卸载
 ```
 
 即可获得全部 Skill 与 `/organize` 系列命令。
+
+### ZIP 导入（平台「从 ZIP 导入技能」）
+
+**不要直接导入 GitHub 的 Source code ZIP。** 整仓路径是 `mcu-skills-*/skills/<name>/SKILL.md`，多数导入器只在 ZIP 根或一层子目录查找 `SKILL.md`，会报「未找到技能」。
+
+正确方式：
+
+1. 打开 [Releases](https://github.com/aceleisureman/mcu-skills/releases)，下载附件中的：
+   - **单 Skill**：`<skill>-v<version>.zip`（`SKILL.md` 在 ZIP 根目录）
+   - **全量**：`mcu-skills-bundle.zip`（结构为 `<skill>/SKILL.md`）
+2. 在平台中选择该 ZIP 导入。
+
+本地生成同样布局的 ZIP：
+
+```sh
+python3 tools/package_skills.py                 # dist/ 下全部单包 + 全量包
+python3 tools/package_skills.py mcu-sensors     # 只打一个 Skill
+```
 
 ### 手动安装：Claude Code / Claude 平台
 

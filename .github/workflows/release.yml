@@ -39,17 +39,27 @@ jobs:
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
           # 判断是单 Skill 还是批量发布
+          # 注意：npm-v* 由 publish.yml 处理，这里排除
+          if echo "$TAG" | grep -qE '^npm-v'; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "title=npm $TAG" >> $GITHUB_OUTPUT
+            echo "body=see publish-npm workflow" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           if echo "$TAG" | grep -qE '^[a-z].*-v[0-9]'; then
             # 单 Skill: mcu-sensors-v2.2.0
             SKILL=$(echo "$TAG" | sed 's/-v[0-9].*//')
             VERSION=$(echo "$TAG" | sed 's/.*-v//')
             TITLE="$SKILL v$VERSION"
+            echo "skill=$SKILL" >> $GITHUB_OUTPUT
           else
             # 批量: v2026-07-11
             TITLE="Skills Release $TAG"
           fi
 
           echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "skip=false" >> $GITHUB_OUTPUT
 
           # 从 CHANGELOG 提取该版本的变更说明
           if [ -n "$SKILL" ] && [ -n "$VERSION" ]; then
@@ -63,14 +73,36 @@ jobs:
             BODY=$(git log --format='- %s' HEAD~1..HEAD)
           fi
 
+          # 附带可导入 ZIP 说明（GitHub 源码 ZIP 因目录过深无法直接导入）
+          BODY="${BODY}
+
+## 导入说明
+
+请下载本 Release 的 **Skill ZIP 附件**（根目录含 \`SKILL.md\`），不要用 GitHub 「Source code (zip)」。
+
+- 单 Skill：\`<skill>-v<version>.zip\` → 直接导入
+- 全量：\`mcu-skills-bundle.zip\` → 结构为 \`<skill>/SKILL.md\`（一层子目录）
+- 推荐安装：\`npx mcu-skills install\`
+"
+
           echo "body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Package importable skill ZIPs
+        if: ${{ steps.info.outputs.skip != 'true' }}
+        run: |
+          # 始终打全量包 + 各单 Skill 包，方便用户一次导入
+          python3 tools/package_skills.py --out dist
+          ls -la dist
+
       - name: Create GitHub Release
+        if: ${{ steps.info.outputs.skip != 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ steps.info.outputs.title }}
           body: ${{ steps.info.outputs.body }}
           tag_name: ${{ steps.info.outputs.tag }}
           generate_release_notes: true
+          files: |
+            dist/*.zip

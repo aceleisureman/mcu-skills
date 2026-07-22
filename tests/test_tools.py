@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -11,6 +12,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import bump_version
 import extract_changelog
+import package_skills
 import skill_registry
 
 
@@ -126,6 +128,30 @@ class ReleaseFilesTests(unittest.TestCase):
         self.assertIn("skills/registry.json", files)
         self.assertIn("docs/routing-evaluation.json", files)
         self.assertNotIn("skills/mcu-power/skill.json", files)
+
+
+class PackageSkillsTests(unittest.TestCase):
+    def test_single_zip_has_root_skill_md(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp)
+            path = package_skills.write_single_zip("mcu-sensors", out)
+            self.assertTrue(path.is_file())
+            self.assertTrue(path.name.startswith("mcu-sensors-v"))
+            with zipfile.ZipFile(path) as zf:
+                names = zf.namelist()
+            self.assertIn("SKILL.md", names)
+            # 导入器要求 SKILL.md 在根，不能嵌套 skills/mcu-sensors/
+            self.assertFalse(any(name.startswith("skills/") for name in names))
+
+    def test_bundle_zip_has_one_level_skill_md(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp)
+            path = package_skills.write_bundle_zip(["mcu-sensors", "mcu-driver-core"], out)
+            with zipfile.ZipFile(path) as zf:
+                names = set(zf.namelist())
+            self.assertIn("mcu-sensors/SKILL.md", names)
+            self.assertIn("mcu-driver-core/SKILL.md", names)
+            self.assertNotIn("SKILL.md", names)
 
 
 if __name__ == "__main__":
