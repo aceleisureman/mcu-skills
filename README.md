@@ -108,19 +108,30 @@ skills/<skill-name>/
 
 ## 安装
 
+> **一键装全部（推荐）**：不必逐个 Skill 安装。
+
+| 方式 | 一条命令 / 一个文件 | 说明 |
+|------|---------------------|------|
+| npm 安装器 | `npx mcu-skills install` | 一次装入当前机器上检测到的 Claude Code / Codex / CodeBuddy |
+| Claude 插件 | `/plugin install mcu-skills@mcu-skills` | 一次拿到全部 Skill + `/organize` 命令 |
+| ZIP 全量包 | 只下 [`mcu-skills-bundle.zip`](https://github.com/aceleisureman/mcu-skills/releases/latest) | 10 个 Skill 都在一个 ZIP 里（`<skill>/SKILL.md`） |
+
 ### npm 安装器（推荐）
 
-使用内置的 `mcu-skills` 安装器一键安装到 Claude Code（`~/.claude`）、Codex（`~/.codex`）和 CodeBuddy（`~/.codebuddy`）的全局 Skill 目录：
-
 ```sh
-# 在仓库根目录（或 npm 包安装后）执行
-npx mcu-skills install                     # 安装全部 Skill 到检测到的平台
-npx mcu-skills install mcu-sensors         # 安装单个 Skill（自动带依赖闭包）
-npx mcu-skills install --target claude     # 只安装到 Claude Code
-npx mcu-skills install --target codex      # 只安装到 Codex
-npx mcu-skills install --target codebuddy  # 只安装到 CodeBuddy
+# 一条命令：安装全部 10 个 Skill（自动装到已检测到的平台）
+npx mcu-skills install
+
+# 只装某一个（仍会自动带上依赖闭包）
+npx mcu-skills install mcu-sensors
+
+# 指定平台
+npx mcu-skills install --target claude     # ~/.claude
+npx mcu-skills install --target codex      # ~/.codex
+npx mcu-skills install --target codebuddy  # ~/.codebuddy
+
 npx mcu-skills list                        # 查看安装状态
-npx mcu-skills uninstall mcu-sensors       # 卸载
+npx mcu-skills uninstall mcu-sensors       # 卸载指定 Skill
 ```
 
 安装 `project-organizer` 时会同时注册 `/organize` 系列斜杠命令（Claude Code/CodeBuddy 为 `commands/`，Codex 为 `prompts/`）；Codex 还会在 `~/.codex/AGENTS.md` 中维护一个 Skill 索引区块。
@@ -130,24 +141,35 @@ npx mcu-skills uninstall mcu-sensors       # 卸载
 仓库内置插件与 marketplace 清单（`.claude-plugin/`），在 Claude Code 中执行：
 
 ```text
-/plugin marketplace add <repo-url-or-owner/repo>
+/plugin marketplace add aceleisureman/mcu-skills
 /plugin install mcu-skills@mcu-skills
 ```
 
-即可获得全部 Skill 与 `/organize` 系列命令。
+即可一次获得全部 Skill 与 `/organize` 系列命令。
 
 ### ZIP 导入（平台「从 ZIP 导入技能」）
 
-**不要直接导入 GitHub 的 Source code ZIP。** 整仓路径是 `mcu-skills-*/skills/<name>/SKILL.md`，多数导入器只在 ZIP 根或一层子目录查找 `SKILL.md`，会报「未找到技能」。
+**不要用 GitHub 的 Source code ZIP**，路径过深会报「未找到技能」。
 
-正确方式：
+**想一次导入全部：只下一个文件**
 
-1. 打开 [Releases](https://github.com/aceleisureman/mcu-skills/releases)，下载附件中的：
-   - **单 Skill**：`<skill>-v<version>.zip`（`SKILL.md` 在 ZIP 根目录）
-   - **全量**：`mcu-skills-bundle.zip`（结构为 `<skill>/SKILL.md`）
-2. 在平台中选择该 ZIP 导入。
+1. 打开 [最新 Release](https://github.com/aceleisureman/mcu-skills/releases/latest)
+2. 下载 **`mcu-skills-bundle.zip`**（不是 10 个单包，也不是 Source code）
+3. 用平台的 ZIP 导入该文件
 
-本地生成同样布局的 ZIP：
+bundle 内结构为：
+
+```text
+mcu-driver-core/SKILL.md
+mcu-sensors/SKILL.md
+...（共 10 个 Skill 目录）
+```
+
+若平台**只认 ZIP 根目录一个 `SKILL.md`**（不支持多子目录），请改用上面的 `npx mcu-skills install`，不要逐个手导 10 个单包。
+
+仅在需要单独分发某个 Skill 时，再下 `<skill>-v<version>.zip`。
+
+本地生成同样布局：
 
 ```sh
 python3 tools/package_skills.py                 # dist/ 下全部单包 + 全量包
