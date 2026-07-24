@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}索引任务 · MCU Skills Admin{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>索引任务</h1>
+    <p>将 Skill 正文与上传文档重新分块并构建 BM25 检索索引</p>
+  </div>
+  <div class="page-actions">
+    <form method="post" action="/admin/jobs/reindex">
+      <button class="btn-accent" type="submit">⚡ 立即重建索引</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="label">定时表达式</div>
+    <span class="value" style="font-size:1.1rem;margin-top:0.7rem;font-family:var(--mono)">{{ cron }}</span>
+    <div class="hint">环境变量 MCU_REINDEX_CRON</div>
+  </div>
+  <div class="stat">
+    <div class="label">任务记录</div>
+    <span class="value">{{ jobs|length }}</span>
+    <div class="hint">最近列表（最多 30 条）</div>
+  </div>
+  <div class="stat">
+    <div class="label">最近状态</div>
+    {% set last = jobs[0] if jobs else none %}
+    {% if last %}
+      <span class="value" style="font-size:1.15rem;margin-top:0.7rem">
+        {% if last.status == 'ok' %}<span class="badge ok">成功</span>
+        {% elif last.status == 'error' %}<span class="badge err">失败</span>
+        {% elif last.status == 'running' %}<span class="badge warn">运行中</span>
+        {% else %}<span class="badge pending">{{ last.status }}</span>{% endif %}
+      </span>
+      <div class="hint">#{{ last.id }} · {{ last.message[:48] if last.message else '' }}</div>
+    {% else %}
+      <span class="value" style="font-size:1.15rem;margin-top:0.7rem"><span class="badge pending">无</span></span>
+      <div class="hint">尚未执行过重建</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>任务历史</h2>
+    <form method="post" action="/admin/jobs/reindex">
+      <button class="btn-ghost" type="submit" style="padding:0.4rem 0.75rem;font-size:0.82rem">再跑一次</button>
+    </form>
+  </div>
+  {% if not jobs %}
+  <div class="empty">
+    <div class="icon">⏱</div>
+    <div>还没有任务记录。点击右上角「立即重建索引」开始。</div>
+  </div>
+  {% else %}
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>状态</th>
+          <th>消息</th>
+          <th>创建</th>
+          <th>完成</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for j in jobs %}
+        <tr>
+          <td class="mono">#{{ j.id }}</td>
+          <td>
+            {% if j.status == 'ok' %}<span class="badge ok">成功</span>
+            {% elif j.status == 'error' %}<span class="badge err">失败</span>
+            {% elif j.status == 'running' %}<span class="badge warn">运行中</span>
+            {% else %}<span class="badge pending">{{ j.status }}</span>{% endif %}
+          </td>
+          <td class="muted">{{ j.message }}</td>
+          <td class="muted">{{ j.created_at }}</td>
+          <td class="muted">{{ j.finished_at or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

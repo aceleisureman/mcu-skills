@@ -1,0 +1,38 @@
+name: server-ci
+
+on:
+  push:
+    paths:
+      - "server/**"
+      - "tools/validate.py"
+      - "tools/skill_registry.py"
+      - "tools/evaluate_routing.py"
+  pull_request:
+    paths:
+      - "server/**"
+      - "tools/validate.py"
+      - "tools/skill_registry.py"
+      - "tools/evaluate_routing.py"
+
+concurrency:
+  group: server-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  server-unit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install server deps
+        run: pip install -r requirements.txt
+      - name: Unit tests (no MySQL)
+        env:
+          PYTHONPATH: .
+          MCU_SKILLS_ROOT: ${{ github.workspace }}
+        run: pytest tests -q

@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mcu_skills
+      MYSQL_USER: mcu_skills
+      MYSQL_PASSWORD: change-me
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MCU_SKILLS_ROOT: /app
+      MCU_DATA_DIR: /data
+      MCU_DATABASE_URL: mysql+aiomysql://mcu_skills:change-me@mysql:3306/mcu_skills?charset=utf8mb4
+      MCU_REINDEX_CRON: "0 2 * * *"
+      MCU_BOOTSTRAP_ADMIN_KEY: ""
+    volumes:
+      - app_data:/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  app_data:

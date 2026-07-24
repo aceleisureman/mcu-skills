@@ -50,7 +50,16 @@ GENERIC_DIR_TARGETS = {
 }
 RESOURCE_DIRS = ("references", "templates", "guides", "examples", "scripts")
 LAYERS = {"foundation", "domain", "orchestrator", "utility"}
-SKIP_DIRS = {".git", ".codebuddy", "__pycache__"}
+SKIP_DIRS = {
+    ".git",
+    ".codebuddy",
+    "__pycache__",
+    "server",
+    "data",
+    ".venv",
+    "venv",
+    "node_modules",
+}
 
 
 @lru_cache(maxsize=None)

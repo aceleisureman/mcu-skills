@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}训练数据 · MCU Skills Admin{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>训练数据</h1>
+    <p>上传公司内部文档，重建索引后即可被 <code>knowledge_search</code> 检索</p>
+  </div>
+  <div class="page-actions">
+    <a class="btn btn-accent" href="/admin/jobs">去重建索引</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>上传文档</h2>
+  <form method="post" action="/admin/docs" enctype="multipart/form-data">
+    <div class="drop">
+      <div class="title">选择 Markdown / 文本文件</div>
+      <div class="sub">支持 .md · .txt · .markdown · 单文件建议 &lt; 10MB</div>
+      <input type="file" name="file" accept=".md,.txt,.markdown,text/markdown,text/plain" required />
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+      <button type="submit">上传到知识库</button>
+      <span class="muted" style="font-size:0.85rem">上传后不会自动检索，请到「索引任务」点重建</span>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>已上传文档</h2>
+    <span class="muted" style="font-size:0.82rem">{{ docs|length }} 个文件</span>
+  </div>
+  {% if not docs %}
+  <div class="empty">
+    <div class="icon">📄</div>
+    <div>还没有上传文件。先传一份内部规范或 FAQ 试试。</div>
+  </div>
+  {% else %}
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>文档 ID</th>
+          <th>文件名</th>
+          <th>大小</th>
+          <th>索引状态</th>
+          <th>创建时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in docs %}
+        <tr>
+          <td><code>{{ d.doc_id[:12] }}…</code></td>
+          <td>{{ d.filename }}</td>
+          <td class="muted">{{ d.size_bytes }} B</td>
+          <td>
+            {% if d.indexed_at %}<span class="badge ok">已索引</span>
+            {% else %}<span class="badge warn">未索引</span>{% endif %}
+          </td>
+          <td class="muted">{{ d.created_at or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>推荐流程</h2>
+  <ol class="steps">
+    <li>整理内部资料为 Markdown（标题层级清晰，方便分块）</li>
+    <li>在此页上传，确认列表出现「未索引」状态</li>
+    <li>打开「索引任务」→ 立即重建索引 → 等待状态变为成功</li>
+    <li>用 REST / MCP 的 knowledge_search 验证关键词能否命中</li>
+  </ol>
+</div>
+{% endblock %}

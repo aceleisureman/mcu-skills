@@ -19,8 +19,19 @@ node_modules/
 # 环境与密钥
 .env
 .env.*
+!.env.example
+!server/.env.example
 *.pem
+server/.admin-key
+server/.secrets/
 
 # 传输临时文件
 .devin-transfer.tgz
 *.tgz
+
+# MCP 服务运行时数据
+data/
+server/.venv/
+server/venv/
+*.db
+*.db-journal

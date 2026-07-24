@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}登录 · MCU Skills Admin{% endblock %}
+{% block auth_body %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="logo-row">
+      <div class="brand-mark">MS</div>
+      <div>
+        <div style="font-weight:700">MCU Skills</div>
+        <div class="muted" style="font-size:0.8rem">Internal Knowledge MCP</div>
+      </div>
+    </div>
+    <h1>管理员登录</h1>
+    <p class="sub">使用 Admin API Key 进入后台，管理密钥、训练数据与索引任务。</p>
+    {% if error %}<div class="alert-err">{{ error }}</div>{% endif %}
+    <form method="post" action="/admin/login">
+      <div class="field">
+        <label for="token">Admin API Key</label>
+        <input id="token" type="password" name="token" placeholder="key_id.secret" required autofocus autocomplete="current-password" />
+      </div>
+      <button type="submit" style="width:100%">进入控制台</button>
+    </form>
+    <p class="hint">格式为 <code>key_id.secret</code>。明文仅在创建时显示一次，本地保存在 <code>server/.admin-key</code>。</p>
+  </div>
+</div>
+{% endblock %}

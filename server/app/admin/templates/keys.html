@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}API Keys · MCU Skills Admin{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>API Keys</h1>
+    <p>为 Agent / 脚本发放调用凭证；Admin 可管理后台，User 可调用 MCP</p>
+  </div>
+</div>
+
+{% if created_token %}
+<div class="flash">
+  <div style="font-size:1.2rem">✅</div>
+  <div style="min-width:0">
+    <div class="flash-title">新建 Key 成功（明文仅显示一次）</div>
+    <code style="display:block;margin-top:0.35rem;padding:0.55rem 0.65rem;word-break:break-all">{{ created_token }}</code>
+    <div class="muted" style="margin-top:0.45rem;font-size:0.82rem">请立即复制保存。服务端只存 SHA-256 哈希，之后无法再查看明文。</div>
+  </div>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>新建密钥</h2>
+  <form method="post" action="/admin/keys" class="form-row">
+    <div class="field" style="margin:0">
+      <label for="name">名称</label>
+      <input id="name" type="text" name="name" value="client" placeholder="例如 agent-prod" />
+    </div>
+    <div class="field" style="margin:0">
+      <label for="role">角色</label>
+      <select id="role" name="role">
+        <option value="user">user · MCP / 只读 API</option>
+        <option value="admin">admin · 管理后台</option>
+      </select>
+    </div>
+    <button type="submit">创建 Key</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>密钥列表</h2>
+    <span class="muted" style="font-size:0.82rem">共 {{ keys|length }} 条</span>
+  </div>
+  {% if not keys %}
+  <div class="empty"><div class="icon">🔑</div><div>暂无密钥</div></div>
+  {% else %}
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Key ID</th>
+          <th>名称</th>
+          <th>角色</th>
+          <th>状态</th>
+          <th>创建时间</th>
+          <th>最近使用</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for k in keys %}
+        <tr>
+          <td><code>{{ k.key_id }}</code></td>
+          <td>{{ k.name }}</td>
+          <td>
+            {% if k.role == 'admin' %}<span class="badge admin">admin</span>
+            {% else %}<span class="badge user">user</span>{% endif %}
+          </td>
+          <td>
+            {% if k.enabled %}<span class="badge ok">启用</span>
+            {% else %}<span class="badge err">禁用</span>{% endif %}
+          </td>
+          <td class="muted">{{ k.created_at }}</td>
+          <td class="muted">{{ k.last_used_at or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="margin:0.9rem 0 0;font-size:0.82rem">
+    禁用 / 删除请使用 REST：
+    <code>POST /api/admin/keys/{id}/disable</code> ·
+    <code>DELETE /api/admin/keys/{id}</code>
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

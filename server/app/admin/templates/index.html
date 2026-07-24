@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}概览 · MCU Skills Admin{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>控制台概览</h1>
+    <p>Skill 知识库、训练数据与索引任务的运行状态</p>
+  </div>
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="/admin/docs">上传数据</a>
+    <a class="btn btn-accent" href="/admin/jobs">重建索引</a>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="label">Skills</div>
+    <span class="value">{{ skill_count }}</span>
+    <div class="hint">已加载领域知识库</div>
+  </div>
+  <div class="stat">
+    <div class="label">知识来源</div>
+    <span class="value">{{ doc_count }}</span>
+    <div class="hint">Skill 文件 + 上传文档</div>
+  </div>
+  <div class="stat">
+    <div class="label">定时重建</div>
+    <span class="value" style="font-size:1.15rem;margin-top:0.65rem;font-family:var(--mono)">{{ cron }}</span>
+    <div class="hint">APScheduler crontab</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>最近任务</h2>
+    <a class="btn btn-ghost" href="/admin/jobs" style="padding:0.4rem 0.75rem;font-size:0.82rem">查看全部</a>
+  </div>
+  {% if not jobs %}
+  <div class="empty">
+    <div class="icon">📭</div>
+    <div>暂无任务。上传训练数据后可手动触发重建索引。</div>
+  </div>
+  {% else %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>类型</th>
+        <th>状态</th>
+        <th>消息</th>
+        <th>时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for j in jobs %}
+      <tr>
+        <td class="mono">#{{ j.id }}</td>
+        <td>{{ j.job_type }}</td>
+        <td>
+          {% if j.status == 'ok' %}<span class="badge ok">成功</span>
+          {% elif j.status == 'error' %}<span class="badge err">失败</span>
+          {% elif j.status == 'running' %}<span class="badge warn">运行中</span>
+          {% else %}<span class="badge pending">{{ j.status }}</span>{% endif %}
+        </td>
+        <td class="muted">{{ j.message }}</td>
+        <td class="muted">{{ j.finished_at or j.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>快速上手</h2>
+  <ol class="steps">
+    <li>在「训练数据」上传公司内部的 .md / .txt 文档</li>
+    <li>在「索引任务」点击立即重建，将 Skill 与上传文档写入检索索引</li>
+    <li>通过 MCP / REST 使用 <code>knowledge_search</code> 与 Skill 路由工具</li>
+  </ol>
+</div>
+{% endblock %}

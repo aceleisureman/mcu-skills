@@ -58,6 +58,7 @@ project-organizer     （独立）
 .
 ├── skills/                 # 10 个独立 Skill
 │   └── registry.json       # 自动汇总的机器可读 registry
+├── server/                 # 内部 MCP 服务 + Admin（MySQL）
 ├── evals/
 │   └── routing-cases.json  # 路由评测数据集
 ├── docs/                   # 架构、依赖图、迁移和生成索引
@@ -77,6 +78,7 @@ project-organizer     （独立）
 │   └── test_tools.py
 └── .github/workflows/
     ├── validate.yml
+    ├── server-ci.yml
     └── release.yml
 ```
 
@@ -95,6 +97,19 @@ skills/<skill-name>/
 ```
 
 ## 安装
+
+### 内部 MCP 服务（公司内网）
+
+仓库提供基于 **FastAPI + MySQL** 的内部 Agent MCP 服务与管理后台，支持 API Key 鉴权、训练数据上传与定时重建索引。详见 [`server/README.md`](server/README.md)。
+
+```sh
+cd server
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+# 配置 MySQL：复制 .env.example 为 .env 并填写 MCU_DATABASE_URL
+export PYTHONPATH=. MCU_SKILLS_ROOT=..
+uvicorn app.main:app --host 0.0.0.0 --port 8080
+```
 
 ### npm 安装器（推荐）
 
